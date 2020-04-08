@@ -1,0 +1,202 @@
+﻿using ShoppingCart.BL.Managers;
+using ShoppingCart.BL.Managers.Interfaces;
+using ShoppingCart.BL.Models;
+using ShoppingCart2;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace ShoppingCart
+{
+    public partial class ProductForm : Form
+    {
+        private IProductManager _manager;
+        public static Product product;
+     
+        public ProductForm()
+        {
+            _manager = new ProductManager();
+            InitializeComponent();
+        }
+
+        private void Products_Load(object sender, EventArgs e)
+        {
+            LoadListViewItems();
+
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            product = new Product();
+            EditProductForm editProductForm = new EditProductForm();
+            editProductForm.Text = "Add Product";
+            editProductForm.MdiParent = this.MdiParent;
+            editProductForm.Show();
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            if (ListViewProducts.SelectedItems.Count > 0)
+            {
+                int id = Convert.ToInt32(ListViewProducts.SelectedItems[0].SubItems[0].Text);
+                string name = ListViewProducts.SelectedItems[0].SubItems[1].Text;
+                float price = (float)Convert.ToDouble(ListViewProducts.SelectedItems[0].SubItems[2].Text);
+                string description = ListViewProducts.SelectedItems[0].SubItems[3].Text;
+                int stock = Convert.ToInt32(ListViewProducts.SelectedItems[0].SubItems[4].Text);
+                product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock };
+                EditProductForm editProduct = new EditProductForm();
+                editProduct.MdiParent = this.MdiParent;
+                editProduct.Show();
+            }
+
+        }
+        private void btnView_Click(object sender, EventArgs e)
+        {
+            ListViewProducts.Items.Clear();
+            txtSearch.Text = string.Empty;
+            LoadListViewItems();
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            List<int> ids = new List<int>();
+
+            foreach (ListViewItem item in ListViewProducts.SelectedItems)
+            {
+                ids.Add(Convert.ToInt32(item.SubItems[0].Text));
+            }
+
+            if (_manager.Delete(ids.ToArray()))
+            {
+                MessageBox.Show("Details deleted successfully.");
+                ListViewProducts.Items.Clear();
+                LoadListViewItems();
+                btnAdd.Enabled = true;
+            }
+            else
+            {
+                MessageBox.Show("Details were not deleted.");
+            }
+
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(txtSearch.Text))
+                {
+                    int id = 0;
+
+                    if (int.TryParse(txtSearch.Text, out id))
+                    {
+                        Product result = _manager.GetById(id);
+
+                        if (result == null)
+                        {
+                            MessageBox.Show("Item doesn't exist");
+                            txtSearch.Clear();
+                        }
+                        else
+                        {
+                            ListViewItem resultItem = new ListViewItem(new string[] { result.Id.ToString(), result.Name, result.Price.ToString(), result.Description, result.Stock.ToString() });
+                            ListViewProducts.Items.Clear();
+                            ListViewProducts.Items.Add(resultItem);
+                        }
+                    }
+                    else
+                    {
+                        string searchByName = txtSearch.Text.ToLower();
+                        IList<Product> resultList = new List<Product>();
+                        resultList = _manager.GetByName(searchByName);
+
+                        if (resultList.Count == 0)
+                        {
+                            MessageBox.Show("Item doesn't exist");
+                            txtSearch.Clear();
+                        }
+                        else
+                        {
+                            ListViewProducts.Items.Clear();
+                            ListViewProducts.Items.AddRange(resultList.Select(x => new ListViewItem(new string[] { x.Id.ToString(), x.Name, x.Price.ToString(), x.Description, x.Stock.ToString() })).ToArray());
+                        }
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Please input your search query.");
+                    txtSearch.Clear();
+                    txtSearch.Focus();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                txtSearch.Clear();
+            }
+
+        }
+
+        private void ListViewProducts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ListViewProducts.SelectedItems.Count > 0)
+            {
+                btnUpdate.Enabled = true;
+                btnAdd.Enabled = false;
+            }
+          
+        }
+
+        private void LoadListViewItems() 
+        {
+            ListViewProducts.Items.AddRange(_manager.GetAll().Select(
+                p => new ListViewItem(new string[]{
+                    p.Id.ToString(), 
+                    p.Name, 
+                    p.Price.ToString("0.00"), 
+                    p.Description, 
+                    p.Stock.ToString()
+                })).ToArray());
+        }
+
+        private void ProductForm_Activated(object sender, EventArgs e)
+        {
+            try
+            {
+                if (EditProductForm.product != null)
+                {
+                    ListViewProducts.Items.Clear();
+                    LoadListViewItems();
+                    btnAdd.Enabled = true;
+                    btnUpdate.Enabled = false;
+                }
+
+                if (ListViewProducts.SelectedItems.Count == 0)
+                {
+                    btnAdd.Enabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void ProductForm_Click(object sender, EventArgs e)
+        {
+            if (ListViewProducts.SelectedItems.Count > 0)
+            {
+                ListViewProducts.SelectedItems.Clear();
+                btnAdd.Enabled = true;
+            }
+        }
+
+    }
+}
