@@ -38,8 +38,8 @@
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.txtStock = new System.Windows.Forms.TextBox();
             this.btnClear = new System.Windows.Forms.Button();
-            this.btnInsert = new System.Windows.Forms.Button();
-            this.btnUpdate = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
             this.errorProviderName = new System.Windows.Forms.ErrorProvider(this.components);
             this.lblId = new System.Windows.Forms.Label();
             this.lblIdName = new System.Windows.Forms.Label();
@@ -123,35 +123,38 @@
             // btnClear
             // 
             this.btnClear.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnClear.Location = new System.Drawing.Point(272, 203);
+            this.btnClear.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnClear.Location = new System.Drawing.Point(220, 203);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 20;
-            this.btnClear.Text = "Reset";
+            this.btnClear.Text = "Cancel";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // btnInsert
+            // btnAdd
             // 
-            this.btnInsert.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnInsert.Location = new System.Drawing.Point(90, 203);
-            this.btnInsert.Name = "btnInsert";
-            this.btnInsert.Size = new System.Drawing.Size(75, 23);
-            this.btnInsert.TabIndex = 17;
-            this.btnInsert.Text = "Insert";
-            this.btnInsert.UseVisualStyleBackColor = true;
-            this.btnInsert.Click += new System.EventHandler(this.btnInsert_Click);
+            this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnAdd.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnAdd.Location = new System.Drawing.Point(130, 203);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnAdd.TabIndex = 17;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnInsert_Click);
             // 
-            // btnUpdate
+            // btnSave
             // 
-            this.btnUpdate.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnUpdate.Location = new System.Drawing.Point(181, 203);
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(75, 23);
-            this.btnUpdate.TabIndex = 21;
-            this.btnUpdate.Text = "Update";
-            this.btnUpdate.UseVisualStyleBackColor = true;
-            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+            this.btnSave.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnSave.Location = new System.Drawing.Point(130, 203);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 21;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // errorProviderName
             // 
@@ -184,9 +187,9 @@
             this.ClientSize = new System.Drawing.Size(427, 243);
             this.Controls.Add(this.lblIdName);
             this.Controls.Add(this.lblId);
-            this.Controls.Add(this.btnUpdate);
+            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnClear);
-            this.Controls.Add(this.btnInsert);
+            this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.label2);
@@ -196,7 +199,7 @@
             this.Controls.Add(this.txtDescription);
             this.Controls.Add(this.txtStock);
             this.Name = "EditProductForm";
-            this.Text = "Edit Product";
+            this.Text = "Product Details";
             this.Load += new System.EventHandler(this.EditProductForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.errorProviderName)).EndInit();
             this.ResumeLayout(false);
@@ -215,8 +218,8 @@
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.TextBox txtStock;
         private System.Windows.Forms.Button btnClear;
-        private System.Windows.Forms.Button btnInsert;
-        private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.ErrorProvider errorProviderName;
         private System.Windows.Forms.Label lblId;
         private System.Windows.Forms.Label lblIdName;

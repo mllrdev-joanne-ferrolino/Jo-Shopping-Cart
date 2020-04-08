@@ -18,46 +18,54 @@ namespace ShoppingCart2
         private ICustomerManager _customerManager;
         private IAddressManager _addressManager;
         private IAddressTypeManager _addressTypeManager;
-        private IOrderItemManager _orderItemManager;
         private IOrderManager _orderManager;
-        public static Address addressItem;
-        public static Customer customer;
-        public static Order order;
+        private List<Address> _addressList;
+        private List<AddressType> _addressTypeList;
+        
+        private Customer _customer;
+
+        public Customer Customer
+        {
+            get { return _customer; }
+            set { _customer = value; }
+        }
+
+        private Order _order;
+        
         public CustomerProfile()
         {
             _customerManager = new CustomerManager();
             _addressManager = new AddressManager();
             _addressTypeManager = new AddressTypeManager();
-            _orderItemManager = new OrderItemManager();
             _orderManager = new OrderManager();
-            customer = new Customer();
-            order = new Order();
+            _customer = new Customer();
+            _order = new Order();
+            _addressTypeList = new List<AddressType>();
+            _addressList = new List<Address>();
             InitializeComponent();
         }
 
-        private void CustomerProfile_Load(object sender, EventArgs e)
-        {
-        }
         private void CustomerProfile_Activated(object sender, EventArgs e)
         {
             try
             {
-                if (CustomerForm.customer == null)
+                if (_customer == null)
                 {
                     MessageBox.Show("No existing customer yet. Select customer.");
+                    
                 }
                 else
                 {
-                    if (CustomerForm.customer.Id > 0)
+                    if (_customer.Id > 0)
                     {
-                        Customer customer = _customerManager.GetAll().FirstOrDefault(x => x.Id == CustomerForm.customer.Id);
-                        lblCustomerId.Text = CustomerForm.customer.Id.ToString();
-                        lblFirstName.Text = customer.FirstName;
-                        lblLastName.Text = customer.LastName;
-                        lblEmail.Text = customer.Email;
-                        lblMobileNumber.Text = customer.MobileNumber;
+                        _customer = _customerManager.GetById(_customer.Id);
+                        lblCustomerId.Text = _customer.Id.ToString();
+                        lblFirstName.Text = _customer.FirstName;
+                        lblLastName.Text = _customer.LastName;
+                        lblEmail.Text = _customer.Email;
+                        lblMobileNumber.Text = _customer.MobileNumber;
 
-                        var typeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == CustomerForm.customer.Id);
+                        var typeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == _customer.Id);
 
                         if (typeList.Count() > 0)
                         {
@@ -77,6 +85,7 @@ namespace ShoppingCart2
                                             lblCityName.Text = address.City;
                                             lblCountryName.Text = address.Country;
                                             lblZipCodeName.Text = address.ZipCode;
+                                            _addressTypeList.Add(addressType);
                                         }
                                         else if (addressType.AddressTypeName == "Mailing Address")
                                         {
@@ -86,6 +95,7 @@ namespace ShoppingCart2
                                             label13.Text = address.City;
                                             label14.Text = address.Country;
                                             label15.Text = address.ZipCode;
+                                            _addressTypeList.Add(addressType);
 
                                         }
                                         else if (addressType.AddressTypeName == "Billing Address")
@@ -96,7 +106,10 @@ namespace ShoppingCart2
                                             label21.Text = address.City;
                                             label22.Text = address.Country;
                                             label23.Text = address.ZipCode;
+                                            _addressTypeList.Add(addressType);
                                         }
+
+                                        _addressList.Add(address);
 
                                     }
 
@@ -112,7 +125,7 @@ namespace ShoppingCart2
                             MessageBox.Show("No address type for this customer.");
                         }
                        
-                        var orderInfo = _orderManager.GetAll().Where(x => x.CustomerId == CustomerForm.customer.Id);
+                        var orderInfo = _orderManager.GetAll().Where(x => x.CustomerId == _customer.Id);
 
                         if (orderInfo.Count() > 0)
                         {
@@ -154,23 +167,38 @@ namespace ShoppingCart2
         private void btnEditDetails_Click(object sender, EventArgs e)
         {
             EditCustomerForm editCustomerForm = new EditCustomerForm();
-            editCustomerForm.MdiParent = this.MdiParent;
-            editCustomerForm.Show();
+            editCustomerForm.Customer = _customer;
+            editCustomerForm.AddressList = _addressList;
+            editCustomerForm.AddressTypeList = _addressTypeList;
+
+            if (editCustomerForm.ShowDialog() == DialogResult.OK)
+            {
+                this.Refresh();
+            }
+            
         }
 
         private void ListViewOrderItems_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ListViewOrderItems.SelectedItems.Count > 0)
+            try
             {
-                btnViewOrder.Enabled = true;
+                if (ListViewOrderItems.SelectedItems.Count > 0)
+                {
+                    btnViewOrder.Enabled = true;
 
-                int id = Convert.ToInt32(ListViewOrderItems.SelectedItems[0].SubItems[0].Text);
-                float totalAmount = (float)Convert.ToDouble(ListViewOrderItems.SelectedItems[0].SubItems[2].Text);
-                var deliveryDate = Convert.ToDateTime(ListViewOrderItems.SelectedItems[0].SubItems[3].Text);
-                string status = ListViewOrderItems.SelectedItems[0].SubItems[4].Text;
-                
-                order = new Order() { Id = id, CustomerId = CustomerForm.customer.Id, DeliveryDate = deliveryDate, Status = status, TotalAmount = totalAmount};
+                    int id = Convert.ToInt32(ListViewOrderItems.SelectedItems[0].SubItems[0].Text);
+                    float totalAmount = (float)Convert.ToDouble(ListViewOrderItems.SelectedItems[0].SubItems[2].Text);
+                    DateTime deliveryDate = Convert.ToDateTime(ListViewOrderItems.SelectedItems[0].SubItems[3].Text);
+                    string status = ListViewOrderItems.SelectedItems[0].SubItems[4].Text;
+
+                    _order = new Order() { Id = id, CustomerId = _customer.Id, DeliveryDate = deliveryDate, Status = status, TotalAmount = totalAmount };
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+           
         }
 
         private void btnAddOrder_Click(object sender, EventArgs e)
@@ -187,5 +215,7 @@ namespace ShoppingCart2
             checkoutForm.MdiParent = this.MdiParent;
             checkoutForm.Show();
         }
+
+       
     }
 }

@@ -31,7 +31,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.btnEdit = new System.Windows.Forms.Button();
             this.btnCheckout = new System.Windows.Forms.Button();
             this.lblTotalAmount = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -64,7 +63,6 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.btnClear);
             this.groupBox1.Controls.Add(this.btnDelete);
-            this.groupBox1.Controls.Add(this.btnEdit);
             this.groupBox1.Controls.Add(this.btnCheckout);
             this.groupBox1.Controls.Add(this.lblTotalAmount);
             this.groupBox1.Controls.Add(this.label1);
@@ -78,7 +76,7 @@
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(405, 211);
+            this.btnClear.Location = new System.Drawing.Point(355, 211);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 7;
@@ -88,7 +86,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(242, 211);
+            this.btnDelete.Location = new System.Drawing.Point(192, 211);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 6;
@@ -96,22 +94,10 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
-            // btnEdit
-            // 
-            this.btnEdit.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnEdit.Enabled = false;
-            this.btnEdit.Location = new System.Drawing.Point(161, 211);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(75, 23);
-            this.btnEdit.TabIndex = 4;
-            this.btnEdit.Text = "Edit";
-            this.btnEdit.UseVisualStyleBackColor = true;
-            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
-            // 
             // btnCheckout
             // 
             this.btnCheckout.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnCheckout.Location = new System.Drawing.Point(323, 211);
+            this.btnCheckout.Location = new System.Drawing.Point(273, 211);
             this.btnCheckout.Name = "btnCheckout";
             this.btnCheckout.Size = new System.Drawing.Size(75, 23);
             this.btnCheckout.TabIndex = 3;
@@ -155,7 +141,7 @@
             this.ListViewOrders.TabIndex = 0;
             this.ListViewOrders.UseCompatibleStateImageBehavior = false;
             this.ListViewOrders.View = System.Windows.Forms.View.Details;
-            this.ListViewOrders.SelectedIndexChanged += new System.EventHandler(this.ListViewOrders_SelectedIndexChanged);
+            this.ListViewOrders.DoubleClick += new System.EventHandler(this.ListViewOrders_DoubleClick);
             // 
             // columnHeader2
             // 
@@ -206,7 +192,7 @@
             this.btnViewAll.Name = "btnViewAll";
             this.btnViewAll.Size = new System.Drawing.Size(75, 23);
             this.btnViewAll.TabIndex = 7;
-            this.btnViewAll.Text = "View All";
+            this.btnViewAll.Text = "Clear";
             this.btnViewAll.UseVisualStyleBackColor = true;
             this.btnViewAll.Click += new System.EventHandler(this.btnViewAll_Click);
             // 
@@ -224,7 +210,7 @@
             // btnAdd
             // 
             this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnAdd.Location = new System.Drawing.Point(273, 233);
+            this.btnAdd.Location = new System.Drawing.Point(271, 233);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 1;
@@ -239,6 +225,8 @@
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(180, 20);
             this.txtSearch.TabIndex = 5;
+            this.txtSearch.Text = "Search by Id or Name";
+            this.txtSearch.Click += new System.EventHandler(this.txtSearch_Click);
             // 
             // ListViewProducts
             // 
@@ -363,7 +351,6 @@
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnViewAll;
-        private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnDelete;
     }

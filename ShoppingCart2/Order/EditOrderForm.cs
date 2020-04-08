@@ -16,10 +16,25 @@ namespace ShoppingCart2
 {
     public partial class EditOrderForm : Form
     {
-        public static OrderItem orderItem;
+        private Product _product;
+
+        public Product Product
+        {
+            get { return _product; }
+            set { _product = value; }
+        }
+
+        private OrderItem _orderItem;
+
+        public OrderItem OrderItem
+        {
+            get { return _orderItem; }
+            set { _orderItem = value; }
+        }
+
         public EditOrderForm()
         {
-            orderItem = new OrderItem();
+            _orderItem = new OrderItem();
             InitializeComponent();
         }
 
@@ -31,13 +46,16 @@ namespace ShoppingCart2
                 int quantity = Convert.ToInt32(txtQuantity.Text);
                 float amount = (float)Convert.ToDouble(lblPrice.Text) * quantity;
 
-                orderItem = new OrderItem() { ProductId = productId, Quantity = quantity, Amount = amount };
+                _orderItem = new OrderItem() { ProductId = productId, Quantity = quantity, Amount = amount };
 
-                if (orderItem != null)
+                if (_orderItem != null)
                 {
-                    MessageBox.Show("Details inserted successfully.");
-                    OrderForm orderForm = new OrderForm();
-                    this.Close();
+                    if (MessageBox.Show("Item added to cart.") == DialogResult.OK)
+                    {
+                        OrderForm orderForm = new OrderForm();
+                        orderForm.OrderItem = _orderItem;
+                        this.Close();
+                    }
                 }
                 else
                 {
@@ -52,20 +70,20 @@ namespace ShoppingCart2
 
         private void EditOrderForm_Load(object sender, EventArgs e)
         {
-            if (ProductForm.product != null)
+            if (_product != null)
             {
-                lblId.Text = ProductForm.product.Id.ToString();
-                lblProductName.Text = ProductForm.product.Name;
-                lblPrice.Text = ProductForm.product.Price.ToString();
-                lblDescription.Text = ProductForm.product.Description;
+                lblId.Text = _product.Id.ToString();
+                lblProductName.Text = _product.Name;
+                lblPrice.Text = _product.Price.ToString();
+                lblDescription.Text = _product.Description;
             }
-            
-            if (OrderForm.orderItem.Quantity > 0)
+
+            if (_orderItem.Quantity > 0)
             {
                 btnUpdate.Visible = true;
                 btnAdd.Visible = false;
                 this.Text = "Edit Order";
-                txtQuantity.Text = OrderForm.orderItem.Quantity.ToString();
+                txtQuantity.Text = _orderItem.Quantity.ToString();
             }
             
         }
@@ -78,13 +96,17 @@ namespace ShoppingCart2
                 int quantity = Convert.ToInt32(txtQuantity.Text);
                 float amount = (float)Convert.ToDouble(lblPrice.Text) * quantity;
 
-                orderItem = new OrderItem() { ProductId = productId, Quantity = quantity, Amount = amount };
+                _orderItem = new OrderItem() { ProductId = productId, Quantity = quantity, Amount = amount };
 
-                if (orderItem != null)
+                if (_orderItem != null)
                 {
-                    MessageBox.Show("Details updated successfully.");
-                    OrderForm orderForm = new OrderForm();
-                    this.Close();
+                    if (MessageBox.Show("Order updated successfully.") == DialogResult.OK)
+                    {
+                        OrderForm orderForm = new OrderForm();
+                        orderForm.OrderItem = _orderItem;
+                        this.Close();
+
+                    }
                 }
                 else
                 {

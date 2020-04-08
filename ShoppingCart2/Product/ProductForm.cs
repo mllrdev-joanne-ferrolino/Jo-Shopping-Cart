@@ -17,44 +17,33 @@ namespace ShoppingCart
     public partial class ProductForm : Form
     {
         private IProductManager _manager;
-        public static Product product;
-     
+        private Product _product;
+   
         public ProductForm()
         {
             _manager = new ProductManager();
+          
             InitializeComponent();
         }
 
         private void Products_Load(object sender, EventArgs e)
         {
             LoadListViewItems();
-
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            product = new Product();
             EditProductForm editProductForm = new EditProductForm();
             editProductForm.Text = "Add Product";
-            editProductForm.MdiParent = this.MdiParent;
-            editProductForm.Show();
-        }
+            DialogResult dialogResult = editProductForm.ShowDialog();
 
-        private void btnUpdate_Click(object sender, EventArgs e)
-        {
-            if (ListViewProducts.SelectedItems.Count > 0)
+            if (dialogResult == DialogResult.OK)
             {
-                int id = Convert.ToInt32(ListViewProducts.SelectedItems[0].SubItems[0].Text);
-                string name = ListViewProducts.SelectedItems[0].SubItems[1].Text;
-                float price = (float)Convert.ToDouble(ListViewProducts.SelectedItems[0].SubItems[2].Text);
-                string description = ListViewProducts.SelectedItems[0].SubItems[3].Text;
-                int stock = Convert.ToInt32(ListViewProducts.SelectedItems[0].SubItems[4].Text);
-                product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock };
-                EditProductForm editProduct = new EditProductForm();
-                editProduct.MdiParent = this.MdiParent;
-                editProduct.Show();
+                ListViewProducts.Items.Clear();
+                LoadListViewItems();
+                btnAdd.Enabled = true;
+                btnDelete.Enabled = false;
             }
-
         }
         private void btnView_Click(object sender, EventArgs e)
         {
@@ -78,6 +67,7 @@ namespace ShoppingCart
                 ListViewProducts.Items.Clear();
                 LoadListViewItems();
                 btnAdd.Enabled = true;
+                btnDelete.Enabled = false;
             }
             else
             {
@@ -105,7 +95,15 @@ namespace ShoppingCart
                         }
                         else
                         {
-                            ListViewItem resultItem = new ListViewItem(new string[] { result.Id.ToString(), result.Name, result.Price.ToString(), result.Description, result.Stock.ToString() });
+                            ListViewItem resultItem = new ListViewItem(new string[] 
+                            { 
+                                result.Id.ToString(), 
+                                result.Name, 
+                                result.Price.ToString(), 
+                                result.Description, 
+                                result.Stock.ToString() 
+                            });
+
                             ListViewProducts.Items.Clear();
                             ListViewProducts.Items.Add(resultItem);
                         }
@@ -124,7 +122,14 @@ namespace ShoppingCart
                         else
                         {
                             ListViewProducts.Items.Clear();
-                            ListViewProducts.Items.AddRange(resultList.Select(x => new ListViewItem(new string[] { x.Id.ToString(), x.Name, x.Price.ToString(), x.Description, x.Stock.ToString() })).ToArray());
+                            ListViewProducts.Items.AddRange(resultList.Select(x => new ListViewItem(new string[] 
+                            { 
+                                x.Id.ToString(), 
+                                x.Name, 
+                                x.Price.ToString(), 
+                                x.Description, 
+                                x.Stock.ToString() 
+                            })).ToArray());
                         }
                     }
 
@@ -148,8 +153,8 @@ namespace ShoppingCart
         {
             if (ListViewProducts.SelectedItems.Count > 0)
             {
-                btnUpdate.Enabled = true;
                 btnAdd.Enabled = false;
+                btnDelete.Enabled = true;
             }
           
         }
@@ -166,21 +171,61 @@ namespace ShoppingCart
                 })).ToArray());
         }
 
+        private void ProductForm_Click(object sender, EventArgs e)
+        {
+            if (ListViewProducts.SelectedItems.Count > 0)
+            {
+                ListViewProducts.SelectedItems.Clear();
+                btnAdd.Enabled = true;
+                btnDelete.Enabled = false;
+            }
+        }
+
+        private void txtSearch_Click(object sender, EventArgs e)
+        {
+            txtSearch.Text = string.Empty;
+        }
+
+        private void ListViewProducts_DoubleClick(object sender, EventArgs e)
+        {
+            if (ListViewProducts.SelectedItems.Count > 0)
+            {
+                int id = Convert.ToInt32(ListViewProducts.SelectedItems[0].SubItems[0].Text);
+                string name = ListViewProducts.SelectedItems[0].SubItems[1].Text;
+                float price = (float)Convert.ToDouble(ListViewProducts.SelectedItems[0].SubItems[2].Text);
+                string description = ListViewProducts.SelectedItems[0].SubItems[3].Text;
+                int stock = Convert.ToInt32(ListViewProducts.SelectedItems[0].SubItems[4].Text);
+                _product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock };
+                EditProductForm editProduct = new EditProductForm();
+                editProduct.Product = _product;
+                DialogResult dialogResult = editProduct.ShowDialog();
+
+                if (dialogResult == DialogResult.OK)
+                {
+                    ListViewProducts.Items.Clear();
+                    LoadListViewItems();
+
+                    if (ListViewProducts.SelectedItems.Count == 0)
+                    {
+                        btnAdd.Enabled = true;
+                        btnDelete.Enabled = false;
+                    }
+                }
+
+            }
+        }
+
         private void ProductForm_Activated(object sender, EventArgs e)
         {
             try
             {
-                if (EditProductForm.product != null)
-                {
-                    ListViewProducts.Items.Clear();
-                    LoadListViewItems();
-                    btnAdd.Enabled = true;
-                    btnUpdate.Enabled = false;
-                }
+                ListViewProducts.Items.Clear();
+                LoadListViewItems();
 
                 if (ListViewProducts.SelectedItems.Count == 0)
                 {
                     btnAdd.Enabled = true;
+                    btnDelete.Enabled = false;
                 }
             }
             catch (Exception ex)
@@ -188,15 +233,5 @@ namespace ShoppingCart
                 MessageBox.Show(ex.Message);
             }
         }
-
-        private void ProductForm_Click(object sender, EventArgs e)
-        {
-            if (ListViewProducts.SelectedItems.Count > 0)
-            {
-                ListViewProducts.SelectedItems.Clear();
-                btnAdd.Enabled = true;
-            }
-        }
-
     }
 }

@@ -15,7 +15,7 @@ namespace ShoppingCart2
 {
     public partial class CustomerForm : Form
     {
-        private ICustomerManager _manager;
+        private ICustomerManager _customerManager;
         private IAddressManager _addressManager;
         private IAddressTypeManager _addressTypeManager;
         private IOrderManager _orderManager; 
@@ -23,10 +23,10 @@ namespace ShoppingCart2
         private IEnumerable<Customer> _resultList;
         public static List<Address> addressList;
         public static IEnumerable<AddressType> addressTypeList;
-        public static Customer customer;
+        private Customer _customer;
         public CustomerForm()
         {
-            _manager = new CustomerManager();
+            _customerManager = new CustomerManager();
             _addressManager = new AddressManager();
             _addressTypeManager = new AddressTypeManager();
             _orderManager = new OrderManager();
@@ -34,7 +34,7 @@ namespace ShoppingCart2
             addressList = new List<Address>();
             addressTypeList = new List<AddressType>();
             _resultList = new List<Customer>();
-            customer = new Customer();
+            _customer = new Customer();
 
             InitializeComponent();
         }
@@ -42,8 +42,13 @@ namespace ShoppingCart2
         private void btnAdd_Click(object sender, EventArgs e)
         {
             EditCustomerForm editCustomerForm = new EditCustomerForm();
-            editCustomerForm.MdiParent = this.MdiParent;
-            editCustomerForm.Show();
+        
+            if (editCustomerForm.ShowDialog() == DialogResult.OK)
+            {
+                ListViewCustomers.Items.Clear();
+                LoadCustomers();
+            }
+            
         }
 
         private void CustomerForm_Load(object sender, EventArgs e)
@@ -53,67 +58,63 @@ namespace ShoppingCart2
 
         private void btnOrder_Click(object sender, EventArgs e)
         {
-            if (ListViewCustomers.SelectedItems.Count > 0)
+            try
             {
-                OrderForm orderForm = new OrderForm();
-                orderForm.MdiParent = this.MdiParent;
-                orderForm.Show();
+                if (ListViewCustomers.SelectedItems.Count > 0)
+                {
+                    OrderForm orderForm = new OrderForm();
+                    orderForm.Customer = _customer;
+                    orderForm.MdiParent = this.MdiParent;
+                    orderForm.Show();
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+           
             
-        }
-
-        private void btnUpdate_Click(object sender, EventArgs e)
-        {
-            if (ListViewCustomers.SelectedItems.Count > 0)
-            {
-                EditCustomerForm editCustomerForm = new EditCustomerForm();
-                editCustomerForm.MdiParent = this.MdiParent;
-                editCustomerForm.Show();
-            }
         }
 
         private void ListViewCustomers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ListViewCustomers.SelectedItems.Count > 0)
+            try
             {
-                customer = new Customer() 
-                { 
-                    Id = Convert.ToInt32(ListViewCustomers.SelectedItems[0].SubItems[0].Text), 
-                    LastName = ListViewCustomers.SelectedItems[0].SubItems[1].Text, 
-                    FirstName = ListViewCustomers.SelectedItems[0].SubItems[2].Text, 
-                    Email = ListViewCustomers.SelectedItems[0].SubItems[3].Text, 
-                    MobileNumber = ListViewCustomers.SelectedItems[0].SubItems[4].Text
-                };
-
-                addressTypeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == customer.Id);
-
-                foreach (var addressItem in addressTypeList)
+                if (ListViewCustomers.SelectedItems.Count > 0)
                 {
-                    Address address = _addressManager.GetAll().FirstOrDefault(x => x.Id == addressItem.AddressId);
-                    addressList.Add(address);
+                    _customer = new Customer()
+                    {
+                        Id = Convert.ToInt32(ListViewCustomers.SelectedItems[0].SubItems[0].Text),
+                        LastName = ListViewCustomers.SelectedItems[0].SubItems[1].Text,
+                        FirstName = ListViewCustomers.SelectedItems[0].SubItems[2].Text,
+                        Email = ListViewCustomers.SelectedItems[0].SubItems[3].Text,
+                        MobileNumber = ListViewCustomers.SelectedItems[0].SubItems[4].Text
+                    };
+
+                    addressTypeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == _customer.Id);
+
+                    foreach (var addressItem in addressTypeList)
+                    {
+                        Address address = _addressManager.GetById(addressItem.AddressId);
+                        addressList.Add(address);
+                    }
+
+                    btnOrder.Enabled = true;
+                    btnAdd.Enabled = false;
                 }
-                
-                btnOrder.Enabled = true;
-                btnUpdate.Enabled = true;
-                btnAdd.Enabled = false;
+                else
+                {
+                    btnOrder.Enabled = false;
+                    btnAdd.Enabled = true;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                btnOrder.Enabled = false;
-                btnUpdate.Enabled = false;
-                btnAdd.Enabled = true;
+                MessageBox.Show(ex.Message);
             }
+            
         }
 
-        private void btnProfile_Click(object sender, EventArgs e)
-        {
-            if (ListViewCustomers.SelectedItems.Count > 0)
-            {
-                CustomerProfile customerProfile = new CustomerProfile();
-                customerProfile.MdiParent = this.MdiParent;
-                customerProfile.Show();
-            }
-        }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -165,7 +166,7 @@ namespace ShoppingCart2
 
             }
 
-            if (_manager.Delete(ids.ToArray()))
+            if (_customerManager.Delete(ids.ToArray()))
             {
                 MessageBox.Show("Customer details deleted successfully.");
                 ListViewCustomers.Items.Clear();
@@ -180,7 +181,7 @@ namespace ShoppingCart2
 
         private void LoadCustomers() 
         {
-            IList<Customer> customerList = _manager.GetAll();
+            IList<Customer> customerList = _customerManager.GetAll();
             IList<AddressType> addressTypeList = _addressTypeManager.GetAll();
             IList<Address> addressList = _addressManager.GetAll();
             Address customerAddress = new Address();
@@ -235,29 +236,35 @@ namespace ShoppingCart2
 
         private void CustomerForm_Activated(object sender, EventArgs e)
         {
-            ListViewCustomers.Items.Clear();
+            try
+            {
+                ListViewCustomers.Items.Clear();
 
-            if (_resultList.Count() > 0)
-            {
-                LoadSearchResults();
-            }
-            else
-            {
-                LoadCustomers();
-            }
+                if (_resultList.Count() > 0)
+                {
+                    LoadSearchResults();
+                }
+                else
+                {
+                    LoadCustomers();
+                }
 
-            if (ListViewCustomers.SelectedItems.Count > 0)
-            {
-                btnOrder.Enabled = true;
-                btnAdd.Enabled = false;
-                btnUpdate.Enabled = true;
+                if (ListViewCustomers.SelectedItems.Count > 0)
+                {
+                    btnOrder.Enabled = true;
+                    btnAdd.Enabled = false;
+                }
+                else
+                {
+                    btnOrder.Enabled = false;
+                    btnAdd.Enabled = true;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                btnOrder.Enabled = false;
-                btnUpdate.Enabled = false;
-                btnAdd.Enabled = true;
+                MessageBox.Show(ex.Message);
             }
+            
 
         }
 
@@ -271,13 +278,13 @@ namespace ShoppingCart2
 
                     if (int.TryParse(txtSearch.Text, out id))
                     {
-                        _resultList = _manager.GetAll().Where(x => x.Id == id);
+                        _resultList = _customerManager.GetAll().Where(x => x.Id == id);
 
                     }
                     else
                     {
                         string searchByName = txtSearch.Text.ToLower();
-                        _resultList = _manager.GetAll().Where(x => x.FirstName.Contains(searchByName) || x.LastName.Contains(searchByName));
+                        _resultList = _customerManager.GetAll().Where(x => x.FirstName.Contains(searchByName) || x.LastName.Contains(searchByName));
                     }
 
                     if (_resultList.Count() == 0)
@@ -309,7 +316,7 @@ namespace ShoppingCart2
         {
             ListViewCustomers.SelectedItems.Clear();
             btnAdd.Enabled = true;
-            btnUpdate.Enabled = false;
+           
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -373,6 +380,26 @@ namespace ShoppingCart2
         private void txtSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Clear();
+        }
+
+        private void ListViewCustomers_DoubleClick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (ListViewCustomers.SelectedItems.Count > 0)
+                {
+                    CustomerProfile customerProfile = new CustomerProfile();
+                    customerProfile.Customer = _customer;
+                    customerProfile.MdiParent = this.MdiParent;
+
+                    customerProfile.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+           
         }
     }
 }

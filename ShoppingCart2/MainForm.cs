@@ -26,6 +26,7 @@ namespace ShoppingCart2
         private void ShopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OrderForm orderForm = new OrderForm();
+            viewCustomersToolStripMenuItem.Enabled = true;
 
             if (this.ActiveMdiChild != null && this.ActiveMdiChild != orderForm)
             {
@@ -39,6 +40,7 @@ namespace ShoppingCart2
         private void ViewProductsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ProductForm productForm = new ProductForm();
+            viewCustomersToolStripMenuItem.Enabled = true;
 
             if (this.ActiveMdiChild != null && this.ActiveMdiChild != productForm)
             {
@@ -51,34 +53,15 @@ namespace ShoppingCart2
 
         private void viewCustomersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (EditCustomerForm.customer == null)
+            CustomerProfile customerProfile = new CustomerProfile();
+
+            if (this.ActiveMdiChild != null && this.ActiveMdiChild != customerProfile)
             {
-                if (MessageBox.Show("No existing customer yet. Select customer.") == DialogResult.OK)
-                {
-                    CustomerForm customerForm = new CustomerForm();
-                    if (this.ActiveMdiChild != null && this.ActiveMdiChild != customerForm)
-                    {
-                        this.ActiveMdiChild.Close();
-                    }
-
-                    customerForm.MdiParent = this;
-                    customerForm.Show();
-                }
-                
-            }
-            else
-            {
-                CustomerProfile customerProfile = new CustomerProfile();
-
-                if (this.ActiveMdiChild != null && this.ActiveMdiChild != customerProfile)
-                {
-                    this.ActiveMdiChild.Close();
-                }
-
-                customerProfile.MdiParent = this;
-                customerProfile.Show();
+                this.ActiveMdiChild.Close();
             }
 
+            customerProfile.MdiParent = this;
+            customerProfile.Show();
         }
 
         private void viewCustomerListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -86,6 +69,11 @@ namespace ShoppingCart2
             CustomerForm customerForm = new CustomerForm();
             customerForm.MdiParent = this;
             customerForm.Show();
+        }
+
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+           
         }
     }
 }

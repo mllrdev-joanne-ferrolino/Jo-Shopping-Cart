@@ -17,11 +17,18 @@ namespace ShoppingCart2
     public partial class EditProductForm : Form
     {
         private IProductManager _manager;
-        public static Product product;
-      
+        private Product _product;
+
+        public Product Product
+        {
+            get { return _product; }
+            set { _product = value; }
+        }
+
         public EditProductForm()
         {
             _manager = new ProductManager();
+            _product = new Product();
             InitializeComponent();
         }
 
@@ -36,9 +43,9 @@ namespace ShoppingCart2
                     string description = txtDescription.Text;
                     int stock = Convert.ToInt32(txtStock.Text);
 
-                    product = new Product() { Name = name, Price = price, Description = description, Stock = stock };
+                    _product = new Product() { Name = name, Price = price, Description = description, Stock = stock };
 
-                    MessageBox.Show(_manager.Insert(product)? "Details inserted successfully." : "Details were not inserted.");
+                    MessageBox.Show(_manager.Insert(_product) ? "Details inserted successfully." : "Details were not inserted.");
 
                     ProductForm productForm = new ProductForm();
                     this.Close();
@@ -62,12 +69,16 @@ namespace ShoppingCart2
                     string description = txtDescription.Text;
                     int stock = Convert.ToInt32(txtStock.Text);
 
-                    product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock };
+                    _product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock };
 
-                    MessageBox.Show(_manager.Update(product)? "Details updated successfully." : "Details were not updated.");
+                    DialogResult dialog = MessageBox.Show(_manager.Update(_product)? "Details updated successfully." : "Details were not updated.");
 
-                    ProductForm productForm = new ProductForm();
-                    this.Close();
+                    if (dialog == DialogResult.OK)
+                    {
+                        ProductForm productForm = new ProductForm();
+                        this.Close();
+                    }
+                    
                 }
 
             }
@@ -87,8 +98,8 @@ namespace ShoppingCart2
             txtPrice.Clear();
             txtDescription.Clear();
             txtStock.Clear();
-            btnInsert.Enabled = true;
-            btnUpdate.Enabled = false;
+            btnAdd.Visible = true;
+            btnSave.Visible = false;
         }
 
         private bool ValidateAllFields() 
@@ -114,22 +125,22 @@ namespace ShoppingCart2
 
         private void EditProductForm_Load(object sender, EventArgs e)
         {
-            if (ProductForm.product.Id != 0)
+            if (_product.Id != 0)
             {
-                lblId.Text = ProductForm.product.Id.ToString();
-                txtName.Text = ProductForm.product.Name;
-                txtPrice.Text = ProductForm.product.Price.ToString();
-                txtDescription.Text = ProductForm.product.Description;
-                txtStock.Text = ProductForm.product.Stock.ToString();
-                btnInsert.Enabled = false;
+                lblId.Text = _product.Id.ToString();
+                txtName.Text = _product.Name;
+                txtPrice.Text = _product.Price.ToString();
+                txtDescription.Text = _product.Description;
+                txtStock.Text = _product.Stock.ToString();
+                btnAdd.Visible = false;
             }
             else
             {
                 lblIdName.Visible = false;
                 lblId.Visible = false;
-                btnUpdate.Enabled = false;
+                btnSave.Visible = false;
             }
-            
+
         }
 
         private void ValidateTextBox(object sender, CancelEventArgs e)
@@ -139,13 +150,11 @@ namespace ShoppingCart2
             if (string.IsNullOrWhiteSpace(textbox.Text))
             {
                 errorProviderName.SetError(textbox, "Please fill up this field.");
-                e.Cancel = true;
                 MessageBox.Show($"Please fill up {textbox.Name.Substring(3)}");
             }
             else
             {
                 errorProviderName.SetError(textbox, string.Empty);
-                e.Cancel = false;
             }
         }
     }

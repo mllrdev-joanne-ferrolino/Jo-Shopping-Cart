@@ -18,17 +18,36 @@ namespace ShoppingCart2
    
     public partial class OrderForm : Form
     {
-        public static OrderItem orderItem;
+        private OrderItem _orderItem;
+
+        public OrderItem OrderItem
+        {
+            get { return _orderItem; }
+            set { _orderItem = value; }
+        }
+
+        private Customer _customer;
+
+        public Customer Customer
+        {
+            get { return _customer; }
+            set { _customer = value; }
+        }
+
+
+        private Product _product;
         private List<OrderItem> _orderItemList;
         private IOrderManager _orderManager;
         private IProductManager _productManager;
         private IOrderItemManager _orderItemManager;
+       
         public OrderForm()
         {
+            _product = new Product();
             _orderManager = new OrderManager();
             _productManager = new ProductManager();
             _orderItemManager = new OrderItemManager();
-            orderItem = new OrderItem();
+            _orderItem = new OrderItem();
             _orderItemList = new List<OrderItem>();
             InitializeComponent();
         }
@@ -37,10 +56,14 @@ namespace ShoppingCart2
         {
             LoadProductItems();
 
-            if (CustomerForm.customer.Id > 0)
+            if (_customer == null)
             {
-                lblCustomerId.Text = CustomerForm.customer.Id.ToString();
-                lblCustomerName.Text = $"{CustomerForm.customer.FirstName} {CustomerForm.customer.LastName}";
+                MessageBox.Show("No customer selected.");
+            }
+            else if (_customer.Id > 0)
+            {
+                lblCustomerId.Text = _customer.Id.ToString();
+                lblCustomerName.Text = $"{_customer.FirstName} {_customer.LastName}";
             }
             else
             {
@@ -75,23 +98,14 @@ namespace ShoppingCart2
             ListViewOrders.Items.AddRange(_orderItemList.Select(o => new ListViewItem(new string[] 
             { 
                 o.ProductId.ToString(), 
-                _productManager.GetById(o.ProductId).Name, 
+                _product.Name, 
                 o.Quantity.ToString(), 
-                _productManager.GetById(o.ProductId).Price.ToString("0.00"), 
+                _product.Price.ToString("0.00"), 
                 o.Amount.ToString("0.00") 
             })).ToArray());
         }
 
         private void ListViewProducts_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ListViewProducts.SelectedItems.Count > 0)
-            {
-                btnAdd.Enabled = true;
-            }
-
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e)
         {
             if (ListViewProducts.SelectedItems.Count > 0)
             {
@@ -101,11 +115,30 @@ namespace ShoppingCart2
                 float price = (float)Convert.ToDouble(listViewItem.SubItems[2].Text);
                 string description = listViewItem.SubItems[3].Text;
 
-                ProductForm.product = new Product() { Id = id, Name = productName, Price = price, Description = description };
+                _product = new Product() { Id = id, Name = productName, Price = price, Description = description };
+                btnAdd.Enabled = true;
+            }
 
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            if (ListViewProducts.SelectedItems.Count > 0)
+            {
                 EditOrderForm editOrderForm = new EditOrderForm();
-                editOrderForm.MdiParent = this.MdiParent;
-                editOrderForm.Show();
+                editOrderForm.Product = _product;
+
+                if (editOrderForm.ShowDialog() == DialogResult.OK)
+                {
+                    _orderItem = editOrderForm.OrderItem;
+                    _orderItemList.Add(_orderItem);
+                    ListViewOrders.Items.Clear();
+                    LoadOrderItems();
+                    float totalAmount = _orderItemList.Sum(x => x.Amount);
+                    lblTotalAmount.Text = totalAmount.ToString("0.00");
+
+                }
+                
 
             }
            
@@ -113,20 +146,20 @@ namespace ShoppingCart2
 
         private void OrderForm_Activated(object sender, EventArgs e)
         {
-            if (EditOrderForm.orderItem == null) 
+            if (_orderItem == null) 
             {
                 MessageBox.Show("No order is selected.");
             }
-            else if (EditOrderForm.orderItem.ProductId > 0)
+            else if (_orderItem.ProductId > 0)
             {
-                if (EditOrderForm.orderItem.ProductId != _orderItemList.Select(x => x.ProductId).LastOrDefault())
+                if (_orderItemList.Where(x => x.ProductId == _orderItem.ProductId) == null)
                 {
-                    _orderItemList.Add(EditOrderForm.orderItem);
+                    _orderItemList.Add(_orderItem);
                 }
                 else
                 {
-                    OrderItem updateOrderItem = _orderItemList.FirstOrDefault(x => x.ProductId == EditOrderForm.orderItem.ProductId);
-                    updateOrderItem.Quantity = EditOrderForm.orderItem.Quantity;
+                    OrderItem item = _orderItemList.FirstOrDefault(x => x.ProductId == _orderItem.ProductId);
+                    item.Quantity = _orderItem.Quantity;
                 }
 
                 ListViewOrders.Items.Clear();
@@ -140,12 +173,14 @@ namespace ShoppingCart2
         {
             try
             {
-                int customerId = Convert.ToInt32(lblCustomerId.Text);
-                float total = (float)Convert.ToDouble(lblTotalAmount.Text);
-                DateTime dateTime = DateTime.Now;
-                string status = "for shipping";
 
-                Order order = new Order() { CustomerId = customerId, TotalAmount = total, DeliveryDate = dateTime, Status = status };
+                Order order = new Order() 
+                { 
+                    CustomerId = Convert.ToInt32(lblCustomerId.Text), 
+                    TotalAmount = (float)Convert.ToDouble(lblTotalAmount.Text), 
+                    DeliveryDate = DateTime.Now, 
+                    Status = "for shipping"
+                };
 
                 if (_orderManager.Insert(order))
                 {
@@ -158,8 +193,8 @@ namespace ShoppingCart2
                         
                     }
 
-                    EditOrderForm.orderItem = new OrderItem();
-                    ProductForm.product = new Product();
+                    _orderItem = new OrderItem();
+                    _product = new Product();
                     ListViewOrders.Items.Clear();
                     CheckoutForm checkoutForm = new CheckoutForm();
                     checkoutForm.MdiParent = this.MdiParent;
@@ -245,41 +280,9 @@ namespace ShoppingCart2
 
         private void btnViewAll_Click(object sender, EventArgs e)
         {
+            txtSearch.Text = string.Empty;
             ListViewProducts.Items.Clear();
             LoadProductItems();
-        }
-
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (ListViewOrders.SelectedItems.Count > 0)
-                {
-                    ListViewItem ListViewOrderItem = ListViewOrders.SelectedItems[0];
-                    int id = Convert.ToInt32(ListViewOrderItem.SubItems[0].Text);
-                    string name = ListViewOrderItem.SubItems[1].Text;
-                    int quantity = Convert.ToInt32(ListViewOrderItem.SubItems[2].Text);
-                    float price = (float)Convert.ToDouble(ListViewOrderItem.SubItems[2].Text);
-                    string description = _productManager.GetAll().FirstOrDefault(x => x.Id == id).Description;
-
-                    ProductForm.product = new Product() { Id = id, Name = name, Price = price, Description = description };
-                    orderItem = new OrderItem() { Quantity = quantity };
-
-                    EditOrderForm editOrder = new EditOrderForm();
-                    editOrder.MdiParent = this.MdiParent;
-                    editOrder.Show();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-           
-        }
-
-        private void ListViewOrders_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            btnEdit.Enabled = true;
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -314,6 +317,58 @@ namespace ShoppingCart2
             }
             
 
+        }
+
+        private void ListViewOrders_DoubleClick(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (ListViewOrders.SelectedItems.Count > 0)
+                {
+                    ListViewItem ListViewOrderItem = ListViewOrders.SelectedItems[0];
+                    int id = Convert.ToInt32(ListViewOrderItem.SubItems[0].Text);
+                    string name = ListViewOrderItem.SubItems[1].Text;
+                    int quantity = Convert.ToInt32(ListViewOrderItem.SubItems[2].Text);
+                    float price = (float)Convert.ToDouble(ListViewOrderItem.SubItems[3].Text);
+                    string description = _productManager.GetById(id).Description;
+                    float amount = price * quantity;
+
+                    _product = new Product() { Id = id, Name = name, Price = price, Description = description };
+                    _orderItem = new OrderItem() { ProductId = id, Quantity = quantity, Amount = amount };
+
+                    EditOrderForm editOrder = new EditOrderForm();
+                    editOrder.Product = _product;
+                    editOrder.OrderItem = _orderItem;
+
+                    if (editOrder.ShowDialog() == DialogResult.OK)
+                    {
+                        _orderItem = editOrder.OrderItem;
+
+                        if (_orderItem.ProductId > 0)
+                        {
+                            OrderItem item = _orderItemList.FirstOrDefault(x => x.ProductId == _orderItem.ProductId);
+                            item.Quantity = _orderItem.Quantity;
+                            item.Amount = _orderItem.Amount;
+                           
+                            ListViewOrders.Items.Clear();
+                            LoadOrderItems();
+                            float totalAmount = _orderItemList.Sum(x => x.Amount);
+                            lblTotalAmount.Text = totalAmount.ToString("0.00");
+                        }
+                    }
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void txtSearch_Click(object sender, EventArgs e)
+        {
+            txtSearch.Text = string.Empty;
         }
     }
 }

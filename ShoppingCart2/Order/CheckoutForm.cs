@@ -18,17 +18,20 @@ namespace ShoppingCart2
         private IOrderItemManager _orderItemManager;
         private IOrderManager _orderManager;
         private IProductManager _productManager;
+        private Order _order;
+
+        public Order Order
+        {
+            get { return _order; }
+            set { _order = value; }
+        }
+
         public CheckoutForm()
         {
             _orderItemManager = new OrderItemManager();
             _productManager = new ProductManager();
             _orderManager = new OrderManager();
             InitializeComponent();
-        }
-
-        private void CheckoutForm_Load(object sender, EventArgs e)
-        {
-            
         }
 
         private void CheckoutForm_Activated(object sender, EventArgs e)
@@ -38,9 +41,9 @@ namespace ShoppingCart2
                 int orderId = 0;
                 IEnumerable<Order> orderList = new List<Order>();
 
-                if (CustomerProfile.order.Id > 0)
+                if (_order.Id > 0)
                 {
-                    orderId = CustomerProfile.order.Id;
+                    orderId = _order.Id;
                     orderList = _orderManager.GetAll().Where(x => x.Id == orderId);
                 }
                 else
@@ -62,9 +65,9 @@ namespace ShoppingCart2
                         x.Amount.ToString("0.00") 
                     })).ToArray());
 
-                    if (CustomerProfile.order.Id > 0)
+                    if (_order.Id > 0)
                     {
-                        lblOrderId.Text = CustomerProfile.order.Id.ToString();
+                        lblOrderId.Text = _order.Id.ToString();
                         lblDeliveryDate.Text = orderList.FirstOrDefault().DeliveryDate.ToString();
                         lblStatus.Text = orderList.FirstOrDefault().Status;
                         lblTotalAmount.Text = orderList.FirstOrDefault().TotalAmount.ToString("0.00");
@@ -92,7 +95,7 @@ namespace ShoppingCart2
 
         private void CheckoutForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            CustomerProfile.order = new Order();
+            _order = new Order();
         }
     }
 }

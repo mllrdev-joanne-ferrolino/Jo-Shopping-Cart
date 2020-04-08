@@ -83,6 +83,7 @@
             // 
             // viewCustomersToolStripMenuItem
             // 
+            this.viewCustomersToolStripMenuItem.Enabled = false;
             this.viewCustomersToolStripMenuItem.Name = "viewCustomersToolStripMenuItem";
             this.viewCustomersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.viewCustomersToolStripMenuItem.Text = "Profile";
@@ -105,6 +106,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Jo\'s Fashion Shop";
+            this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

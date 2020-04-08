@@ -41,10 +41,8 @@
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.btnUpdate = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnOrder = new System.Windows.Forms.Button();
-            this.btnProfile = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,6 +66,7 @@
             this.ListViewCustomers.UseCompatibleStateImageBehavior = false;
             this.ListViewCustomers.View = System.Windows.Forms.View.Details;
             this.ListViewCustomers.SelectedIndexChanged += new System.EventHandler(this.ListViewCustomers_SelectedIndexChanged);
+            this.ListViewCustomers.DoubleClick += new System.EventHandler(this.ListViewCustomers_DoubleClick);
             // 
             // columnHeader1
             // 
@@ -146,7 +145,7 @@
             // btnAdd
             // 
             this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnAdd.Location = new System.Drawing.Point(253, 483);
+            this.btnAdd.Location = new System.Drawing.Point(328, 486);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 5;
@@ -154,22 +153,10 @@
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // btnUpdate
-            // 
-            this.btnUpdate.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnUpdate.Enabled = false;
-            this.btnUpdate.Location = new System.Drawing.Point(334, 483);
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(75, 23);
-            this.btnUpdate.TabIndex = 6;
-            this.btnUpdate.Text = "Update";
-            this.btnUpdate.UseVisualStyleBackColor = true;
-            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
-            // 
             // btnDelete
             // 
             this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnDelete.Location = new System.Drawing.Point(416, 483);
+            this.btnDelete.Location = new System.Drawing.Point(409, 486);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 7;
@@ -181,7 +168,7 @@
             // 
             this.btnOrder.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnOrder.Enabled = false;
-            this.btnOrder.Location = new System.Drawing.Point(172, 483);
+            this.btnOrder.Location = new System.Drawing.Point(247, 486);
             this.btnOrder.Name = "btnOrder";
             this.btnOrder.Size = new System.Drawing.Size(75, 23);
             this.btnOrder.TabIndex = 8;
@@ -189,26 +176,13 @@
             this.btnOrder.UseVisualStyleBackColor = true;
             this.btnOrder.Click += new System.EventHandler(this.btnOrder_Click);
             // 
-            // btnProfile
-            // 
-            this.btnProfile.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnProfile.Location = new System.Drawing.Point(498, 484);
-            this.btnProfile.Name = "btnProfile";
-            this.btnProfile.Size = new System.Drawing.Size(75, 23);
-            this.btnProfile.TabIndex = 9;
-            this.btnProfile.Text = "View Profile";
-            this.btnProfile.UseVisualStyleBackColor = true;
-            this.btnProfile.Click += new System.EventHandler(this.btnProfile_Click);
-            // 
             // CustomerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(752, 523);
-            this.Controls.Add(this.btnProfile);
             this.Controls.Add(this.btnOrder);
             this.Controls.Add(this.btnDelete);
-            this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSearch);
@@ -233,7 +207,6 @@
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -242,7 +215,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.Button btnOrder;
-        private System.Windows.Forms.Button btnProfile;
         private System.Windows.Forms.ColumnHeader columnHeader7;
     }
 }

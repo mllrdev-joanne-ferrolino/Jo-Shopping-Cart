@@ -67,6 +67,7 @@
             // 
             // btnUpdate
             // 
+            this.btnUpdate.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnUpdate.Location = new System.Drawing.Point(137, 175);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(75, 23);
@@ -153,6 +154,7 @@
             // 
             // btnAdd
             // 
+            this.btnAdd.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnAdd.Location = new System.Drawing.Point(137, 175);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);

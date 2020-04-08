@@ -13,7 +13,6 @@ namespace ShoppingCart.BL.Managers
     public class AddressManager : BaseManager<Address>, IAddressManager 
     {
         public override IRepository<Address> Repository => new AddressRepository();
-        private IAddressRepository _addressRepository = new AddressRepository();
 
         public new IList<Address> GetAll()
         {
@@ -46,7 +45,7 @@ namespace ShoppingCart.BL.Managers
         }
         public int GetId(int id) 
         {
-            return _addressRepository.GetId(id);
+            return ((IAddressRepository)Repository).GetId(id);
         }
     }
 }

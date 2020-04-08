@@ -42,7 +42,6 @@
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnView = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.btnUpdate = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProviderName)).BeginInit();
@@ -68,6 +67,7 @@
             this.ListViewProducts.UseCompatibleStateImageBehavior = false;
             this.ListViewProducts.View = System.Windows.Forms.View.Details;
             this.ListViewProducts.SelectedIndexChanged += new System.EventHandler(this.ListViewProducts_SelectedIndexChanged);
+            this.ListViewProducts.DoubleClick += new System.EventHandler(this.ListViewProducts_DoubleClick);
             // 
             // columnHeader1
             // 
@@ -128,10 +128,12 @@
             // 
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.CausesValidation = false;
-            this.txtSearch.Location = new System.Drawing.Point(369, 21);
+            this.txtSearch.Location = new System.Drawing.Point(283, 21);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(115, 20);
+            this.txtSearch.Size = new System.Drawing.Size(201, 20);
             this.txtSearch.TabIndex = 19;
+            this.txtSearch.Text = "Search by Id or Name";
+            this.txtSearch.Click += new System.EventHandler(this.txtSearch_Click);
             // 
             // btnSearch
             // 
@@ -158,7 +160,7 @@
             // btnDelete
             // 
             this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnDelete.Location = new System.Drawing.Point(378, 501);
+            this.btnDelete.Location = new System.Drawing.Point(338, 504);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 22;
@@ -166,22 +168,10 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
-            // btnUpdate
-            // 
-            this.btnUpdate.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnUpdate.Enabled = false;
-            this.btnUpdate.Location = new System.Drawing.Point(297, 502);
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(75, 23);
-            this.btnUpdate.TabIndex = 23;
-            this.btnUpdate.Text = "Update";
-            this.btnUpdate.UseVisualStyleBackColor = true;
-            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
-            // 
             // btnAdd
             // 
             this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnAdd.Location = new System.Drawing.Point(216, 501);
+            this.btnAdd.Location = new System.Drawing.Point(257, 504);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 24;
@@ -195,7 +185,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(685, 536);
             this.Controls.Add(this.btnAdd);
-            this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnView);
             this.Controls.Add(this.btnSearch);
@@ -228,7 +217,6 @@
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnView;
         private System.Windows.Forms.Button btnDelete;
-        private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnAdd;
     }
 }
