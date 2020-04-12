@@ -216,7 +216,7 @@ namespace ShoppingCart2
                             customerAddress.ZipCode 
                         });
 
-                        addressTypeString = customerAddressType.AddressTypeName;
+                        addressTypeString = customerAddressType.Name;
 
                     }
                     else
@@ -362,7 +362,7 @@ namespace ShoppingCart2
                             customerAddress.ZipCode
                         });
 
-                        addressTypeString = customerAddressType.AddressTypeName;
+                        addressTypeString = customerAddressType.Name;
                     }
                     else
                     {

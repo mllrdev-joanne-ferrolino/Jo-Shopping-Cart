@@ -99,7 +99,7 @@ namespace ShoppingCart2
                     {
                         foreach (var address in addressList)
                         {
-                            if (addressType.AddressTypeName == "Shipping Address")
+                            if (addressType.Name == "Shipping Address")
                             {
                                 tabControlAddress.SelectedTab = tabPage1;
                                 lblShippingAddressId.Text = address.Id.ToString();
@@ -109,7 +109,7 @@ namespace ShoppingCart2
                                 lblZipCodeName.Text = address.ZipCode;
                                 _addressTypeList.Add(addressType);
                             }
-                            else if (addressType.AddressTypeName == "Mailing Address")
+                            else if (addressType.Name == "Mailing Address")
                             {
                                 tabControlAddress.SelectedTab = tabPage2;
                                 lblMailingAddressId.Text = address.Id.ToString();
@@ -120,7 +120,7 @@ namespace ShoppingCart2
                                 _addressTypeList.Add(addressType);
 
                             }
-                            else if (addressType.AddressTypeName == "Billing Address")
+                            else if (addressType.Name == "Billing Address")
                             {
                                 tabControlAddress.SelectedTab = tabPage3;
                                 lblBillingAddressId.Text = address.Id.ToString();

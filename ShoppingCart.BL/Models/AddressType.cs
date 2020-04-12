@@ -10,7 +10,7 @@ namespace ShoppingCart.BL.Models
     {
         public int CustomerId { get; set; }
         public int AddressId { get; set; }
-        public string AddressTypeName { get; set; }
+        public string Name { get; set; }
 
     }
 }
