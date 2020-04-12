@@ -49,18 +49,18 @@ namespace ShoppingCart2
                 else
                 {
                     orderId = _orderItemManager.GetAll().LastOrDefault().OrderId;
+                    
                     orderList = _orderManager.GetAll().Where(x => x.Id == orderId);
                 }
 
                 IEnumerable<OrderItem> orderItemList = _orderItemManager.GetAll().Where(x => x.OrderId == orderId);
-                IList<Product> productList = _productManager.GetAll();
 
                 if (orderItemList != null && orderList != null)
                 {
                     ListViewOrderItems.Items.AddRange(orderItemList.Select(x => new ListViewItem(new string[] 
                     { 
-                        x.ProductId.ToString(), 
-                        productList.FirstOrDefault(y => y.Id == x.ProductId).Name, 
+                        x.ProductId.ToString(),
+                        _productManager.GetById(x.ProductId).Name,
                         x.Quantity.ToString(), 
                         x.Amount.ToString("0.00") 
                     })).ToArray());

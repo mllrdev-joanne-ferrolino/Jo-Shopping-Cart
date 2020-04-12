@@ -29,7 +29,7 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetByName(name);
         }
 
-        public new bool Insert(Address address)
+        public new int Insert(Address address)
         {
             return Repository.Insert(address);
         }

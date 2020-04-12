@@ -13,7 +13,6 @@ namespace ShoppingCart.BL.Managers
     public class OrderItemManager : BaseManager<OrderItem>, IOrderItemManager
     {
         public override IRepository<OrderItem> Repository => new OrderItemRepository();
-        private IOrderItemRepository _orderItemRepository = new OrderItemRepository();
         public new IList<OrderItem> GetAll()
         {
             return Repository.GetAll();
@@ -28,7 +27,7 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetByName(name);
         }
 
-        public new bool Insert(OrderItem orderItem)
+        public new int Insert(OrderItem orderItem)
         {
             return Repository.Insert(orderItem);
         }
@@ -45,7 +44,7 @@ namespace ShoppingCart.BL.Managers
 
         public bool DeleteByOrderId(int[] id) 
         {
-            return _orderItemRepository.DeleteByOrderId(id);
+            return ((IOrderItemRepository)Repository).DeleteByOrderId(id);
         }
     }
 }

@@ -2,9 +2,11 @@
 using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
 using ShoppingCart.BL.Models;
+using ShoppingCart.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -22,6 +24,14 @@ namespace ShoppingCart2
         private List<AddressType> _addressTypeList;
         private Address _address;
         private AddressType _addressType;
+        private bool _isValid;
+
+        public bool IsValid
+        {
+            get { return _isValid; }
+            set { _isValid = value; }
+        }
+
 
         public List<AddressType> AddressTypeList
         {
@@ -64,130 +74,6 @@ namespace ShoppingCart2
             return customer.FirstName.ToLower() == txtFirstName.Text.ToLower() && customer.LastName.ToLower() == txtLastName.Text.ToLower();
         }
 
-        private void GetData() 
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(lblCustomerId.Text))
-                {
-                    lblCustomerId.Text = "0";
-                }
-
-                _customer = new Customer()
-                {
-                    Id = Convert.ToInt32(lblCustomerId.Text),
-                    LastName = txtLastName.Text,
-                    FirstName = txtFirstName.Text,
-                    Email = txtEmail.Text,
-                    MobileNumber = txtMobileNumber.Text
-                };
-
-                if (!string.IsNullOrWhiteSpace(txtShippingStreetLine.Text))
-                {
-                    if (string.IsNullOrWhiteSpace(lblShippingAddressId.Text))
-                    {
-                        lblShippingAddressId.Text = "0";
-                        Address shippingAddress = new Address()
-                        {
-                            Id = Convert.ToInt32(lblShippingAddressId.Text),
-                            AddressLine = txtShippingStreetLine.Text,
-                            City = txtShippingCity.Text,
-                            Country = txtShippingCountry.Text,
-                            ZipCode = txtShippingZipcode.Text
-                        };
-
-                        AddressType addressType = new AddressType() { AddressId = shippingAddress.Id, AddressTypeName = "Shipping Address" };
-                        _addressList.Add(shippingAddress);
-                        _addressTypeList.Add(addressType);
-
-                    }
-                    else if (_addressList.Count > 0)
-                    {
-                        if (_addressList.FirstOrDefault(x => x.Id == Convert.ToInt32(lblShippingAddressId.Text)) != null)
-                        {
-                            var address = _addressList.FirstOrDefault(x => x.Id == Convert.ToInt32(lblShippingAddressId.Text));
-                            address.AddressLine = txtShippingStreetLine.Text;
-                            address.City = txtShippingCity.Text;
-                            address.Country = txtShippingCountry.Text;
-                            address.ZipCode = txtShippingZipcode.Text;
-                        }
-                    }
-
-                }
-
-                if (!string.IsNullOrWhiteSpace(txtMailingStreet.Text))
-                {
-                    if (string.IsNullOrWhiteSpace(lblMailingAddressId.Text))
-                    {
-                        lblMailingAddressId.Text = "0";
-
-                        Address mailingAddress = new Address()
-                        {
-                            Id = Convert.ToInt32(lblMailingAddressId.Text),
-                            AddressLine = txtMailingStreet.Text,
-                            City = txtMailingCity.Text,
-                            Country = txtMailingCountry.Text,
-                            ZipCode = txtMailingZipcode.Text
-                        };
-
-                        AddressType addressType = new AddressType() { AddressId = mailingAddress.Id, AddressTypeName = "Mailing Address" };
-                        _addressList.Add(mailingAddress);
-                        _addressTypeList.Add(addressType);
-                    }
-                    else if (_addressList.Count > 0)
-                    {
-                        if (_addressList.FirstOrDefault(x => x.Id == Convert.ToInt32(lblMailingAddressId.Text)) != null)
-                        {
-                            var address = _addressList.FirstOrDefault(x => x.Id == Convert.ToInt32(lblMailingAddressId.Text));
-                            address.AddressLine = txtMailingStreet.Text;
-                            address.City = txtMailingCity.Text;
-                            address.Country = txtMailingCountry.Text;
-                            address.ZipCode = txtMailingZipcode.Text;
-                        }
-                    }
-                   
-                }
-
-                if (!string.IsNullOrWhiteSpace(txtBillingStreet.Text))
-                {
-                    if (string.IsNullOrWhiteSpace(lblMailingAddressId.Text))
-                    {
-                        lblMailingAddressId.Text = "0";
-                        Address billingAddress = new Address()
-                        {
-                            Id = Convert.ToInt32(lblBillingAddressId.Text),
-                            AddressLine = txtBillingStreet.Text,
-                            City = txtBillingCity.Text,
-                            Country = txtBillingCountry.Text,
-                            ZipCode = txtBillingZipcode.Text
-                        };
-
-                        AddressType addressType = new AddressType() { AddressId = billingAddress.Id, AddressTypeName = "Mailing Address" };
-
-                        _addressList.Add(billingAddress);
-                        _addressTypeList.Add(addressType);
-                    }
-                    else if (_addressList.Count > 0)
-                    {
-                        if (_addressList.FirstOrDefault(x => x.Id == Convert.ToInt32(lblBillingAddressId.Text)) != null)
-                        {
-                            var address = _addressList.FirstOrDefault(x => x.Id == Convert.ToInt32(lblBillingAddressId.Text));
-                            address.AddressLine = txtBillingStreet.Text;
-                            address.City = txtBillingCity.Text;
-                            address.Country = txtBillingCountry.Text;
-                            address.ZipCode = txtBillingZipcode.Text;
-                        }
-                    }
-
-
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            
-        }
         private void btnSubmit_Click(object sender, EventArgs e)
         {
             try
@@ -206,14 +92,17 @@ namespace ShoppingCart2
                     {
                         GetData();
 
-                        if (_customerManager.Insert(_customer))
+                        int customerId = _customerManager.Insert(_customer);
+
+                        if (customerId > 0)
                         {
                             foreach (var address in _addressList)
                             {
-                                if (_addressManager.Insert(address))
-                                {
-                                    address.Id = _addressManager.GetAll().Select(x => x.Id).LastOrDefault();
+                                int addressId = _addressManager.Insert(address);
 
+                                if ( addressId > 0)
+                                {
+                                    address.Id = addressId;
                                 }
                                 else
                                 {
@@ -226,7 +115,7 @@ namespace ShoppingCart2
                                 for (int i = 0; i < _addressList.Count; i++)
                                 {
                                     _addressTypeList[i].AddressId = _addressList[i].Id;
-                                    _addressTypeList[i].CustomerId = _customerManager.GetAll().Select(x => x.Id).LastOrDefault();
+                                    _addressTypeList[i].CustomerId = customerId;
                                 }
                             }
                             catch (Exception ex)
@@ -236,7 +125,7 @@ namespace ShoppingCart2
 
                             foreach (var addressType in _addressTypeList)
                             {
-                                MessageBox.Show(_typeManager.Insert(addressType) ? "Address details inserted successfully." : "Address type was not inserted.");
+                                MessageBox.Show(_typeManager.Insert(addressType) > 0 ? "Address details inserted successfully." : "Address type was not inserted.");
                             }
 
                             MessageBox.Show("Customer details inserted successfully.");
@@ -246,7 +135,9 @@ namespace ShoppingCart2
 
                             CustomerProfile customerProfile = new CustomerProfile();
                             customerProfile.MdiParent = this.MdiParent;
+                            _isValid = true;
                             this.Close();
+                            
                         }
                         else
                         {
@@ -257,6 +148,10 @@ namespace ShoppingCart2
 
                     }
 
+                }
+                else
+                {
+                    _isValid = false;
                 }
             }
             catch (Exception ex)
@@ -273,8 +168,7 @@ namespace ShoppingCart2
                 if (string.IsNullOrWhiteSpace(textbox.Text))
                 {
                     textbox.Focus();
-                    errorProvider.SetError(textbox, "Please fill up this field.");
-                    MessageBox.Show($"Please fill up {textbox.Name.Substring(3)}");
+                    errorProvider.SetError(textbox, $"Please fill up {textbox.Name.Substring(3)}.");
                     return false;
                 }
                 else
@@ -284,10 +178,9 @@ namespace ShoppingCart2
 
                 if (textbox == txtEmail)
                 {
-                    if (!txtEmail.Text.Contains("@") || !txtEmail.Text.Contains("."))
+                    if (!new EmailAddressAttribute().IsValid(txtEmail.Text))
                     {
-                        errorProvider.SetError(txtEmail, "Invalid email.");
-                        MessageBox.Show("Please enter valid email.");
+                        errorProvider.SetError(txtEmail, "Please enter valid email.");
                         return false;
                     }
                     else
@@ -300,14 +193,12 @@ namespace ShoppingCart2
                 {
                     if (txtFirstName.Text.Any(x => char.IsDigit(x)))
                     {
-                        errorProvider.SetError(txtFirstName, "Name contains number.");
-                        MessageBox.Show("Please enter valid name.");
+                        errorProvider.SetError(txtFirstName, "Name contains number. Please enter valid name.");
                         return false;
                     }
                     if (txtLastName.Text.Any(y => char.IsDigit(y)))
                     {
-                        errorProvider.SetError(txtLastName, "Name contains number.");
-                        MessageBox.Show("Please enter valid name.");
+                        errorProvider.SetError(txtLastName, "Name contains number. Please enter valid name.");
                         return false;
                     }
                     else
@@ -417,54 +308,19 @@ namespace ShoppingCart2
                 if (ValidateAllFields())
                 {
                     List<int> existingId = new List<int>();
-                    List<Address> addressList = new List<Address>();
-                    Address address = new Address();
-
+                   
                     GetData();
-
-                    foreach (var item in _addressTypeList)
-                    {
-                        address = _addressList.FirstOrDefault(x => x.Id == item.AddressId);
-
-                        if (item.AddressTypeName == "Shipping Address")
-                        {
-                            address.Id = Convert.ToInt32(lblShippingAddressId.Text);
-                            address.AddressLine = txtShippingStreetLine.Text;
-                            address.City = txtShippingCity.Text;
-                            address.Country = txtShippingCountry.Text;
-                            address.ZipCode = txtShippingZipcode.Text;
-                        }
-                        else if (item.AddressTypeName == "Mailing Address")
-                        {
-                            address.Id = Convert.ToInt32(lblMailingAddressId.Text);
-                            address.AddressLine = txtMailingStreet.Text;
-                            address.City = txtMailingCity.Text;
-                            address.Country = txtMailingCountry.Text;
-                            address.ZipCode = txtMailingZipcode.Text;
-                        }
-                        else if (item.AddressTypeName == "Billing Address")
-                        {
-                            address.Id = Convert.ToInt32(lblBillingAddressId.Text);
-                            address.AddressLine = txtBillingStreet.Text;
-                            address.City = txtBillingCity.Text;
-                            address.Country = txtBillingCountry.Text;
-                            address.ZipCode = txtBillingZipcode.Text;
-                        }
-
-                        addressList.Add(address);
-                    }
 
                     if (_customerManager.Update(_customer))
                     {
-                        MessageBox.Show("Customer details updated successfully.");
-
-                        foreach (var item in addressList)
+                        
+                        foreach (var item in _addressList)
                         {
                             if (item.Id == 0)
                             {
-                                MessageBox.Show(_addressManager.Insert(item) ? "Address details added successfully." : "Address details were not added.");
+                                MessageBox.Show(_addressManager.Insert(item) > 0 ? "Address details added successfully." : "Address details were not added.");
 
-                                item.Id = _addressManager.GetAll().Select(x => x.Id).LastOrDefault();
+                                item.Id = _addressManager.Insert(item);
                             }
                             else
                             {
@@ -499,10 +355,12 @@ namespace ShoppingCart2
                         {
                             if (existingId.Where(x => x == addressType.AddressId).Count() == 0)
                             {
-                                MessageBox.Show(_typeManager.Insert(addressType) ? "Address type inserted successfully." : "Address type was not inserted.");
+                                MessageBox.Show(_typeManager.Insert(addressType) > 0 ? "Address type inserted successfully." : "Address type was not inserted.");
                             }
 
                         }
+
+                        MessageBox.Show("Customer details updated successfully.");
 
                         _addressList.Clear();
                         _addressTypeList.Clear();
@@ -533,6 +391,130 @@ namespace ShoppingCart2
             {
                 textbox.Clear();
             }
+        }
+
+        private void GetData()
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(lblCustomerId.Text))
+                {
+                    lblCustomerId.Text = "0";
+                }
+
+                _customer = new Customer()
+                {
+                    Id = lblCustomerId.Text.ToInt(),
+                    LastName = txtLastName.Text,
+                    FirstName = txtFirstName.Text,
+                    Email = txtEmail.Text,
+                    MobileNumber = txtMobileNumber.Text
+                };
+
+                if (!string.IsNullOrWhiteSpace(txtShippingStreetLine.Text))
+                {
+                    if (string.IsNullOrWhiteSpace(lblShippingAddressId.Text))
+                    {
+                        lblShippingAddressId.Text = "0";
+                        Address shippingAddress = new Address()
+                        {
+                            Id = lblShippingAddressId.Text.ToInt(),
+                            AddressLine = txtShippingStreetLine.Text,
+                            City = txtShippingCity.Text,
+                            Country = txtShippingCountry.Text,
+                            ZipCode = txtShippingZipcode.Text
+                        };
+
+                        AddressType addressType = new AddressType() { AddressId = shippingAddress.Id, AddressTypeName = "Shipping Address" };
+                        _addressList.Add(shippingAddress);
+                        _addressTypeList.Add(addressType);
+
+                    }
+                    else if (_addressList.Count > 0)
+                    {
+                        if (_addressList.FirstOrDefault(x => x.Id == lblShippingAddressId.Text.ToInt()) != null)
+                        {
+                            var address = _addressList.FirstOrDefault(x => x.Id == lblShippingAddressId.Text.ToInt());
+                            address.AddressLine = txtShippingStreetLine.Text;
+                            address.City = txtShippingCity.Text;
+                            address.Country = txtShippingCountry.Text;
+                            address.ZipCode = txtShippingZipcode.Text;
+                        }
+                    }
+
+                }
+
+                if (!string.IsNullOrWhiteSpace(txtMailingStreet.Text))
+                {
+                    if (string.IsNullOrWhiteSpace(lblMailingAddressId.Text))
+                    {
+                        lblMailingAddressId.Text = "0";
+
+                        Address mailingAddress = new Address()
+                        {
+                            Id = lblMailingAddressId.Text.ToInt(),
+                            AddressLine = txtMailingStreet.Text,
+                            City = txtMailingCity.Text,
+                            Country = txtMailingCountry.Text,
+                            ZipCode = txtMailingZipcode.Text
+                        };
+
+                        AddressType addressType = new AddressType() { AddressId = mailingAddress.Id, AddressTypeName = "Mailing Address" };
+                        _addressList.Add(mailingAddress);
+                        _addressTypeList.Add(addressType);
+                    }
+                    else if (_addressList.Count > 0)
+                    {
+                        if (_addressList.FirstOrDefault(x => x.Id == lblMailingAddressId.Text.ToInt()) != null)
+                        {
+                            var address = _addressList.FirstOrDefault(x => x.Id == lblMailingAddressId.Text.ToInt());
+                            address.AddressLine = txtMailingStreet.Text;
+                            address.City = txtMailingCity.Text;
+                            address.Country = txtMailingCountry.Text;
+                            address.ZipCode = txtMailingZipcode.Text;
+                        }
+                    }
+
+                }
+
+                if (!string.IsNullOrWhiteSpace(txtBillingStreet.Text))
+                {
+                    if (string.IsNullOrWhiteSpace(lblMailingAddressId.Text))
+                    {
+                        lblMailingAddressId.Text = "0";
+                        Address billingAddress = new Address()
+                        {
+                            Id = lblBillingAddressId.Text.ToInt(),
+                            AddressLine = txtBillingStreet.Text,
+                            City = txtBillingCity.Text,
+                            Country = txtBillingCountry.Text,
+                            ZipCode = txtBillingZipcode.Text
+                        };
+
+                        AddressType addressType = new AddressType() { AddressId = billingAddress.Id, AddressTypeName = "Mailing Address" };
+
+                        _addressList.Add(billingAddress);
+                        _addressTypeList.Add(addressType);
+                    }
+                    else if (_addressList.Count > 0)
+                    {
+                        if (_addressList.FirstOrDefault(x => x.Id == lblBillingAddressId.Text.ToInt()) != null)
+                        {
+                            var address = _addressList.FirstOrDefault(x => x.Id == lblBillingAddressId.Text.ToInt());
+                            address.AddressLine = txtBillingStreet.Text;
+                            address.City = txtBillingCity.Text;
+                            address.Country = txtBillingCountry.Text;
+                            address.ZipCode = txtBillingZipcode.Text;
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
     }
 }

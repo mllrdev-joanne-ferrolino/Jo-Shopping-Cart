@@ -2,6 +2,7 @@
 using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
 using ShoppingCart.BL.Models;
+using ShoppingCart.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,6 +33,15 @@ namespace ShoppingCart2
             InitializeComponent();
         }
 
+        private bool _isValid;
+
+        public bool IsValid
+        {
+            get { return _isValid; }
+            set { _isValid = value; }
+        }
+
+
         private void btnInsert_Click(object sender, EventArgs e)
         {
             try
@@ -45,11 +55,16 @@ namespace ShoppingCart2
 
                     _product = new Product() { Name = name, Price = price, Description = description, Stock = stock };
 
-                    MessageBox.Show(_manager.Insert(_product) ? "Details inserted successfully." : "Details were not inserted.");
-
+                    MessageBox.Show(_manager.Insert(_product) > 0 ? "Details inserted successfully." : "Details were not inserted.");
+                    _isValid = true;
                     ProductForm productForm = new ProductForm();
                     this.Close();
                 }
+                else
+                {
+                    _isValid = false;
+                }
+               
             }
             catch (Exception ex)
             {
@@ -63,11 +78,11 @@ namespace ShoppingCart2
             {
                 if (ValidateAllFields())
                 {
-                    int id = Convert.ToInt32(lblId.Text);
+                    int id = lblId.Text.ToInt();
                     string name = txtName.Text;
                     float price = (float)Convert.ToDouble(txtPrice.Text);
                     string description = txtDescription.Text;
-                    int stock = Convert.ToInt32(txtStock.Text);
+                    int stock = txtStock.Text.ToInt();
 
                     _product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock };
 
@@ -109,8 +124,7 @@ namespace ShoppingCart2
                 if (string.IsNullOrWhiteSpace(textbox.Text))
                 {
                     textbox.Focus();
-                    errorProviderName.SetError(textbox, "Please fill up this field.");
-                    MessageBox.Show($"Please fill up {textbox.Name.Substring(3)}");
+                    errorProviderName.SetError(textbox, $"Please fill up this field {textbox.Name.Substring(3)}.");
                     return false;
                 }
                 else
@@ -129,7 +143,7 @@ namespace ShoppingCart2
             {
                 lblId.Text = _product.Id.ToString();
                 txtName.Text = _product.Name;
-                txtPrice.Text = _product.Price.ToString();
+                txtPrice.Text = _product.Price.ToString("0.00");
                 txtDescription.Text = _product.Description;
                 txtStock.Text = _product.Stock.ToString();
                 btnAdd.Visible = false;
@@ -149,8 +163,7 @@ namespace ShoppingCart2
 
             if (string.IsNullOrWhiteSpace(textbox.Text))
             {
-                errorProviderName.SetError(textbox, "Please fill up this field.");
-                MessageBox.Show($"Please fill up {textbox.Name.Substring(3)}");
+                errorProviderName.SetError(textbox, $"Please fill up {textbox.Name.Substring(3)}.");
             }
             else
             {

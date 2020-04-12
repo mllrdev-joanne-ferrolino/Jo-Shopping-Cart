@@ -58,93 +58,7 @@ namespace ShoppingCart2
                 {
                     if (_customer.Id > 0)
                     {
-                        _customer = _customerManager.GetById(_customer.Id);
-                        lblCustomerId.Text = _customer.Id.ToString();
-                        lblFirstName.Text = _customer.FirstName;
-                        lblLastName.Text = _customer.LastName;
-                        lblEmail.Text = _customer.Email;
-                        lblMobileNumber.Text = _customer.MobileNumber;
-
-                        var typeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == _customer.Id);
-
-                        if (typeList.Count() > 0)
-                        {
-                            foreach (var addressType in typeList)
-                            {
-                                var addressList = _addressManager.GetAll().Where(x => x.Id == addressType.AddressId);
-
-                                if (addressList.Count() > 0)
-                                {
-                                    foreach (var address in addressList)
-                                    {
-                                        if (addressType.AddressTypeName == "Shipping Address")
-                                        {
-                                            tabControlAddress.SelectedTab = tabPage1;
-                                            lblShippingAddressId.Text = address.Id.ToString();
-                                            lblStreetLineName.Text = address.AddressLine;
-                                            lblCityName.Text = address.City;
-                                            lblCountryName.Text = address.Country;
-                                            lblZipCodeName.Text = address.ZipCode;
-                                            _addressTypeList.Add(addressType);
-                                        }
-                                        else if (addressType.AddressTypeName == "Mailing Address")
-                                        {
-                                            tabControlAddress.SelectedTab = tabPage2;
-                                            lblMailingAddressId.Text = address.Id.ToString();
-                                            label12.Text = address.AddressLine;
-                                            label13.Text = address.City;
-                                            label14.Text = address.Country;
-                                            label15.Text = address.ZipCode;
-                                            _addressTypeList.Add(addressType);
-
-                                        }
-                                        else if (addressType.AddressTypeName == "Billing Address")
-                                        {
-                                            tabControlAddress.SelectedTab = tabPage3;
-                                            lblBillingAddressId.Text = address.Id.ToString();
-                                            label20.Text = address.AddressLine;
-                                            label21.Text = address.City;
-                                            label22.Text = address.Country;
-                                            label23.Text = address.ZipCode;
-                                            _addressTypeList.Add(addressType);
-                                        }
-
-                                        _addressList.Add(address);
-
-                                    }
-
-                                }
-                                else
-                                {
-                                    MessageBox.Show("No address for this customer");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("No address type for this customer.");
-                        }
-                       
-                        var orderInfo = _orderManager.GetAll().Where(x => x.CustomerId == _customer.Id);
-
-                        if (orderInfo.Count() > 0)
-                        {
-                            ListViewOrderItems.Items.Clear();
-                            ListViewOrderItems.Items.AddRange(orderInfo.Select(x => new ListViewItem(new string[]
-                        {
-                        x.Id.ToString(),
-                        x.CustomerId.ToString(),
-                        x.TotalAmount.ToString("0.00"),
-                        x.DeliveryDate.ToShortDateString(),
-                        x.Status
-                        })).ToArray());
-
-                        }
-                        else
-                        {
-                            MessageBox.Show("There are no orders for this customer.");
-                            btnAddOrder.Enabled = true;
-                        }
+                        LoadData();
 
                     }
                     else
@@ -164,6 +78,96 @@ namespace ShoppingCart2
            
         }
 
+        private void LoadData() 
+        {
+            _customer = _customerManager.GetById(_customer.Id);
+            lblCustomerId.Text = _customer.Id.ToString();
+            lblFirstName.Text = _customer.FirstName;
+            lblLastName.Text = _customer.LastName;
+            lblEmail.Text = _customer.Email;
+            lblMobileNumber.Text = _customer.MobileNumber;
+
+            var typeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == _customer.Id);
+
+            if (typeList.Count() > 0)
+            {
+                foreach (var addressType in typeList)
+                {
+                    var addressList = _addressManager.GetAll().Where(x => x.Id == addressType.AddressId);
+
+                    if (addressList.Count() > 0)
+                    {
+                        foreach (var address in addressList)
+                        {
+                            if (addressType.AddressTypeName == "Shipping Address")
+                            {
+                                tabControlAddress.SelectedTab = tabPage1;
+                                lblShippingAddressId.Text = address.Id.ToString();
+                                lblStreetLineName.Text = address.AddressLine;
+                                lblCityName.Text = address.City;
+                                lblCountryName.Text = address.Country;
+                                lblZipCodeName.Text = address.ZipCode;
+                                _addressTypeList.Add(addressType);
+                            }
+                            else if (addressType.AddressTypeName == "Mailing Address")
+                            {
+                                tabControlAddress.SelectedTab = tabPage2;
+                                lblMailingAddressId.Text = address.Id.ToString();
+                                label12.Text = address.AddressLine;
+                                label13.Text = address.City;
+                                label14.Text = address.Country;
+                                label15.Text = address.ZipCode;
+                                _addressTypeList.Add(addressType);
+
+                            }
+                            else if (addressType.AddressTypeName == "Billing Address")
+                            {
+                                tabControlAddress.SelectedTab = tabPage3;
+                                lblBillingAddressId.Text = address.Id.ToString();
+                                label20.Text = address.AddressLine;
+                                label21.Text = address.City;
+                                label22.Text = address.Country;
+                                label23.Text = address.ZipCode;
+                                _addressTypeList.Add(addressType);
+                            }
+
+                            _addressList.Add(address);
+
+                        }
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("No address for this customer");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("No address type for this customer.");
+            }
+
+            var orderInfo = _orderManager.GetAll().Where(x => x.CustomerId == _customer.Id);
+
+            if (orderInfo.Count() > 0)
+            {
+                ListViewOrderItems.Items.Clear();
+                ListViewOrderItems.Items.AddRange(orderInfo.Select(x => new ListViewItem(new string[]
+            {
+                        x.Id.ToString(),
+                        x.CustomerId.ToString(),
+                        x.TotalAmount.ToString("0.00"),
+                        x.DeliveryDate.ToShortDateString(),
+                        x.Status
+            })).ToArray());
+
+            }
+            else
+            {
+                MessageBox.Show("There are no orders for this customer.");
+                btnAddOrder.Enabled = true;
+            }
+        }
         private void btnEditDetails_Click(object sender, EventArgs e)
         {
             EditCustomerForm editCustomerForm = new EditCustomerForm();
@@ -174,6 +178,7 @@ namespace ShoppingCart2
             if (editCustomerForm.ShowDialog() == DialogResult.OK)
             {
                 this.Refresh();
+                LoadData();
             }
             
         }
@@ -184,8 +189,6 @@ namespace ShoppingCart2
             {
                 if (ListViewOrderItems.SelectedItems.Count > 0)
                 {
-                    btnViewOrder.Enabled = true;
-
                     int id = Convert.ToInt32(ListViewOrderItems.SelectedItems[0].SubItems[0].Text);
                     float totalAmount = (float)Convert.ToDouble(ListViewOrderItems.SelectedItems[0].SubItems[2].Text);
                     DateTime deliveryDate = Convert.ToDateTime(ListViewOrderItems.SelectedItems[0].SubItems[3].Text);
@@ -204,18 +207,18 @@ namespace ShoppingCart2
         private void btnAddOrder_Click(object sender, EventArgs e)
         {
             OrderForm orderForm = new OrderForm();
+            orderForm.Customer = _customer;
             orderForm.MdiParent = this.MdiParent;
             orderForm.Show();
             this.Close();
         }
 
-        private void btnViewOrder_Click(object sender, EventArgs e)
+        private void ListViewOrderItems_DoubleClick(object sender, EventArgs e)
         {
             CheckoutForm checkoutForm = new CheckoutForm();
+            checkoutForm.Order = _order;
             checkoutForm.MdiParent = this.MdiParent;
             checkoutForm.Show();
         }
-
-       
     }
 }

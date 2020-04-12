@@ -37,6 +37,7 @@
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -159,6 +160,10 @@
     <ProjectReference Include="..\ShoppingCart.BL\ShoppingCart.BL.csproj">
       <Project>{DE0A4DB2-CC1A-4F62-B40C-CE62702C4987}</Project>
       <Name>ShoppingCart.BL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShoppingCart.Utilities\ShoppingCart.Utilities.csproj">
+      <Project>{14e3441a-e7bd-4b5f-9011-c5856d16f6d8}</Project>
+      <Name>ShoppingCart.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

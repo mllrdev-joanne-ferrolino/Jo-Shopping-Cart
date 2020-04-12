@@ -28,7 +28,7 @@ namespace ShoppingCart.BL.Repositories
             return base.GetByName(name);
         }
 
-        public new bool Insert(Customer customer)
+        public new int Insert(Customer customer)
         {
             return base.Insert(customer);
         }

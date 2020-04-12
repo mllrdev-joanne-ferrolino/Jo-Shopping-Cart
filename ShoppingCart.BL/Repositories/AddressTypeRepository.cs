@@ -25,7 +25,7 @@ namespace ShoppingCart.BL.Repositories
         {
             return base.GetByName(name);
         }
-        public new bool Insert(AddressType addressType)
+        public new int Insert(AddressType addressType)
         {
             return base.Insert(addressType);
         }

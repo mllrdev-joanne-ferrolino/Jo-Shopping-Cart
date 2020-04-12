@@ -13,7 +13,6 @@ namespace ShoppingCart.BL.Managers
     public class CustomerManager : BaseManager<Customer>, ICustomerManager
     {
         public override IRepository<Customer> Repository => new CustomerRepository();
-        public ICustomerRepository repository = new CustomerRepository();
 
         public new IList<Customer> GetAll()
         {
@@ -28,7 +27,7 @@ namespace ShoppingCart.BL.Managers
         {
             return Repository.GetByName(name);
         }
-        public new bool Insert(Customer customer)
+        public new int Insert(Customer customer)
         {
             return Repository.Insert(customer);
         }
@@ -45,7 +44,7 @@ namespace ShoppingCart.BL.Managers
 
         public int GetId(int id)
         {
-            return repository.GetId(id);
+            return ((ICustomerRepository)Repository).GetId(id);
         }
     }
 }

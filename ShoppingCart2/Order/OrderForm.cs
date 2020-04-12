@@ -2,6 +2,7 @@
 using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
 using ShoppingCart.BL.Models;
+using ShoppingCart.Utilities;
 using ShoppingCart2;
 using System;
 using System.Collections.Generic;
@@ -98,9 +99,9 @@ namespace ShoppingCart2
             ListViewOrders.Items.AddRange(_orderItemList.Select(o => new ListViewItem(new string[] 
             { 
                 o.ProductId.ToString(), 
-                _product.Name, 
-                o.Quantity.ToString(), 
-                _product.Price.ToString("0.00"), 
+                _productManager.GetById(o.ProductId).Name, 
+                o.Quantity.ToString(),
+                 _productManager.GetById(o.ProductId).Price.ToString("0.00"), 
                 o.Amount.ToString("0.00") 
             })).ToArray());
         }
@@ -110,7 +111,7 @@ namespace ShoppingCart2
             if (ListViewProducts.SelectedItems.Count > 0)
             {
                 ListViewItem listViewItem = ListViewProducts.SelectedItems[0];
-                int id = Convert.ToInt32(listViewItem.SubItems[0].Text);
+                int id = listViewItem.SubItems[0].Text.ToInt();
                 string productName = listViewItem.SubItems[1].Text;
                 float price = (float)Convert.ToDouble(listViewItem.SubItems[2].Text);
                 string description = listViewItem.SubItems[3].Text;
@@ -138,10 +139,7 @@ namespace ShoppingCart2
                     lblTotalAmount.Text = totalAmount.ToString("0.00");
 
                 }
-                
-
             }
-           
         }
 
         private void OrderForm_Activated(object sender, EventArgs e)
@@ -173,30 +171,31 @@ namespace ShoppingCart2
         {
             try
             {
-
                 Order order = new Order() 
                 { 
-                    CustomerId = Convert.ToInt32(lblCustomerId.Text), 
+                    CustomerId = lblCustomerId.Text.ToInt(), 
                     TotalAmount = (float)Convert.ToDouble(lblTotalAmount.Text), 
                     DeliveryDate = DateTime.Now, 
                     Status = "for shipping"
                 };
 
-                if (_orderManager.Insert(order))
+                if (_orderManager.Insert(order) > 0)
                 {
-                    int orderId = _orderManager.GetAll().LastOrDefault().Id;
-
+                    order.Id = _orderManager.Insert(order);
+                    
                     foreach (var item in _orderItemList)
                     {
-                        item.OrderId = orderId;
-                        MessageBox.Show(_orderItemManager.Insert(item)? "Order placed successfully." : "Order items were not inserted.");
-                        
+                        item.OrderId = order.Id;
+                        _orderItemManager.Insert(item);
                     }
 
+                    MessageBox.Show("Order placed successfully.");
                     _orderItem = new OrderItem();
                     _product = new Product();
+                    lblTotalAmount.Text = string.Empty;
                     ListViewOrders.Items.Clear();
                     CheckoutForm checkoutForm = new CheckoutForm();
+                    checkoutForm.Order = order;
                     checkoutForm.MdiParent = this.MdiParent;
                     checkoutForm.Show();
 
@@ -296,7 +295,7 @@ namespace ShoppingCart2
         {
             try
             {
-                int productId = Convert.ToInt32(ListViewOrders.SelectedItems[0].SubItems[0].Text);
+                int productId = ListViewOrders.SelectedItems[0].SubItems[0].Text.ToInt();
 
                 foreach (var item in _orderItemList)
                 {
@@ -327,9 +326,9 @@ namespace ShoppingCart2
                 if (ListViewOrders.SelectedItems.Count > 0)
                 {
                     ListViewItem ListViewOrderItem = ListViewOrders.SelectedItems[0];
-                    int id = Convert.ToInt32(ListViewOrderItem.SubItems[0].Text);
+                    int id = ListViewOrderItem.SubItems[0].Text.ToInt();
                     string name = ListViewOrderItem.SubItems[1].Text;
-                    int quantity = Convert.ToInt32(ListViewOrderItem.SubItems[2].Text);
+                    int quantity = ListViewOrderItem.SubItems[2].Text.ToInt();
                     float price = (float)Convert.ToDouble(ListViewOrderItem.SubItems[3].Text);
                     string description = _productManager.GetById(id).Description;
                     float amount = price * quantity;

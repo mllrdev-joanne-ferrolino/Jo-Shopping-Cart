@@ -90,7 +90,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.btnViewOrder = new System.Windows.Forms.Button();
             this.btnAddOrder = new System.Windows.Forms.Button();
             this.ListViewOrderItems = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -716,7 +715,6 @@
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Controls.Add(this.btnViewOrder);
             this.groupBox3.Controls.Add(this.btnAddOrder);
             this.groupBox3.Controls.Add(this.ListViewOrderItems);
             this.groupBox3.Location = new System.Drawing.Point(12, 298);
@@ -724,24 +722,12 @@
             this.groupBox3.Size = new System.Drawing.Size(733, 258);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = " ";
-            // 
-            // btnViewOrder
-            // 
-            this.btnViewOrder.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnViewOrder.Enabled = false;
-            this.btnViewOrder.Location = new System.Drawing.Point(366, 224);
-            this.btnViewOrder.Name = "btnViewOrder";
-            this.btnViewOrder.Size = new System.Drawing.Size(75, 23);
-            this.btnViewOrder.TabIndex = 2;
-            this.btnViewOrder.Text = "View Order";
-            this.btnViewOrder.UseVisualStyleBackColor = true;
-            this.btnViewOrder.Click += new System.EventHandler(this.btnViewOrder_Click);
+            this.groupBox3.Text = " Your Orders";
             // 
             // btnAddOrder
             // 
             this.btnAddOrder.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnAddOrder.Location = new System.Drawing.Point(285, 224);
+            this.btnAddOrder.Location = new System.Drawing.Point(322, 224);
             this.btnAddOrder.Name = "btnAddOrder";
             this.btnAddOrder.Size = new System.Drawing.Size(75, 23);
             this.btnAddOrder.TabIndex = 1;
@@ -768,6 +754,7 @@
             this.ListViewOrderItems.UseCompatibleStateImageBehavior = false;
             this.ListViewOrderItems.View = System.Windows.Forms.View.Details;
             this.ListViewOrderItems.SelectedIndexChanged += new System.EventHandler(this.ListViewOrderItems_SelectedIndexChanged);
+            this.ListViewOrderItems.DoubleClick += new System.EventHandler(this.ListViewOrderItems_DoubleClick);
             // 
             // columnHeader1
             // 
@@ -897,7 +884,6 @@
         private System.Windows.Forms.Button btnEditDetails;
         private System.Windows.Forms.Label lblMailingAddressId;
         private System.Windows.Forms.Label lblBillingAddressId;
-        private System.Windows.Forms.Button btnViewOrder;
         private System.Windows.Forms.Button btnAddOrder;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;

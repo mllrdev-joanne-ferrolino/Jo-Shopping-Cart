@@ -1,6 +1,7 @@
 ﻿using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
 using ShoppingCart.BL.Models;
+using ShoppingCart.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,8 +22,8 @@ namespace ShoppingCart2
         private IOrderManager _orderManager; 
         private IOrderItemManager _orderItemManager;
         private IEnumerable<Customer> _resultList;
-        public static List<Address> addressList;
-        public static IEnumerable<AddressType> addressTypeList;
+        private List<Address> _addressList;
+        private IEnumerable<AddressType> _addressTypeList;
         private Customer _customer;
         public CustomerForm()
         {
@@ -31,8 +32,8 @@ namespace ShoppingCart2
             _addressTypeManager = new AddressTypeManager();
             _orderManager = new OrderManager();
             _orderItemManager = new OrderItemManager();
-            addressList = new List<Address>();
-            addressTypeList = new List<AddressType>();
+            _addressList = new List<Address>();
+            _addressTypeList = new List<AddressType>();
             _resultList = new List<Customer>();
             _customer = new Customer();
 
@@ -45,8 +46,17 @@ namespace ShoppingCart2
         
             if (editCustomerForm.ShowDialog() == DialogResult.OK)
             {
-                ListViewCustomers.Items.Clear();
-                LoadCustomers();
+                while (editCustomerForm.IsValid == false)
+                {
+                    editCustomerForm.ShowDialog();
+                }
+
+                if (editCustomerForm.IsValid == true)
+                {
+                    ListViewCustomers.Items.Clear();
+                    LoadCustomers();
+                }
+               
             }
             
         }
@@ -91,12 +101,12 @@ namespace ShoppingCart2
                         MobileNumber = ListViewCustomers.SelectedItems[0].SubItems[4].Text
                     };
 
-                    addressTypeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == _customer.Id);
+                    _addressTypeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == _customer.Id);
 
-                    foreach (var addressItem in addressTypeList)
+                    foreach (var addressItem in _addressTypeList)
                     {
                         Address address = _addressManager.GetById(addressItem.AddressId);
-                        addressList.Add(address);
+                        _addressList.Add(address);
                     }
 
                     btnOrder.Enabled = true;
@@ -124,7 +134,7 @@ namespace ShoppingCart2
 
             foreach (ListViewItem item in ListViewCustomers.SelectedItems)
             {
-                ids.Add(Convert.ToInt32(item.SubItems[0].Text));
+                ids.Add(item.SubItems[0].Text.ToInt());
             }
 
             foreach (var id in ids)
@@ -335,11 +345,12 @@ namespace ShoppingCart2
 
             foreach (var result in _resultList)
             {
+                
                 var customerAddressType = _addressTypeManager.GetAll().FirstOrDefault(x => x.CustomerId == result.Id);
 
                 if (customerAddressType != null)
                 {
-                    var customerAddress = _addressManager.GetAll().FirstOrDefault(x => x.Id == customerAddressType.AddressId);
+                    var customerAddress = _addressManager.GetById(customerAddressType.AddressId);
 
                     if (customerAddress != null)
                     {

@@ -32,7 +32,7 @@ namespace ShoppingCart.BL.Repositories
             return base.GetByName(name);
         }
 
-        public new bool Insert(Product product) 
+        public new int Insert(Product product) 
         {
             return base.Insert(product);
         }

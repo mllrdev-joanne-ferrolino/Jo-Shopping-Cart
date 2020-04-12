@@ -13,7 +13,6 @@ namespace ShoppingCart.BL.Managers
     public class AddressTypeManager : BaseManager<AddressType>, IAddressTypeManager
     {
         public override IRepository<AddressType> Repository => new AddressTypeRepository();
-        private IAddressTypeRepository _addressTypeRepository = new AddressTypeRepository();
 
         public new IList<AddressType> GetAll()
         {
@@ -28,7 +27,7 @@ namespace ShoppingCart.BL.Managers
         {
             return Repository.GetByName(name);
         }
-        public new bool Insert(AddressType addressType)
+        public new int Insert(AddressType addressType)
         {
             return Repository.Insert(addressType);
         }
@@ -45,7 +44,7 @@ namespace ShoppingCart.BL.Managers
 
         public bool DeleteByCustomerId(int[] id) 
         {
-            return _addressTypeRepository.DeleteByCustomerId(id);
+            return ((IAddressTypeRepository)Repository).DeleteByCustomerId(id);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace ShoppingCart.BL.Repositories
             return base.GetByName(name);
         }
 
-        public new bool Insert(Order order)
+        public new int Insert(Order order)
         {
             return base.Insert(order);
         }

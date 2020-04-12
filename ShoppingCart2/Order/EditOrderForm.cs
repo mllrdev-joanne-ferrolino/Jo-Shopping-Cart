@@ -74,7 +74,7 @@ namespace ShoppingCart2
             {
                 lblId.Text = _product.Id.ToString();
                 lblProductName.Text = _product.Name;
-                lblPrice.Text = _product.Price.ToString();
+                lblPrice.Text = _product.Price.ToString("0.00");
                 lblDescription.Text = _product.Description;
             }
 

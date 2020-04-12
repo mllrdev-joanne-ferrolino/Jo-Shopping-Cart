@@ -1,6 +1,7 @@
 ﻿using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
 using ShoppingCart.BL.Models;
+using ShoppingCart.Utilities;
 using ShoppingCart2;
 using System;
 using System.Collections.Generic;
@@ -35,14 +36,22 @@ namespace ShoppingCart
         {
             EditProductForm editProductForm = new EditProductForm();
             editProductForm.Text = "Add Product";
-            DialogResult dialogResult = editProductForm.ShowDialog();
 
-            if (dialogResult == DialogResult.OK)
+            if (editProductForm.ShowDialog() == DialogResult.OK)
             {
-                ListViewProducts.Items.Clear();
-                LoadListViewItems();
-                btnAdd.Enabled = true;
-                btnDelete.Enabled = false;
+                while (editProductForm.IsValid == false)
+                {
+                    editProductForm.ShowDialog();
+                }
+
+                if (editProductForm.IsValid == true)
+                {
+                    ListViewProducts.Items.Clear();
+                    LoadListViewItems();
+                    btnAdd.Enabled = true;
+                    btnDelete.Enabled = false;
+                }
+               
             }
         }
         private void btnView_Click(object sender, EventArgs e)
@@ -190,17 +199,16 @@ namespace ShoppingCart
         {
             if (ListViewProducts.SelectedItems.Count > 0)
             {
-                int id = Convert.ToInt32(ListViewProducts.SelectedItems[0].SubItems[0].Text);
+                int id = ListViewProducts.SelectedItems[0].SubItems[0].Text.ToInt();
                 string name = ListViewProducts.SelectedItems[0].SubItems[1].Text;
-                float price = (float)Convert.ToDouble(ListViewProducts.SelectedItems[0].SubItems[2].Text);
+                float price = ListViewProducts.SelectedItems[0].SubItems[2].Text.ToFloat();
                 string description = ListViewProducts.SelectedItems[0].SubItems[3].Text;
-                int stock = Convert.ToInt32(ListViewProducts.SelectedItems[0].SubItems[4].Text);
+                int stock = ListViewProducts.SelectedItems[0].SubItems[4].Text.ToInt();
                 _product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock };
                 EditProductForm editProduct = new EditProductForm();
                 editProduct.Product = _product;
-                DialogResult dialogResult = editProduct.ShowDialog();
 
-                if (dialogResult == DialogResult.OK)
+                if (editProduct.ShowDialog() == DialogResult.OK)
                 {
                     ListViewProducts.Items.Clear();
                     LoadListViewItems();
