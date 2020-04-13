@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers
 {
-    public class AddressTypeManager : BaseManager<AddressType>, IAddressTypeManager
+    public class AddressTypeManager : BaseManager<AddressType>, IAddressTypeManager, IAssociativeManager<AddressType>
     {
         public override IRepository<AddressType> Repository => new AddressTypeRepository();
 
@@ -27,11 +27,7 @@ namespace ShoppingCart.BL.Managers
         {
             return Repository.GetByName(name);
         }
-        public new int Insert(AddressType addressType)
-        {
-            return Repository.Insert(addressType);
-        }
-
+      
         public new bool Update(AddressType addressType)
         {
             return Repository.Update(addressType);
@@ -45,6 +41,11 @@ namespace ShoppingCart.BL.Managers
         public bool DeleteByCustomerId(int[] id) 
         {
             return ((IAddressTypeRepository)Repository).DeleteByCustomerId(id);
+        }
+
+        public bool Insert(AddressType addressType) 
+        {
+            return ((IAddressTypeRepository)Repository).Insert(addressType);
         }
     }
 }

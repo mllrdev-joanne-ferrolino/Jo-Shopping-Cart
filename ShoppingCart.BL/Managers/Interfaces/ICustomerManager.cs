@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers.Interfaces
 {
-    public interface ICustomerManager : IManager<Customer>
+    public interface ICustomerManager : IManager<Customer>, IIndependentManager<Customer>
     {
         int GetId(int id);
     }

@@ -113,7 +113,7 @@ namespace ShoppingCart2
                 ListViewItem listViewItem = ListViewProducts.SelectedItems[0];
                 int id = listViewItem.SubItems[0].Text.ToInt();
                 string productName = listViewItem.SubItems[1].Text;
-                float price = (float)Convert.ToDouble(listViewItem.SubItems[2].Text);
+                float price = listViewItem.SubItems[2].Text.ToFloat();
                 string description = listViewItem.SubItems[3].Text;
 
                 _product = new Product() { Id = id, Name = productName, Price = price, Description = description };
@@ -174,14 +174,16 @@ namespace ShoppingCart2
                 Order order = new Order() 
                 { 
                     CustomerId = lblCustomerId.Text.ToInt(), 
-                    TotalAmount = (float)Convert.ToDouble(lblTotalAmount.Text), 
+                    TotalAmount = lblTotalAmount.Text.ToFloat(), 
                     DeliveryDate = DateTime.Now, 
                     Status = "for shipping"
                 };
 
-                if (_orderManager.Insert(order) > 0)
+                int id = _orderManager.Insert(order);
+
+                if (id > 0)
                 {
-                    order.Id = _orderManager.Insert(order);
+                    order.Id = id;
                     
                     foreach (var item in _orderItemList)
                     {
@@ -222,7 +224,7 @@ namespace ShoppingCart2
 
                     if (int.TryParse(txtSearch.Text, out id))
                     {
-                        id = Convert.ToInt32(txtSearch.Text);
+                        id = txtSearch.Text.ToInt();
                         Product result = _productManager.GetById(id);
 
                         if (result == null)
@@ -329,7 +331,7 @@ namespace ShoppingCart2
                     int id = ListViewOrderItem.SubItems[0].Text.ToInt();
                     string name = ListViewOrderItem.SubItems[1].Text;
                     int quantity = ListViewOrderItem.SubItems[2].Text.ToInt();
-                    float price = (float)Convert.ToDouble(ListViewOrderItem.SubItems[3].Text);
+                    float price = ListViewOrderItem.SubItems[3].Text.ToFloat();
                     string description = _productManager.GetById(id).Description;
                     float amount = price * quantity;
 

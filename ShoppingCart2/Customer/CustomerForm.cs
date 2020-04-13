@@ -94,7 +94,7 @@ namespace ShoppingCart2
                 {
                     _customer = new Customer()
                     {
-                        Id = Convert.ToInt32(ListViewCustomers.SelectedItems[0].SubItems[0].Text),
+                        Id = ListViewCustomers.SelectedItems[0].SubItems[0].Text.ToInt(),
                         LastName = ListViewCustomers.SelectedItems[0].SubItems[1].Text,
                         FirstName = ListViewCustomers.SelectedItems[0].SubItems[2].Text,
                         Email = ListViewCustomers.SelectedItems[0].SubItems[3].Text,

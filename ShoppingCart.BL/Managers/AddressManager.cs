@@ -29,9 +29,9 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetByName(name);
         }
 
-        public new int Insert(Address address)
+        public int Insert(Address address)
         {
-            return Repository.Insert(address);
+            return ((IAddressRepository)Repository).Insert(address);
         }
 
         public new bool Update(Address address)

@@ -67,24 +67,6 @@ namespace ShoppingCart.BL.Repositories
             }
         }
 
-        internal int Insert(T entity)
-        {
-            try
-            {
-                var properties = entity.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
-                var fields = string.Join(", ", properties.Select(e => e.Name));
-                var values = string.Join(", ", properties.Select(e => $"@{e.Name}"));
-                string sql = $"INSERT INTO {TableName} ({fields}) VALUES ({values}); SELECT @@IDENTITY";
-                return _connection.ExecuteScalar<int>(sql, entity);
-                
-            }
-            catch (Exception ex)
-            {
-                _log.Error(ex.StackTrace);
-                return 0;
-            }
-
-        }
         internal bool Update(T entity)
         {
             try

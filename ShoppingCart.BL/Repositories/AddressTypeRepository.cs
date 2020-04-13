@@ -25,11 +25,7 @@ namespace ShoppingCart.BL.Repositories
         {
             return base.GetByName(name);
         }
-        public new int Insert(AddressType addressType)
-        {
-            return base.Insert(addressType);
-        }
-
+     
         public new bool Update(AddressType addressType)
         {
             return base.Update(addressType);
@@ -53,5 +49,23 @@ namespace ShoppingCart.BL.Repositories
                 return false;
             }
         }
+
+        public bool Insert(AddressType addressType) 
+        {
+            try
+            {
+                var properties = addressType.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
+                var fields = string.Join(", ", properties.Select(e => e.Name));
+                var values = string.Join(", ", properties.Select(e => $"@{e.Name}"));
+                string sql = $"INSERT INTO {TableName} ({fields}) VALUES ({values})";
+                return _connection.Execute(sql, addressType) > 0;
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.StackTrace);
+                return false;
+            }
+        }
+
     }
 }

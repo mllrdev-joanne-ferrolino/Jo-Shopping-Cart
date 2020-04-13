@@ -108,7 +108,7 @@ namespace ShoppingCart
                             { 
                                 result.Id.ToString(), 
                                 result.Name, 
-                                result.Price.ToString(), 
+                                result.Price.ToString("0.00"), 
                                 result.Description, 
                                 result.Stock.ToString() 
                             });
@@ -135,7 +135,7 @@ namespace ShoppingCart
                             { 
                                 x.Id.ToString(), 
                                 x.Name, 
-                                x.Price.ToString(), 
+                                x.Price.ToString("0.00"), 
                                 x.Description, 
                                 x.Stock.ToString() 
                             })).ToArray());

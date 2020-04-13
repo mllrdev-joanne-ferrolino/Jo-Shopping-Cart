@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers.Interfaces
 {
-    public interface IOrderItemManager : IManager<OrderItem>
+    public interface IOrderItemManager : IManager<OrderItem>, IAssociativeManager<OrderItem>
     {
         bool DeleteByOrderId(int[] id);
     }

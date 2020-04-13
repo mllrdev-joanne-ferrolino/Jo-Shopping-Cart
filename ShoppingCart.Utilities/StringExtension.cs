@@ -32,5 +32,16 @@ namespace ShoppingCart.Utilities
 
             return 0f;
         }
+
+        public static DateTime ToDateTime(this string str) 
+        {
+            DateTime parsedDateTime;
+            if (DateTime.TryParse(str, out parsedDateTime))
+            {
+                return parsedDateTime;
+            }
+
+            return new DateTime();
+        }
     }
 }

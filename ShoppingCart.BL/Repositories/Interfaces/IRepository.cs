@@ -11,7 +11,6 @@ namespace ShoppingCart.BL.Repositories.Interfaces
         IList<T> GetAll();
         T GetById(int id);
         IList<T> GetByName(string name);
-        int Insert(T obj);
         bool Update(T obj);
         bool Delete(int[] id);
     }

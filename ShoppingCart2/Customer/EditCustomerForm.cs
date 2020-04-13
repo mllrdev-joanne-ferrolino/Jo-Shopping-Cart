@@ -125,7 +125,7 @@ namespace ShoppingCart2
 
                             foreach (var addressType in _addressTypeList)
                             {
-                                MessageBox.Show(_typeManager.Insert(addressType) > 0 ? "Address details inserted successfully." : "Address type was not inserted.");
+                                MessageBox.Show(_typeManager.Insert(addressType) ? "Address details inserted successfully." : "Address type was not inserted.");
                             }
 
                             MessageBox.Show("Customer details inserted successfully.");
@@ -318,9 +318,11 @@ namespace ShoppingCart2
                         {
                             if (item.Id == 0)
                             {
-                                MessageBox.Show(_addressManager.Insert(item) > 0 ? "Address details added successfully." : "Address details were not added.");
+                                int id = _addressManager.Insert(item);
 
-                                item.Id = _addressManager.Insert(item);
+                                MessageBox.Show( id > 0 ? "Address details added successfully." : "Address details were not added.");
+
+                                item.Id = id;
                             }
                             else
                             {
@@ -355,7 +357,7 @@ namespace ShoppingCart2
                         {
                             if (existingId.Where(x => x == addressType.AddressId).Count() == 0)
                             {
-                                MessageBox.Show(_typeManager.Insert(addressType) > 0 ? "Address type inserted successfully." : "Address type was not inserted.");
+                                MessageBox.Show(_typeManager.Insert(addressType) ? "Address type inserted successfully." : "Address type was not inserted.");
                             }
 
                         }

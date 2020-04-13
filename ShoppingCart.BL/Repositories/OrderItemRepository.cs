@@ -26,11 +26,6 @@ namespace ShoppingCart.BL.Repositories
             return base.GetByName(name);
         }
 
-        public new int Insert(OrderItem orderItem)
-        {
-            return base.Insert(orderItem);
-        }
-
         public new bool Update(OrderItem orderItem)
         {
             return base.Update(orderItem);
@@ -54,5 +49,23 @@ namespace ShoppingCart.BL.Repositories
                 return false;
             }
         }
+
+        public bool Insert(OrderItem orderItem)
+        {
+            try
+            {
+                var properties = orderItem.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
+                var fields = string.Join(", ", properties.Select(e => e.Name));
+                var values = string.Join(", ", properties.Select(e => $"@{e.Name}"));
+                string sql = $"INSERT INTO {TableName} ({fields}) VALUES ({values})";
+                return _connection.Execute(sql, orderItem) > 0;
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.StackTrace);
+                return false;
+            }
+        }
+
     }
 }

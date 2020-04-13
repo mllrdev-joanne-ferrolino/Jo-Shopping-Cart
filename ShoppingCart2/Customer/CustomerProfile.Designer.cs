@@ -84,8 +84,7 @@
             this.lblIdName = new System.Windows.Forms.Label();
             this.lblMobileNumber = new System.Windows.Forms.Label();
             this.lblEmail = new System.Windows.Forms.Label();
-            this.lblLastName = new System.Windows.Forms.Label();
-            this.lblFirstName = new System.Windows.Forms.Label();
+            this.lblName = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -586,8 +585,7 @@
             this.groupBoxInfo.Controls.Add(this.lblIdName);
             this.groupBoxInfo.Controls.Add(this.lblMobileNumber);
             this.groupBoxInfo.Controls.Add(this.lblEmail);
-            this.groupBoxInfo.Controls.Add(this.lblLastName);
-            this.groupBoxInfo.Controls.Add(this.lblFirstName);
+            this.groupBoxInfo.Controls.Add(this.lblName);
             this.groupBoxInfo.Controls.Add(this.label2);
             this.groupBoxInfo.Controls.Add(this.label3);
             this.groupBoxInfo.Controls.Add(this.label4);
@@ -667,21 +665,13 @@
             this.lblEmail.Size = new System.Drawing.Size(0, 13);
             this.lblEmail.TabIndex = 103;
             // 
-            // lblLastName
+            // lblName
             // 
-            this.lblLastName.AutoSize = true;
-            this.lblLastName.Location = new System.Drawing.Point(229, 89);
-            this.lblLastName.Name = "lblLastName";
-            this.lblLastName.Size = new System.Drawing.Size(0, 13);
-            this.lblLastName.TabIndex = 102;
-            // 
-            // lblFirstName
-            // 
-            this.lblFirstName.AutoSize = true;
-            this.lblFirstName.Location = new System.Drawing.Point(150, 89);
-            this.lblFirstName.Name = "lblFirstName";
-            this.lblFirstName.Size = new System.Drawing.Size(0, 13);
-            this.lblFirstName.TabIndex = 101;
+            this.lblName.AutoSize = true;
+            this.lblName.Location = new System.Drawing.Point(150, 89);
+            this.lblName.Name = "lblName";
+            this.lblName.Size = new System.Drawing.Size(0, 13);
+            this.lblName.TabIndex = 101;
             // 
             // label2
             // 
@@ -836,8 +826,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBoxInfo;
         private System.Windows.Forms.Label lblEmail;
-        private System.Windows.Forms.Label lblLastName;
-        private System.Windows.Forms.Label lblFirstName;
+        private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;

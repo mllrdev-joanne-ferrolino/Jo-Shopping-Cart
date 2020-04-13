@@ -27,9 +27,9 @@ namespace ShoppingCart.BL.Managers
         {
             return Repository.GetByName(name);
         }
-        public new int Insert(Customer customer)
+        public int Insert(Customer customer)
         {
-            return Repository.Insert(customer);
+            return ((ICustomerRepository)Repository).Insert(customer);
         }
 
         public new bool Update(Customer customer)

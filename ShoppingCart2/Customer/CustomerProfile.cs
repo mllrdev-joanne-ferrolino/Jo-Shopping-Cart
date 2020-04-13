@@ -1,6 +1,7 @@
 ﻿using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
 using ShoppingCart.BL.Models;
+using ShoppingCart.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -82,8 +83,7 @@ namespace ShoppingCart2
         {
             _customer = _customerManager.GetById(_customer.Id);
             lblCustomerId.Text = _customer.Id.ToString();
-            lblFirstName.Text = _customer.FirstName;
-            lblLastName.Text = _customer.LastName;
+            lblName.Text = $"{_customer.FirstName} {_customer.LastName}";
             lblEmail.Text = _customer.Email;
             lblMobileNumber.Text = _customer.MobileNumber;
 
@@ -157,7 +157,7 @@ namespace ShoppingCart2
                         x.Id.ToString(),
                         x.CustomerId.ToString(),
                         x.TotalAmount.ToString("0.00"),
-                        x.DeliveryDate.ToShortDateString(),
+                        x.DeliveryDate.ToString(),
                         x.Status
             })).ToArray());
 
@@ -189,9 +189,9 @@ namespace ShoppingCart2
             {
                 if (ListViewOrderItems.SelectedItems.Count > 0)
                 {
-                    int id = Convert.ToInt32(ListViewOrderItems.SelectedItems[0].SubItems[0].Text);
-                    float totalAmount = (float)Convert.ToDouble(ListViewOrderItems.SelectedItems[0].SubItems[2].Text);
-                    DateTime deliveryDate = Convert.ToDateTime(ListViewOrderItems.SelectedItems[0].SubItems[3].Text);
+                    int id = ListViewOrderItems.SelectedItems[0].SubItems[0].Text.ToInt();
+                    float totalAmount = ListViewOrderItems.SelectedItems[0].SubItems[2].Text.ToFloat();
+                    DateTime deliveryDate = ListViewOrderItems.SelectedItems[0].SubItems[3].Text.ToDateTime();
                     string status = ListViewOrderItems.SelectedItems[0].SubItems[4].Text;
 
                     _order = new Order() { Id = id, CustomerId = _customer.Id, DeliveryDate = deliveryDate, Status = status, TotalAmount = totalAmount };

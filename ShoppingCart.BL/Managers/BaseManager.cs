@@ -26,10 +26,10 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetByName(name);
         }
 
-        public int Insert(T entity)
-        {
-            return Repository.Insert(entity);
-        }
+        //public int Insert(T entity)
+        //{
+        //    return Repository.Insert(entity);
+        //}
 
         public bool Update(T entity)
         {

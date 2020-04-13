@@ -39,23 +39,23 @@ namespace ShoppingCart2
             try
             {
                 int orderId = 0;
-                IEnumerable<Order> orderList = new List<Order>();
 
                 if (_order.Id > 0)
                 {
                     orderId = _order.Id;
-                    orderList = _orderManager.GetAll().Where(x => x.Id == orderId);
+                    lblOrderId.Text = _order.Id.ToString();
+                    lblDeliveryDate.Text = _order.DeliveryDate.ToString();
+                    lblStatus.Text = _order.Status;
+                    lblTotalAmount.Text = _order.TotalAmount.ToString("0.00");
                 }
                 else
                 {
-                    orderId = _orderItemManager.GetAll().LastOrDefault().OrderId;
-                    
-                    orderList = _orderManager.GetAll().Where(x => x.Id == orderId);
+                    MessageBox.Show("No order selected");
                 }
 
                 IEnumerable<OrderItem> orderItemList = _orderItemManager.GetAll().Where(x => x.OrderId == orderId);
 
-                if (orderItemList != null && orderList != null)
+                if (orderItemList != null)
                 {
                     ListViewOrderItems.Items.AddRange(orderItemList.Select(x => new ListViewItem(new string[] 
                     { 
@@ -65,21 +65,6 @@ namespace ShoppingCart2
                         x.Amount.ToString("0.00") 
                     })).ToArray());
 
-                    if (_order.Id > 0)
-                    {
-                        lblOrderId.Text = _order.Id.ToString();
-                        lblDeliveryDate.Text = orderList.FirstOrDefault().DeliveryDate.ToString();
-                        lblStatus.Text = orderList.FirstOrDefault().Status;
-                        lblTotalAmount.Text = orderList.FirstOrDefault().TotalAmount.ToString("0.00");
-
-                    }
-                    else
-                    {
-                        lblOrderId.Text = orderList.LastOrDefault().Id.ToString();
-                        lblDeliveryDate.Text = orderList.LastOrDefault().DeliveryDate.ToString();
-                        lblStatus.Text = orderList.LastOrDefault().Status;
-                        lblTotalAmount.Text = orderList.LastOrDefault().TotalAmount.ToString();
-                    }
                    
                 }
                 else

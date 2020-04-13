@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Repositories.Interfaces
 {
-    interface IOrderRepository: IRepository<Order>
+    interface IOrderRepository: IRepository<Order>, IIndependentRepository<Order>
     {
     }
 }

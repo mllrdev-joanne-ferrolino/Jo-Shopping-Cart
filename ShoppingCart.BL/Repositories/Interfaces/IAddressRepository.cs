@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Repositories.Interfaces
 {
-    public interface IAddressRepository : IRepository<Address>
+    public interface IAddressRepository : IRepository<Address>, IIndependentRepository<Address>
     {
         int GetId(int id);
     }

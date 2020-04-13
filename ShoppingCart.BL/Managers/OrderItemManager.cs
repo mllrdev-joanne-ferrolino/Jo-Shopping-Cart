@@ -27,9 +27,9 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetByName(name);
         }
 
-        public new int Insert(OrderItem orderItem)
+        public bool Insert(OrderItem orderItem)
         {
-            return Repository.Insert(orderItem);
+            return ((IOrderItemRepository)Repository).Insert(orderItem);
         }
 
         public new bool Update(OrderItem orderItem)
@@ -46,5 +46,6 @@ namespace ShoppingCart.BL.Managers
         {
             return ((IOrderItemRepository)Repository).DeleteByOrderId(id);
         }
+
     }
 }

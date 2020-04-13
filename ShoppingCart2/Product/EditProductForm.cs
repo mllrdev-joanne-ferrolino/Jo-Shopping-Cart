@@ -49,9 +49,9 @@ namespace ShoppingCart2
                 if (ValidateAllFields())
                 {
                     string name = txtName.Text;
-                    float price = (float)Convert.ToDouble(txtPrice.Text);
+                    float price = txtPrice.Text.ToFloat();
                     string description = txtDescription.Text;
-                    int stock = Convert.ToInt32(txtStock.Text);
+                    int stock = txtStock.Text.ToInt();
 
                     _product = new Product() { Name = name, Price = price, Description = description, Stock = stock };
 
@@ -80,7 +80,7 @@ namespace ShoppingCart2
                 {
                     int id = lblId.Text.ToInt();
                     string name = txtName.Text;
-                    float price = (float)Convert.ToDouble(txtPrice.Text);
+                    float price = txtPrice.Text.ToFloat();
                     string description = txtDescription.Text;
                     int stock = txtStock.Text.ToInt();
 
@@ -131,7 +131,46 @@ namespace ShoppingCart2
                 {
                     errorProviderName.SetError(textbox, string.Empty);
                 }
-                
+
+                if (textbox == txtName)
+                {
+                    if (txtName.Text.Any(x => char.IsDigit(x)))
+                    {
+                        errorProviderName.SetError(txtName, "Name contains number. Please enter valid name.");
+                        return false;
+                    }
+                    else
+                    {
+                        errorProviderName.SetError(txtName, string.Empty);
+                    }
+                }
+
+                if (textbox == txtPrice)
+                {
+                    if (txtPrice.Text.Any(x => char.IsLetter(x)) || txtPrice.Text.Any(x => char.IsPunctuation(x)))
+                    {
+                        errorProviderName.SetError(txtPrice, "Price is invalid. Please enter valid price.");
+                        return false;
+                    }
+                    else
+                    {
+                        errorProviderName.SetError(txtPrice, string.Empty);
+                    }
+                }
+
+                if (textbox == txtStock)
+                {
+                    if (txtStock.Text.Any(x => char.IsLetter(x)) || txtStock.Text.Any(x => char.IsPunctuation(x)))
+                    {
+                        errorProviderName.SetError(txtStock, "Stock is invalid. Please enter valid stock.");
+                        return false;
+                    }
+                    else
+                    {
+                        errorProviderName.SetError(txtStock, string.Empty);
+                    }
+                }
+
             }
 
             return true;

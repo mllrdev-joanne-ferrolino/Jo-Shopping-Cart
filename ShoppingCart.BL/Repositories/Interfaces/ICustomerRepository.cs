@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Repositories.Interfaces
 {
-    public interface ICustomerRepository : IRepository<Customer>
+    public interface ICustomerRepository : IRepository<Customer>, IIndependentRepository<Customer>
     {
         int GetId(int id);
     }

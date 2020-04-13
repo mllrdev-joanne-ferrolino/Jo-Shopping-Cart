@@ -57,7 +57,9 @@
     <Compile Include="Managers\CustomerManager.cs" />
     <Compile Include="Managers\Interfaces\IAddressManager.cs" />
     <Compile Include="Managers\Interfaces\IAddressTypeManager.cs" />
+    <Compile Include="Managers\Interfaces\IAssociativeManager.cs" />
     <Compile Include="Managers\Interfaces\ICustomerManager.cs" />
+    <Compile Include="Managers\Interfaces\IIndependentManager.cs" />
     <Compile Include="Managers\Interfaces\IManager.cs" />
     <Compile Include="Managers\Interfaces\IOrderItemManager.cs" />
     <Compile Include="Managers\Interfaces\IOrderManager.cs" />
@@ -78,7 +80,9 @@
     <Compile Include="Repositories\CustomerRepository.cs" />
     <Compile Include="Repositories\Interfaces\IAddressRepository.cs" />
     <Compile Include="Repositories\Interfaces\IAddressTypeRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IAssociativeRepository.cs" />
     <Compile Include="Repositories\Interfaces\ICustomerRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IIndependentRepository.cs" />
     <Compile Include="Repositories\Interfaces\IOrderItemRepository.cs" />
     <Compile Include="Repositories\Interfaces\IOrderRepository.cs" />
     <Compile Include="Repositories\Interfaces\IProductRepository.cs" />

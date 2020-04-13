@@ -2,6 +2,7 @@
 using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
 using ShoppingCart.BL.Models;
+using ShoppingCart.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -42,9 +43,9 @@ namespace ShoppingCart2
         {
             try
             {
-                int productId = Convert.ToInt32(lblId.Text);
-                int quantity = Convert.ToInt32(txtQuantity.Text);
-                float amount = (float)Convert.ToDouble(lblPrice.Text) * quantity;
+                int productId = lblId.Text.ToInt();
+                int quantity = txtQuantity.Text.ToInt();
+                float amount = lblPrice.Text.ToFloat() * quantity;
 
                 _orderItem = new OrderItem() { ProductId = productId, Quantity = quantity, Amount = amount };
 
@@ -92,9 +93,9 @@ namespace ShoppingCart2
         {
             try
             {
-                int productId = Convert.ToInt32(lblId.Text);
-                int quantity = Convert.ToInt32(txtQuantity.Text);
-                float amount = (float)Convert.ToDouble(lblPrice.Text) * quantity;
+                int productId = lblId.Text.ToInt();
+                int quantity = txtQuantity.Text.ToInt();
+                float amount = lblPrice.Text.ToFloat() * quantity;
 
                 _orderItem = new OrderItem() { ProductId = productId, Quantity = quantity, Amount = amount };
 

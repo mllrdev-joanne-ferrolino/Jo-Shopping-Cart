@@ -29,9 +29,9 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetByName(name);
         }
 
-        public new int Insert(Product product) 
+        public int Insert(Product product) 
         {
-            return Repository.Insert(product);
+            return ((IProductRepository)Repository).Insert(product);
         }
 
         public new bool Update(Product product) 
