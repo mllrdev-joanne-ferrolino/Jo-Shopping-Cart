@@ -14,6 +14,19 @@ namespace ShoppingCart2
 {
     public partial class MainForm : Form
     {
+        private OrderForm _orderForm = new OrderForm();
+        private ProductForm _productForm = new ProductForm();
+        private CustomerProfile _customerProfile = new CustomerProfile();
+        private CustomerForm _customerForm = new CustomerForm();
+        private Customer _customer;
+
+        public Customer Customer
+        {
+            get { return _customer; }
+            set { _customer = value; }
+        }
+
+
         public MainForm()
         {
             InitializeComponent();
@@ -25,55 +38,53 @@ namespace ShoppingCart2
 
         private void ShopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OrderForm orderForm = new OrderForm();
             viewCustomersToolStripMenuItem.Enabled = true;
 
-            if (this.ActiveMdiChild != null && this.ActiveMdiChild != orderForm)
+            if (this.ActiveMdiChild != null && this.ActiveMdiChild != _orderForm)
             {
                 this.ActiveMdiChild.Close();
             }
 
-            orderForm.MdiParent = this;
-            orderForm.Show();
+            _orderForm.MdiParent = this;
+            _orderForm.Customer = _customer;
+            _orderForm.Show();
         }
 
         private void ViewProductsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ProductForm productForm = new ProductForm();
             viewCustomersToolStripMenuItem.Enabled = true;
 
-            if (this.ActiveMdiChild != null && this.ActiveMdiChild != productForm)
+            if (this.ActiveMdiChild != null && this.ActiveMdiChild != _productForm)
             {
                 this.ActiveMdiChild.Close();
             }
 
-            productForm.MdiParent = this;
-            productForm.Show();
+            _productForm.MdiParent = this;
+            _productForm.Show();
         }
 
         private void viewCustomersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CustomerProfile customerProfile = new CustomerProfile();
-
-            if (this.ActiveMdiChild != null && this.ActiveMdiChild != customerProfile)
+            if (this.ActiveMdiChild != null && this.ActiveMdiChild != _customerProfile)
             {
                 this.ActiveMdiChild.Close();
             }
 
-            customerProfile.MdiParent = this;
-            customerProfile.Show();
+            _customerProfile.MdiParent = this;
+            _customerProfile.Customer = _customer;
+            _customerProfile.Show();
         }
 
         private void viewCustomerListToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CustomerForm customerForm = new CustomerForm();
-            customerForm.MdiParent = this;
-            customerForm.Show();
+            
+            _customerForm.MdiParent = this;
+            _customerForm.Show();
         }
 
         private void MainForm_Activated(object sender, EventArgs e)
         {
-           
+          
         }
     }
 }

@@ -52,6 +52,7 @@
             // 
             // ShopToolStripMenuItem
             // 
+            this.ShopToolStripMenuItem.Enabled = false;
             this.ShopToolStripMenuItem.Name = "ShopToolStripMenuItem";
             this.ShopToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.ShopToolStripMenuItem.Text = "Shop";
@@ -119,9 +120,9 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ViewProductsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ShopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewCustomersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewCustomerListToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem ShopToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem viewCustomersToolStripMenuItem;
     }
 }

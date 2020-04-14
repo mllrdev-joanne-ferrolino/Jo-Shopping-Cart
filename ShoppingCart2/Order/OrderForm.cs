@@ -131,12 +131,21 @@ namespace ShoppingCart2
 
                 if (editOrderForm.ShowDialog() == DialogResult.OK)
                 {
-                    _orderItem = editOrderForm.OrderItem;
-                    _orderItemList.Add(_orderItem);
-                    ListViewOrders.Items.Clear();
-                    LoadOrderItems();
-                    float totalAmount = _orderItemList.Sum(x => x.Amount);
-                    lblTotalAmount.Text = totalAmount.ToString("0.00");
+                    while (editOrderForm.IsValid == false)
+                    {
+                        editOrderForm.ShowDialog();
+                    }
+
+                    if (editOrderForm.IsValid == true)
+                    {
+                        _orderItem = editOrderForm.OrderItem;
+                        _orderItemList.Add(_orderItem);
+                        ListViewOrders.Items.Clear();
+                        LoadOrderItems();
+                        float totalAmount = _orderItemList.Sum(x => x.Amount);
+                        lblTotalAmount.Text = totalAmount.ToString("0.00");
+                    }
+                   
 
                 }
             }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBoxProduct = new System.Windows.Forms.GroupBox();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.lblId = new System.Windows.Forms.Label();
@@ -41,7 +42,9 @@
             this.lblQuantity = new System.Windows.Forms.Label();
             this.btnAdd = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBoxProduct.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBoxProduct
@@ -172,6 +175,10 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Product Name";
             // 
+            // errorProvider
+            // 
+            this.errorProvider.ContainerControl = this;
+            // 
             // EditOrderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -183,6 +190,7 @@
             this.Load += new System.EventHandler(this.EditOrderForm_Load);
             this.groupBoxProduct.ResumeLayout(false);
             this.groupBoxProduct.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -202,5 +210,6 @@
         private System.Windows.Forms.Label lblId;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.ErrorProvider errorProvider;
     }
 }

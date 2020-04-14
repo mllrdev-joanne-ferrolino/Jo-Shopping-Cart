@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers
 {
-    public class AddressTypeManager : BaseManager<AddressType>, IAddressTypeManager, IAssociativeManager<AddressType>
+    public class AddressTypeManager : BaseManager<AddressType>, IAddressTypeManager
     {
         public override IRepository<AddressType> Repository => new AddressTypeRepository();
 

@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers.Interfaces
 {
-    public interface IAddressTypeManager : IManager<AddressType>, IAssociativeManager<AddressType>
+    public interface IAddressTypeManager : IManager<AddressType>
     {
         bool DeleteByCustomerId(int[] id);
+        bool Insert(AddressType addressType);
     }
 }

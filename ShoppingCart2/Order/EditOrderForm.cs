@@ -33,6 +33,14 @@ namespace ShoppingCart2
             set { _orderItem = value; }
         }
 
+        private bool _isValid;
+
+        public bool IsValid
+        {
+            get { return _isValid; }
+            set { _isValid = value; }
+        }
+
         public EditOrderForm()
         {
             _orderItem = new OrderItem();
@@ -43,25 +51,34 @@ namespace ShoppingCart2
         {
             try
             {
-                int productId = lblId.Text.ToInt();
-                int quantity = txtQuantity.Text.ToInt();
-                float amount = lblPrice.Text.ToFloat() * quantity;
-
-                _orderItem = new OrderItem() { ProductId = productId, Quantity = quantity, Amount = amount };
-
-                if (_orderItem != null)
+                if (ValidateQuantity())
                 {
-                    if (MessageBox.Show("Item added to cart.") == DialogResult.OK)
+                    int productId = lblId.Text.ToInt();
+                    int quantity = txtQuantity.Text.ToInt();
+                    float amount = lblPrice.Text.ToFloat() * quantity;
+
+                    _orderItem = new OrderItem() { ProductId = productId, Quantity = quantity, Amount = amount };
+
+                    if (_orderItem != null)
                     {
-                        OrderForm orderForm = new OrderForm();
-                        orderForm.OrderItem = _orderItem;
-                        this.Close();
+                        if (MessageBox.Show("Item added to cart.") == DialogResult.OK)
+                        {
+                            OrderForm orderForm = new OrderForm();
+                            orderForm.OrderItem = _orderItem;
+                            _isValid = true;
+                            this.Close();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Details were not inserted.");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Details were not inserted.");
+                    _isValid = false;
                 }
+                
             }
             catch (Exception ex)
             {
@@ -93,32 +110,61 @@ namespace ShoppingCart2
         {
             try
             {
-                int productId = lblId.Text.ToInt();
-                int quantity = txtQuantity.Text.ToInt();
-                float amount = lblPrice.Text.ToFloat() * quantity;
-
-                _orderItem = new OrderItem() { ProductId = productId, Quantity = quantity, Amount = amount };
-
-                if (_orderItem != null)
+                if (ValidateQuantity())
                 {
-                    if (MessageBox.Show("Order updated successfully.") == DialogResult.OK)
-                    {
-                        OrderForm orderForm = new OrderForm();
-                        orderForm.OrderItem = _orderItem;
-                        this.Close();
+                    int productId = lblId.Text.ToInt();
+                    int quantity = txtQuantity.Text.ToInt();
+                    float amount = lblPrice.Text.ToFloat() * quantity;
 
+                    _orderItem = new OrderItem() { ProductId = productId, Quantity = quantity, Amount = amount };
+
+                    if (_orderItem != null)
+                    {
+                        if (MessageBox.Show("Order updated successfully.") == DialogResult.OK)
+                        {
+                            OrderForm orderForm = new OrderForm();
+                            orderForm.OrderItem = _orderItem;
+                            _isValid = true;
+                            this.Close();
+
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Details were not inserted.");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Details were not inserted.");
+                    _isValid = false;
                 }
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
             
+        }
+
+        private bool ValidateQuantity() 
+        {
+            if (string.IsNullOrWhiteSpace(txtQuantity.Text))
+            {
+                errorProvider.SetError(txtQuantity, "Please enter quantity");
+                return false;
+            }
+            else if (txtQuantity.Text.Any(x => char.IsLetter(x)) || txtQuantity.Text.Any(x => !char.IsNumber(x)))
+            {
+                errorProvider.SetError(txtQuantity, "Please enter valid number for quantity");
+                return false;
+            }
+            else
+            {
+                errorProvider.SetError(txtQuantity, string.Empty);
+            }
+
+            return true;
         }
     }
 }

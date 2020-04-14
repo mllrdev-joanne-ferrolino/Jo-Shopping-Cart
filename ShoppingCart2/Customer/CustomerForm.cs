@@ -402,7 +402,6 @@ namespace ShoppingCart2
                     CustomerProfile customerProfile = new CustomerProfile();
                     customerProfile.Customer = _customer;
                     customerProfile.MdiParent = this.MdiParent;
-
                     customerProfile.Show();
                 }
             }

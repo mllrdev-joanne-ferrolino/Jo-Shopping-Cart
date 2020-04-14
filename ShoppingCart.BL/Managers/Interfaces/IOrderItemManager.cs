@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers.Interfaces
 {
-    public interface IOrderItemManager : IManager<OrderItem>, IAssociativeManager<OrderItem>
+    public interface IOrderItemManager : IManager<OrderItem>
     {
         bool DeleteByOrderId(int[] id);
+        bool Insert(OrderItem orderItem);
     }
 }

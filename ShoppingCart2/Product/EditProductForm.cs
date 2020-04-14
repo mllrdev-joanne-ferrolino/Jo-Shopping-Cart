@@ -147,7 +147,7 @@ namespace ShoppingCart2
 
                 if (textbox == txtPrice)
                 {
-                    if (txtPrice.Text.Any(x => char.IsLetter(x)) || txtPrice.Text.Any(x => char.IsPunctuation(x)))
+                    if (txtPrice.Text.Any(x => char.IsLetter(x)))
                     {
                         errorProviderName.SetError(txtPrice, "Price is invalid. Please enter valid price.");
                         return false;
