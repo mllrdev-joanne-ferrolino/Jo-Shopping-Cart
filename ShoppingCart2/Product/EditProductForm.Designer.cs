@@ -198,6 +198,7 @@
             this.Controls.Add(this.Stock);
             this.Controls.Add(this.txtDescription);
             this.Controls.Add(this.txtStock);
+            this.MaximizeBox = false;
             this.Name = "EditProductForm";
             this.Text = "Product Details";
             this.Load += new System.EventHandler(this.EditProductForm_Load);

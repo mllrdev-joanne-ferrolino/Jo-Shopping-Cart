@@ -32,10 +32,6 @@ namespace ShoppingCart2
             InitializeComponent();
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-        }
-
         private void ShopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             viewCustomersToolStripMenuItem.Enabled = true;
@@ -80,11 +76,6 @@ namespace ShoppingCart2
             
             _customerForm.MdiParent = this;
             _customerForm.Show();
-        }
-
-        private void MainForm_Activated(object sender, EventArgs e)
-        {
-          
         }
     }
 }

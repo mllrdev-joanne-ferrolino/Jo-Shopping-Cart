@@ -185,6 +185,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(395, 246);
             this.Controls.Add(this.groupBoxProduct);
+            this.MaximizeBox = false;
             this.Name = "EditOrderForm";
             this.Text = "Add Order to Cart";
             this.Load += new System.EventHandler(this.EditOrderForm_Load);

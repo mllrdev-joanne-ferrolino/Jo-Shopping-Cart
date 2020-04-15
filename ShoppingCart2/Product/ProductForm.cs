@@ -34,25 +34,33 @@ namespace ShoppingCart
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            EditProductForm editProductForm = new EditProductForm();
-            editProductForm.Text = "Add Product";
-
-            if (editProductForm.ShowDialog() == DialogResult.OK)
+            try
             {
-                while (editProductForm.IsValid == false)
-                {
-                    editProductForm.ShowDialog();
-                }
+                EditProductForm editProductForm = new EditProductForm();
+                editProductForm.Text = "Add Product";
 
-                if (editProductForm.IsValid == true)
+                if (editProductForm.ShowDialog() == DialogResult.OK)
                 {
-                    ListViewProducts.Items.Clear();
-                    LoadListViewItems();
-                    btnAdd.Enabled = true;
-                    btnDelete.Enabled = false;
+                    while (editProductForm.IsValid == false)
+                    {
+                        editProductForm.ShowDialog();
+                    }
+
+                    if (editProductForm.IsValid == true)
+                    {
+                        ListViewProducts.Items.Clear();
+                        LoadListViewItems();
+                        btnAdd.Enabled = true;
+                        btnDelete.Enabled = false;
+                    }
+
                 }
-               
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
         private void btnView_Click(object sender, EventArgs e)
         {
@@ -63,25 +71,33 @@ namespace ShoppingCart
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            List<int> ids = new List<int>();
+            try
+            {
+                List<int> ids = new List<int>();
 
-            foreach (ListViewItem item in ListViewProducts.SelectedItems)
-            {
-                ids.Add(Convert.ToInt32(item.SubItems[0].Text));
-            }
+                foreach (ListViewItem item in ListViewProducts.SelectedItems)
+                {
+                    ids.Add(Convert.ToInt32(item.SubItems[0].Text));
+                }
 
-            if (_manager.Delete(ids.ToArray()))
-            {
-                MessageBox.Show("Details deleted successfully.");
-                ListViewProducts.Items.Clear();
-                LoadListViewItems();
-                btnAdd.Enabled = true;
-                btnDelete.Enabled = false;
+                if (_manager.Delete(ids.ToArray()))
+                {
+                    MessageBox.Show("Details deleted successfully.");
+                    ListViewProducts.Items.Clear();
+                    LoadListViewItems();
+                    btnAdd.Enabled = true;
+                    btnDelete.Enabled = false;
+                }
+                else
+                {
+                    MessageBox.Show("Details were not deleted.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Details were not deleted.");
+                MessageBox.Show(ex.Message);
             }
+            
 
         }
 

@@ -319,15 +319,12 @@ namespace ShoppingCart2
                             if (item.Id == 0)
                             {
                                 int id = _addressManager.Insert(item);
-
                                 MessageBox.Show( id > 0 ? "Address details added successfully." : "Address details were not added.");
-
                                 item.Id = id;
                             }
                             else
                             {
                                 MessageBox.Show(_addressManager.Update(item) ? "Address details updated successfully." : "Address details were not updated.");
-
                             }
 
                         }

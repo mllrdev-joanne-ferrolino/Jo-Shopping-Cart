@@ -644,6 +644,7 @@
             this.Controls.Add(this.lblCustomerInfo);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.btnSubmit);
+            this.MaximizeBox = false;
             this.Name = "EditCustomerForm";
             this.Text = "Add Customer";
             this.Load += new System.EventHandler(this.EditCustomerForm_Load);

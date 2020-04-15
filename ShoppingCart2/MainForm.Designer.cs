@@ -86,14 +86,14 @@
             // 
             this.viewCustomersToolStripMenuItem.Enabled = false;
             this.viewCustomersToolStripMenuItem.Name = "viewCustomersToolStripMenuItem";
-            this.viewCustomersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewCustomersToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.viewCustomersToolStripMenuItem.Text = "Profile";
             this.viewCustomersToolStripMenuItem.Click += new System.EventHandler(this.viewCustomersToolStripMenuItem_Click);
             // 
             // viewCustomerListToolStripMenuItem
             // 
             this.viewCustomerListToolStripMenuItem.Name = "viewCustomerListToolStripMenuItem";
-            this.viewCustomerListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewCustomerListToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.viewCustomerListToolStripMenuItem.Text = "View Customer List";
             this.viewCustomerListToolStripMenuItem.Click += new System.EventHandler(this.viewCustomerListToolStripMenuItem_Click);
             // 
@@ -107,8 +107,6 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Jo\'s Fashion Shop";
-            this.Activated += new System.EventHandler(this.MainForm_Activated);
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
