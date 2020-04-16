@@ -10,41 +10,22 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers
 {
-    public class OrderItemManager : BaseManager<OrderItem>, IOrderItemManager
+    public class OrderItemManager : AssociativeEntityManager<OrderItem>, IOrderItemManager
     {
-        public override IRepository<OrderItem> Repository => new OrderItemRepository();
-        public new IList<OrderItem> GetAll()
+        public override IAssociativeEntityRepository<OrderItem> Repository => new OrderItemRepository();
+        public IList<OrderItem> GetAll()
         {
-            return Repository.GetAll();
+            return ((IOrderItemRepository)Repository).GetAll();
         }
 
-        public new OrderItem GetById(int id)
+        public new bool Insert(OrderItem orderItem)
         {
-            return Repository.GetById(id);
-        }
-        public new IList<OrderItem> GetByName(string name)
-        {
-            return Repository.GetByName(name);
+            return Repository.Insert(orderItem);
         }
 
-        public bool Insert(OrderItem orderItem)
+        public bool Delete(int[] id)
         {
-            return ((IOrderItemRepository)Repository).Insert(orderItem);
-        }
-
-        public new bool Update(OrderItem orderItem)
-        {
-            return Repository.Update(orderItem);
-        }
-
-        public new bool Delete(int[] id)
-        {
-            return Repository.Delete(id);
-        }
-
-        public bool DeleteByOrderId(int[] id) 
-        {
-            return ((IOrderItemRepository)Repository).DeleteByOrderId(id);
+            return ((IOrderItemRepository)Repository).Delete(id);
         }
 
     }

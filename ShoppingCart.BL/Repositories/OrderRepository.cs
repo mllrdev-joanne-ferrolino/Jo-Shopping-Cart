@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Repositories
 {
-    internal class OrderRepository : BaseRepository<Order>, IOrderRepository
+    internal class OrderRepository : MainEntityRepository<Order>, IOrderRepository
     {
         internal override string TableName => "[Order]";
+        internal override string ColumnIdName => "Id";
         public new IList<Order> GetAll()
         {
             return base.GetAll();
@@ -27,6 +28,10 @@ namespace ShoppingCart.BL.Repositories
             return base.GetByName(name);
         }
 
+        public new int Insert(Order order)
+        {
+            return base.Insert(order);
+        }
 
         public new bool Update(Order order)
         {
@@ -38,23 +43,5 @@ namespace ShoppingCart.BL.Repositories
             return base.Delete(id);
         }
 
-        public int Insert(Order order)
-        {
-            try
-            {
-                var properties = order.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
-                var fields = string.Join(", ", properties.Select(e => e.Name));
-                var values = string.Join(", ", properties.Select(e => $"@{e.Name}"));
-                string sql = $"INSERT INTO {TableName} ({fields}) VALUES ({values}); SELECT @@IDENTITY";
-                return _connection.ExecuteScalar<int>(sql, order);
-
-            }
-            catch (Exception ex)
-            {
-                _log.Error(ex.StackTrace);
-                return 0;
-            }
-
-        }
     }
 }

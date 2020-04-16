@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Repositories.Interfaces
 {
-    public interface IOrderItemRepository : IRepository<OrderItem>
+    public interface IOrderItemRepository : IRepository<OrderItem>, IAssociativeEntityRepository<OrderItem>
     {
-        bool DeleteByOrderId(int[] id);
-        bool Insert(OrderItem orderItem);
+        //bool DeleteByOrderId(int[] id);
     }
 }

@@ -10,42 +10,24 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers
 {
-    public class AddressTypeManager : BaseManager<AddressType>, IAddressTypeManager
+    public class AddressTypeManager : AssociativeEntityManager<AddressType>, IAddressTypeManager
     {
-        public override IRepository<AddressType> Repository => new AddressTypeRepository();
+        public override IAssociativeEntityRepository<AddressType> Repository => new AddressTypeRepository();
 
-        public new IList<AddressType> GetAll()
+        public IList<AddressType> GetAll()
         {
-            return Repository.GetAll();
-        }
-
-        public new AddressType GetById(int id)
-        {
-            return Repository.GetById(id);
-        }
-        public new IList<AddressType> GetByName(string name)
-        {
-            return Repository.GetByName(name);
-        }
-      
-        public new bool Update(AddressType addressType)
-        {
-            return Repository.Update(addressType);
+            return ((IAddressTypeRepository)Repository).GetAll();
         }
 
-        public new bool Delete(int[] id)
+        public bool Delete(int[] id) 
         {
-            return Repository.Delete(id);
+            return ((IAddressTypeRepository)Repository).Delete(id);
+        }
+        public new bool Insert(AddressType addressType) 
+        {
+            return Repository.Insert(addressType);
         }
 
-        public bool DeleteByCustomerId(int[] id) 
-        {
-            return ((IAddressTypeRepository)Repository).DeleteByCustomerId(id);
-        }
 
-        public bool Insert(AddressType addressType) 
-        {
-            return ((IAddressTypeRepository)Repository).Insert(addressType);
-        }
     }
 }

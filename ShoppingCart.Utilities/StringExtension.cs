@@ -11,37 +11,20 @@ namespace ShoppingCart.Utilities
         public static int ToInt(this string str, int defaultValue = 0) 
         {
             int parsedInt;
-
-            if (int.TryParse(str, out parsedInt))
-            {
-                return parsedInt;
-            }
-
-            return defaultValue;
+            return int.TryParse(str, out parsedInt) ? parsedInt : defaultValue;
             
         }
 
-        public static float ToFloat(this string str) 
+        public static float ToFloat(this string str, float defaultValue = 0f) 
         {
             double parsedDouble;
-
-            if (double.TryParse(str, out parsedDouble))
-            {
-                return (float)parsedDouble;
-            }
-
-            return 0f;
+            return double.TryParse(str, out parsedDouble) ? (float)parsedDouble : defaultValue;
         }
 
-        public static DateTime ToDateTime(this string str) 
+        public static DateTime ToDateTime(this string str, DateTime defaultValue = new DateTime()) 
         {
             DateTime parsedDateTime;
-            if (DateTime.TryParse(str, out parsedDateTime))
-            {
-                return parsedDateTime;
-            }
-
-            return new DateTime();
+            return DateTime.TryParse(str, out parsedDateTime) ? parsedDateTime : defaultValue;
         }
     }
 }

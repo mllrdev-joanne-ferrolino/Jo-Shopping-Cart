@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers
 {
-    public class ProductManager : BaseManager<Product>, IProductManager
+    public class ProductManager : MainEntityManager<Product>, IProductManager
     {
-        public override IRepository<Product> Repository => new ProductRepository();
+        public override IMainEntityRepository<Product> Repository => new ProductRepository();
 
-        public new IList<Product> GetAll()
+        public IList<Product> GetAll()
         {
-            return Repository.GetAll();
+            return ((IProductRepository)Repository).GetAll();
         }
 
         public new Product GetById(int id) 
@@ -29,9 +29,9 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetByName(name);
         }
 
-        public int Insert(Product product) 
+        public new int Insert(Product product) 
         {
-            return ((IProductRepository)Repository).Insert(product);
+            return Repository.Insert(product);
         }
 
         public new bool Update(Product product) 
@@ -39,9 +39,9 @@ namespace ShoppingCart.BL.Managers
             return Repository.Update(product);
         }
         
-        public new bool Delete(int[] id) 
+        public bool Delete(int[] id) 
         {
-            return Repository.Delete(id);
+            return ((IProductRepository)Repository).Delete(id);
         }
         
     }

@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers.Interfaces
 {
-    public interface IProductManager : IManager<Product>
+    public interface IProductManager : IManager<Product>, IMainEntityManager<Product>
     {
-        int Insert(Product product);
     }
 }

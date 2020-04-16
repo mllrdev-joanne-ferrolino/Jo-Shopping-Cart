@@ -9,9 +9,7 @@ namespace ShoppingCart.BL.Repositories.Interfaces
      public interface IRepository<T> where T : class
     {
         IList<T> GetAll();
-        T GetById(int id);
-        IList<T> GetByName(string name);
-        bool Update(T obj);
+    
         bool Delete(int[] id);
     }
 }

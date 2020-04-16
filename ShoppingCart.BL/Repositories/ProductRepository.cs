@@ -14,9 +14,10 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Repositories
 {
-    internal class ProductRepository : BaseRepository<Product>, IProductRepository
+    internal class ProductRepository : MainEntityRepository<Product>, IProductRepository
     {
         internal override string TableName => "Product";
+        internal override string ColumnIdName => "Id";
         public new IList<Product> GetAll()
         {
             return base.GetAll();
@@ -32,6 +33,11 @@ namespace ShoppingCart.BL.Repositories
             return base.GetByName(name);
         }
 
+        public new int Insert(Product product)
+        {
+            return base.Insert(product);
+        }
+
         public new bool Update(Product product) 
         {
             return base.Update(product);
@@ -42,23 +48,6 @@ namespace ShoppingCart.BL.Repositories
             return base.Delete(id);
         }
 
-        public int Insert(Product product)
-        {
-            try
-            {
-                var properties = product.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
-                var fields = string.Join(", ", properties.Select(e => e.Name));
-                var values = string.Join(", ", properties.Select(e => $"@{e.Name}"));
-                string sql = $"INSERT INTO {TableName} ({fields}) VALUES ({values}); SELECT @@IDENTITY";
-                return _connection.ExecuteScalar<int>(sql, product);
-
-            }
-            catch (Exception ex)
-            {
-                _log.Error(ex.StackTrace);
-                return 0;
-            }
-
-        }
+       
     }
 }

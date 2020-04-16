@@ -1,5 +1,4 @@
-﻿using ShoppingCart.BL.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers.Interfaces
 {
-    public interface IOrderItemManager : IManager<OrderItem>, IAssociativeEntityManager<OrderItem>
+    public interface IAssociativeEntityManager<T> where T: class
     {
+        bool Insert(T entity);
     }
 }

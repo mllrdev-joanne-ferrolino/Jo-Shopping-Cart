@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers
 {
-    public class CustomerManager : BaseManager<Customer>, ICustomerManager
+    public class CustomerManager : MainEntityManager<Customer>, ICustomerManager
     {
-        public override IRepository<Customer> Repository => new CustomerRepository();
+        public override IMainEntityRepository<Customer> Repository => new CustomerRepository();
 
-        public new IList<Customer> GetAll()
+        public IList<Customer> GetAll()
         {
-            return Repository.GetAll();
+            return ((ICustomerRepository)Repository).GetAll();
         }
 
         public new Customer GetById(int id)
@@ -27,9 +27,9 @@ namespace ShoppingCart.BL.Managers
         {
             return Repository.GetByName(name);
         }
-        public int Insert(Customer customer)
+        public new int Insert(Customer customer)
         {
-            return ((ICustomerRepository)Repository).Insert(customer);
+            return Repository.Insert(customer);
         }
 
         public new bool Update(Customer customer)
@@ -37,14 +37,14 @@ namespace ShoppingCart.BL.Managers
             return Repository.Update(customer);
         }
 
-        public new bool Delete(int[] id)
+        public bool Delete(int[] id)
         {
-            return Repository.Delete(id);
+            return ((ICustomerRepository)Repository).Delete(id);
         }
 
-        public int GetId(int id)
+        public new int GetId(int id)
         {
-            return ((ICustomerRepository)Repository).GetId(id);
+            return Repository.GetId(id);
         }
     }
 }

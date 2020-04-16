@@ -148,7 +148,7 @@ namespace ShoppingCart2
                         addressIds.Add(addressType.AddressId);
                     }
 
-                    MessageBox.Show(_addressTypeManager.DeleteByCustomerId(ids.ToArray()) ? "Address types deleted successfully" : "Address types were not deleted");
+                    MessageBox.Show(_addressTypeManager.Delete(ids.ToArray()) ? "Address types deleted successfully" : "Address types were not deleted");
                     MessageBox.Show(_addressManager.Delete(addressIds.ToArray()) ? "Addresses deleted successfully" : "Addresses were not deleted");
                 }
                 else
@@ -165,7 +165,7 @@ namespace ShoppingCart2
                         orderIds.Add(orders.Id);
                     }
 
-                    MessageBox.Show(_orderItemManager.DeleteByOrderId(orderIds.ToArray()) ? "Order item deleted successfully" : "Order items were not deleted");
+                    MessageBox.Show(_orderItemManager.Delete(orderIds.ToArray()) ? "Order item deleted successfully" : "Order items were not deleted");
                     MessageBox.Show(_orderManager.Delete(orderIds.ToArray()) ? "Order deleted successfully" : "Orders were not deleted");
 
                 }

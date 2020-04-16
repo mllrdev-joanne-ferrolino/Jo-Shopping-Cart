@@ -9,10 +9,6 @@ namespace ShoppingCart.BL.Managers.Interfaces
     public interface IManager<T> where T : class
     {
         IList<T> GetAll();
-        T GetById(int id);
-        IList<T> GetByName(string name);
-        //int Insert(T obj);
-        bool Update(T obj);
         bool Delete(int[] id);
     }
 }

@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers.Interfaces
 {
-    public interface IAddressManager : IManager<Address>
+    public interface IAddressManager : IManager<Address>, IMainEntityManager<Address>
     {
-        int GetId(int id);
-        int Insert(Address address);
     }
 }

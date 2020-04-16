@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers.Interfaces
 {
-    public interface IOrderManager : IManager<Order>
+    public interface IOrderManager : IManager<Order>, IMainEntityManager<Order>
     {
-        int Insert(Order order);
     }
 }

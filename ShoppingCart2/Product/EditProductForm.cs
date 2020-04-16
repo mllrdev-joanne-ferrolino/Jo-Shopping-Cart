@@ -26,6 +26,14 @@ namespace ShoppingCart2
             set { _product = value; }
         }
 
+        private bool _isNew;
+
+        public bool IsNew
+        {
+            get { return _isNew; }
+            set { _isNew = value; }
+        }
+
         public EditProductForm()
         {
             _manager = new ProductManager();
@@ -33,16 +41,16 @@ namespace ShoppingCart2
             InitializeComponent();
         }
 
-        private bool _isValid;
+        private bool _isSuccessful;
 
-        public bool IsValid
+        public bool IsSuccessful
         {
-            get { return _isValid; }
-            set { _isValid = value; }
+            get { return _isSuccessful; }
+            set { _isSuccessful = value; }
         }
 
 
-        private void btnInsert_Click(object sender, EventArgs e)
+        private bool Insert() 
         {
             try
             {
@@ -55,24 +63,39 @@ namespace ShoppingCart2
 
                     _product = new Product() { Name = name, Price = price, Description = description, Stock = stock };
 
-                    MessageBox.Show(_manager.Insert(_product) > 0 ? "Details inserted successfully." : "Details were not inserted.");
-                    _isValid = true;
-                    ProductForm productForm = new ProductForm();
-                    this.Close();
+                    if (_manager.Insert(_product) > 0)
+                    {
+                        if (MessageBox.Show("Details inserted successfully.") == DialogResult.OK)
+                        {
+                            ProductForm productForm = new ProductForm();
+                            this.Close();
+                        }
+                        
+                    }
+                    else
+                    {
+                       MessageBox.Show("Details were not inserted.");
+                        return false;
+                    }
+
                 }
                 else
                 {
-                    _isValid = false;
+                    return false;
                 }
-               
+
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                return false;
             }
+
+            return true;
         }
 
-        private void btnUpdate_Click(object sender, EventArgs e)
+        private bool Edit() 
         {
             try
             {
@@ -86,23 +109,31 @@ namespace ShoppingCart2
 
                     _product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock };
 
-                    DialogResult dialog = MessageBox.Show(_manager.Update(_product)? "Details updated successfully." : "Details were not updated.");
-
-                    if (dialog == DialogResult.OK)
+                    if (_manager.Update(_product))
                     {
-                        ProductForm productForm = new ProductForm();
-                        this.Close();
+                        if (MessageBox.Show("Details updated successfully.") == DialogResult.OK)
+                        {
+                            ProductForm productForm = new ProductForm();
+                            this.Close();
+                        }
                     }
-                    
+                    else
+                    {
+                        MessageBox.Show("Details were not updated.");
+                        return false;
+                    }
+
                 }
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                return false;
             }
-        }
 
+            return true;
+        }
         private void btnClear_Click(object sender, EventArgs e)
         {
             ClearTextBoxes();
@@ -113,8 +144,6 @@ namespace ShoppingCart2
             txtPrice.Clear();
             txtDescription.Clear();
             txtStock.Clear();
-            btnAdd.Visible = true;
-            btnSave.Visible = false;
         }
 
         private bool ValidateAllFields() 
@@ -185,13 +214,15 @@ namespace ShoppingCart2
                 txtPrice.Text = _product.Price.ToString("0.00");
                 txtDescription.Text = _product.Description;
                 txtStock.Text = _product.Stock.ToString();
-                btnAdd.Visible = false;
+                btnOK.Text = "Save";
+                _isNew = false;
             }
             else
             {
+                _isNew = true;
                 lblIdName.Visible = false;
                 lblId.Visible = false;
-                btnSave.Visible = false;
+                btnOK.Text = "Add";
             }
 
         }
@@ -208,6 +239,11 @@ namespace ShoppingCart2
             {
                 errorProviderName.SetError(textbox, string.Empty);
             }
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            _isSuccessful = _isNew ? Insert() : Edit();
         }
     }
 }

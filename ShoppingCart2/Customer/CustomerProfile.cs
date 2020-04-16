@@ -181,8 +181,17 @@ namespace ShoppingCart2
 
             if (editCustomerForm.ShowDialog() == DialogResult.OK)
             {
-                this.Refresh();
-                LoadData();
+                while (editCustomerForm.IsValid == false)
+                {
+                    editCustomerForm.ShowDialog();
+                }
+
+                if (editCustomerForm.IsValid == true)
+                {
+                    this.Refresh();
+                    LoadData();
+                }
+               
             }
             
         }

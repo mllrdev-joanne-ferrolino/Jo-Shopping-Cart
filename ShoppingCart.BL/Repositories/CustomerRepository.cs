@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Repositories
 {
-    internal class CustomerRepository : BaseRepository<Customer>, ICustomerRepository
+    internal class CustomerRepository : MainEntityRepository<Customer>, ICustomerRepository
     {
         internal override string TableName => "Customer";
+        internal override string ColumnIdName => "Id";
         public new IList<Customer> GetAll()
         {
             return base.GetAll();
@@ -23,9 +24,19 @@ namespace ShoppingCart.BL.Repositories
             return base.GetById(id);
         }
 
+        public new int GetId(int id)
+        {
+            return base.GetId(id);
+        }
+
         public new IList<Customer> GetByName(string name) 
         {
             return base.GetByName(name);
+        }
+
+        public new int Insert(Customer customer)
+        {
+            return base.Insert(customer);
         }
 
         public new bool Update(Customer customer)
@@ -38,37 +49,5 @@ namespace ShoppingCart.BL.Repositories
             return base.Delete(id);
         }
 
-        public int GetId(int id) 
-        {
-            try
-            {
-                string sql = $"SELECT {id} FROM {TableName}";
-                return _connection.Execute(sql);
-            }
-            catch (Exception ex)
-            {
-                _log.Error(ex.StackTrace);
-                return 0;
-            }
-        }
-
-        public int Insert(Customer customer)
-        {
-            try
-            {
-                var properties = customer.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
-                var fields = string.Join(", ", properties.Select(e => e.Name));
-                var values = string.Join(", ", properties.Select(e => $"@{e.Name}"));
-                string sql = $"INSERT INTO {TableName} ({fields}) VALUES ({values}); SELECT @@IDENTITY";
-                return _connection.ExecuteScalar<int>(sql, customer);
-
-            }
-            catch (Exception ex)
-            {
-                _log.Error(ex.StackTrace);
-                return 0;
-            }
-
-        }
     }
 }

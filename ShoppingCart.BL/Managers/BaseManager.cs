@@ -17,24 +17,14 @@ namespace ShoppingCart.BL.Managers
         { 
             return Repository.GetAll();
         }
-        public T GetById(int id)
-        {
-            return Repository.GetById(id);
-        }
-        public IList<T> GetByName(string name) 
-        {
-            return Repository.GetByName(name);
-        }
+       
 
         //public int Insert(T entity)
         //{
         //    return Repository.Insert(entity);
         //}
 
-        public bool Update(T entity)
-        {
-            return Repository.Update(entity);
-        }
+      
 
         public bool Delete(int[] id)
         {

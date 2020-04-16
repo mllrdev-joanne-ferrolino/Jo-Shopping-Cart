@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers
 {
-    public class AddressManager : BaseManager<Address>, IAddressManager 
+    public class AddressManager : MainEntityManager<Address>, IAddressManager 
     {
-        public override IRepository<Address> Repository => new AddressRepository();
+        public override IMainEntityRepository<Address> Repository => new AddressRepository();
 
-        public new IList<Address> GetAll()
+        public IList<Address> GetAll()
         {
-            return Repository.GetAll();
+            return ((IAddressRepository)Repository).GetAll();
         }
 
         public new Address GetById(int id)
@@ -29,9 +29,9 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetByName(name);
         }
 
-        public int Insert(Address address)
+        public new int Insert(Address address)
         {
-            return ((IAddressRepository)Repository).Insert(address);
+            return Repository.Insert(address);
         }
 
         public new bool Update(Address address)
@@ -39,13 +39,13 @@ namespace ShoppingCart.BL.Managers
             return Repository.Update(address);
         }
 
-        public new bool Delete(int[] id)
+        public bool Delete(int[] id)
         {
-            return Repository.Delete(id);
+            return ((IAddressRepository)Repository).Delete(id);
         }
-        public int GetId(int id) 
+        public new int GetId(int id) 
         {
-            return ((IAddressRepository)Repository).GetId(id);
+            return Repository.GetId(id);
         }
     }
 }

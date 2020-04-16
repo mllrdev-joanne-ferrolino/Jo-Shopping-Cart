@@ -178,7 +178,10 @@ namespace ShoppingCart2
 
                 if (textbox == txtEmail)
                 {
-                    if (!new EmailAddressAttribute().IsValid(txtEmail.Text))
+                    string[] split = txtEmail.Text.Split('@');
+                    bool valid = split.Length > 1 && split.LastOrDefault().Contains('.');
+
+                    if (!valid)
                     {
                         errorProvider.SetError(txtEmail, "Please enter valid email.");
                         return false;
@@ -375,6 +378,10 @@ namespace ShoppingCart2
                         ClearTextBoxes();
                     }
 
+                }
+                else
+                {
+                    _isValid = false;
                 }
             }
             catch (Exception ex)

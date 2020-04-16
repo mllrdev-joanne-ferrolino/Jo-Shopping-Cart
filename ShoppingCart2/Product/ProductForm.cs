@@ -41,12 +41,12 @@ namespace ShoppingCart
 
                 if (editProductForm.ShowDialog() == DialogResult.OK)
                 {
-                    while (editProductForm.IsValid == false)
+                    while (editProductForm.IsSuccessful == false)
                     {
                         editProductForm.ShowDialog();
                     }
 
-                    if (editProductForm.IsValid == true)
+                    if (editProductForm.IsSuccessful == true)
                     {
                         ListViewProducts.Items.Clear();
                         LoadListViewItems();
@@ -226,14 +226,22 @@ namespace ShoppingCart
 
                 if (editProduct.ShowDialog() == DialogResult.OK)
                 {
-                    ListViewProducts.Items.Clear();
-                    LoadListViewItems();
-
-                    if (ListViewProducts.SelectedItems.Count == 0)
+                    if (editProduct.IsSuccessful)
                     {
-                        btnAdd.Enabled = true;
-                        btnDelete.Enabled = false;
+                        ListViewProducts.Items.Clear();
+                        LoadListViewItems();
+
+                        if (ListViewProducts.SelectedItems.Count == 0)
+                        {
+                            btnAdd.Enabled = true;
+                            btnDelete.Enabled = false;
+                        }
                     }
+                    else
+                    {
+                        editProduct.ShowDialog();
+                    }
+                   
                 }
 
             }
