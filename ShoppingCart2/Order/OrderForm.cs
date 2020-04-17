@@ -16,11 +16,9 @@ using System.Windows.Forms;
 
 namespace ShoppingCart2
 {
-   
     public partial class OrderForm : Form
     {
         private OrderItem _orderItem;
-
         public OrderItem OrderItem
         {
             get { return _orderItem; }
@@ -28,7 +26,6 @@ namespace ShoppingCart2
         }
 
         private Customer _customer;
-
         public Customer Customer
         {
             get { return _customer; }
@@ -104,6 +101,9 @@ namespace ShoppingCart2
                  _productManager.GetById(o.ProductId).Price.ToString("0.00"), 
                 o.Amount.ToString("0.00") 
             })).ToArray());
+
+            float totalAmount = _orderItemList.Sum(x => x.Amount);
+            lblTotalAmount.Text = totalAmount.ToString("0.00");
         }
 
         private void ListViewProducts_SelectedIndexChanged(object sender, EventArgs e)
@@ -131,22 +131,19 @@ namespace ShoppingCart2
 
                 if (editOrderForm.ShowDialog() == DialogResult.OK)
                 {
-                    while (editOrderForm.IsValid == false)
+                    while (!editOrderForm.IsSuccessful)
                     {
                         editOrderForm.ShowDialog();
                     }
 
-                    if (editOrderForm.IsValid == true)
+                    if (editOrderForm.IsSuccessful)
                     {
                         _orderItem = editOrderForm.OrderItem;
                         _orderItemList.Add(_orderItem);
                         ListViewOrders.Items.Clear();
                         LoadOrderItems();
-                        float totalAmount = _orderItemList.Sum(x => x.Amount);
-                        lblTotalAmount.Text = totalAmount.ToString("0.00");
                     }
-                   
-
+                 
                 }
             }
         }
@@ -171,8 +168,6 @@ namespace ShoppingCart2
 
                 ListViewOrders.Items.Clear();
                 LoadOrderItems();
-                float totalAmount = _orderItemList.Sum(x => x.Amount);
-                lblTotalAmount.Text = totalAmount.ToString("0.00");
             }
         }
 
@@ -326,7 +321,6 @@ namespace ShoppingCart2
                 MessageBox.Show(ex.Message);
             }
             
-
         }
 
         private void ListViewOrders_DoubleClick(object sender, EventArgs e)
@@ -353,19 +347,27 @@ namespace ShoppingCart2
 
                     if (editOrder.ShowDialog() == DialogResult.OK)
                     {
-                        _orderItem = editOrder.OrderItem;
-
-                        if (_orderItem.ProductId > 0)
+                        while (!editOrder.IsSuccessful)
                         {
-                            OrderItem item = _orderItemList.FirstOrDefault(x => x.ProductId == _orderItem.ProductId);
-                            item.Quantity = _orderItem.Quantity;
-                            item.Amount = _orderItem.Amount;
-                           
-                            ListViewOrders.Items.Clear();
-                            LoadOrderItems();
-                            float totalAmount = _orderItemList.Sum(x => x.Amount);
-                            lblTotalAmount.Text = totalAmount.ToString("0.00");
+                            editOrder.ShowDialog();
                         }
+
+                        if (editOrder.IsSuccessful)
+                        {
+                            _orderItem = editOrder.OrderItem;
+
+                            if (_orderItem.ProductId > 0)
+                            {
+                                OrderItem item = _orderItemList.FirstOrDefault(x => x.ProductId == _orderItem.ProductId);
+                                item.Quantity = _orderItem.Quantity;
+                                item.Amount = _orderItem.Amount;
+
+                                ListViewOrders.Items.Clear();
+                                LoadOrderItems();
+                            }
+                          
+                        }
+
                     }
                     
                 }

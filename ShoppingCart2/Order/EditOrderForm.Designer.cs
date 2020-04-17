@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBoxProduct = new System.Windows.Forms.GroupBox();
-            this.btnUpdate = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
             this.lblId = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.lblDescription = new System.Windows.Forms.Label();
@@ -40,7 +40,6 @@
             this.lblProductName = new System.Windows.Forms.Label();
             this.txtQuantity = new System.Windows.Forms.TextBox();
             this.lblQuantity = new System.Windows.Forms.Label();
-            this.btnAdd = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBoxProduct.SuspendLayout();
@@ -49,7 +48,7 @@
             // 
             // groupBoxProduct
             // 
-            this.groupBoxProduct.Controls.Add(this.btnUpdate);
+            this.groupBoxProduct.Controls.Add(this.btnOK);
             this.groupBoxProduct.Controls.Add(this.lblId);
             this.groupBoxProduct.Controls.Add(this.label2);
             this.groupBoxProduct.Controls.Add(this.lblDescription);
@@ -59,7 +58,6 @@
             this.groupBoxProduct.Controls.Add(this.lblProductName);
             this.groupBoxProduct.Controls.Add(this.txtQuantity);
             this.groupBoxProduct.Controls.Add(this.lblQuantity);
-            this.groupBoxProduct.Controls.Add(this.btnAdd);
             this.groupBoxProduct.Controls.Add(this.label3);
             this.groupBoxProduct.Location = new System.Drawing.Point(12, 12);
             this.groupBoxProduct.Name = "groupBoxProduct";
@@ -68,17 +66,17 @@
             this.groupBoxProduct.TabStop = false;
             this.groupBoxProduct.Text = "Order";
             // 
-            // btnUpdate
+            // btnOK
             // 
-            this.btnUpdate.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnUpdate.Location = new System.Drawing.Point(137, 175);
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(75, 23);
-            this.btnUpdate.TabIndex = 12;
-            this.btnUpdate.Text = "Update";
-            this.btnUpdate.UseVisualStyleBackColor = true;
-            this.btnUpdate.Visible = false;
-            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+            this.btnOK.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnOK.Location = new System.Drawing.Point(147, 181);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.TabIndex = 13;
+            this.btnOK.Text = "OK";
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // lblId
             // 
@@ -155,17 +153,6 @@
             this.lblQuantity.TabIndex = 3;
             this.lblQuantity.Text = "Quantity";
             // 
-            // btnAdd
-            // 
-            this.btnAdd.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnAdd.Location = new System.Drawing.Point(137, 175);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnAdd.TabIndex = 1;
-            this.btnAdd.Text = "Add to Cart";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -206,11 +193,10 @@
         private System.Windows.Forms.Label lblProductName;
         private System.Windows.Forms.TextBox txtQuantity;
         private System.Windows.Forms.Label lblQuantity;
-        private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lblId;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.ErrorProvider errorProvider;
+        private System.Windows.Forms.Button btnOK;
     }
 }

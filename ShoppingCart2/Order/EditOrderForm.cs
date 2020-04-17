@@ -33,13 +33,15 @@ namespace ShoppingCart2
             set { _orderItem = value; }
         }
 
-        private bool _isValid;
+        private bool _isSuccessful;
 
-        public bool IsValid
+        public bool IsSuccessful
         {
-            get { return _isValid; }
-            set { _isValid = value; }
+            get { return _isSuccessful; }
+            set { _isSuccessful = value; }
         }
+
+        private bool _isNew = true;
 
         public EditOrderForm()
         {
@@ -47,7 +49,7 @@ namespace ShoppingCart2
             InitializeComponent();
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private bool Add() 
         {
             try
             {
@@ -65,26 +67,29 @@ namespace ShoppingCart2
                         {
                             OrderForm orderForm = new OrderForm();
                             orderForm.OrderItem = _orderItem;
-                            _isValid = true;
                             this.Close();
                         }
                     }
                     else
                     {
                         MessageBox.Show("Details were not inserted.");
+                        return false;
                     }
                 }
                 else
                 {
-                    _isValid = false;
+                    return false;
                 }
-                
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+
+            return true;
         }
+      
 
         private void EditOrderForm_Load(object sender, EventArgs e)
         {
@@ -98,15 +103,15 @@ namespace ShoppingCart2
 
             if (_orderItem.Quantity > 0)
             {
-                btnUpdate.Visible = true;
-                btnAdd.Visible = false;
-                this.Text = "Edit Order";
+                _isNew = false;
                 txtQuantity.Text = _orderItem.Quantity.ToString();
             }
-            
+
+            btnOK.Text = _isNew ? "Add" : "Save";
+            this.Text = _isNew ? "Add Order" : "Save Order";
         }
 
-        private void btnUpdate_Click(object sender, EventArgs e)
+        private bool Save() 
         {
             try
             {
@@ -124,7 +129,6 @@ namespace ShoppingCart2
                         {
                             OrderForm orderForm = new OrderForm();
                             orderForm.OrderItem = _orderItem;
-                            _isValid = true;
                             this.Close();
 
                         }
@@ -132,11 +136,12 @@ namespace ShoppingCart2
                     else
                     {
                         MessageBox.Show("Details were not inserted.");
+                        return false;
                     }
                 }
                 else
                 {
-                    _isValid = false;
+                    return false;
                 }
 
             }
@@ -144,9 +149,10 @@ namespace ShoppingCart2
             {
                 MessageBox.Show(ex.Message);
             }
-            
-        }
 
+            return true;
+        }
+   
         private bool ValidateQuantity() 
         {
             if (string.IsNullOrWhiteSpace(txtQuantity.Text))
@@ -165,6 +171,11 @@ namespace ShoppingCart2
             }
 
             return true;
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            _isSuccessful = _isNew ? Add() : Save();
         }
     }
 }

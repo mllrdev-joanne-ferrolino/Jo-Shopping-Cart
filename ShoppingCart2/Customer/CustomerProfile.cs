@@ -22,9 +22,7 @@ namespace ShoppingCart2
         private IOrderManager _orderManager;
         private List<Address> _addressList;
         private List<AddressType> _addressTypeList;
-        
         private Customer _customer;
-
         public Customer Customer
         {
             get { return _customer; }
@@ -32,7 +30,6 @@ namespace ShoppingCart2
         }
 
         private Order _order;
-        
         public CustomerProfile()
         {
             _customerManager = new CustomerManager();
@@ -74,7 +71,6 @@ namespace ShoppingCart2
                     }
                 }
                
-
             }
             catch (Exception ex)
             {
@@ -181,14 +177,13 @@ namespace ShoppingCart2
 
             if (editCustomerForm.ShowDialog() == DialogResult.OK)
             {
-                while (editCustomerForm.IsValid == false)
+                while (!editCustomerForm.IsSuccessful)
                 {
                     editCustomerForm.ShowDialog();
                 }
 
-                if (editCustomerForm.IsValid == true)
+                if (editCustomerForm.IsSuccessful)
                 {
-                    this.Refresh();
                     LoadData();
                 }
                

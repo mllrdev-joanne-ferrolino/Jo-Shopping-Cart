@@ -24,14 +24,6 @@ namespace ShoppingCart2
         private List<AddressType> _addressTypeList;
         private Address _address;
         private AddressType _addressType;
-        private bool _isValid;
-
-        public bool IsValid
-        {
-            get { return _isValid; }
-            set { _isValid = value; }
-        }
-
 
         public List<AddressType> AddressTypeList
         {
@@ -55,7 +47,17 @@ namespace ShoppingCart2
             set { _customer = value; }
         }
 
- 
+        private bool _isNew = true;
+
+        private bool _isSuccessful;
+
+        public bool IsSuccessful
+        {
+            get { return _isSuccessful; }
+            set { _isSuccessful = value; }
+        }
+
+
         public EditCustomerForm()
         {
             _customerManager = new CustomerManager();
@@ -74,7 +76,7 @@ namespace ShoppingCart2
             return customer.FirstName.ToLower() == txtFirstName.Text.ToLower() && customer.LastName.ToLower() == txtLastName.Text.ToLower();
         }
 
-        private void btnSubmit_Click(object sender, EventArgs e)
+        private bool Insert() 
         {
             try
             {
@@ -87,6 +89,7 @@ namespace ShoppingCart2
                     if (existingCustomer.Count() > 0)
                     {
                         MessageBox.Show("Customer exists.");
+                        return false;
                     }
                     else
                     {
@@ -100,13 +103,14 @@ namespace ShoppingCart2
                             {
                                 int addressId = _addressManager.Insert(address);
 
-                                if ( addressId > 0)
+                                if (addressId > 0)
                                 {
                                     address.Id = addressId;
                                 }
                                 else
                                 {
                                     MessageBox.Show("Address details were not inserted.");
+                                    return false;
                                 }
                             }
 
@@ -125,33 +129,43 @@ namespace ShoppingCart2
 
                             foreach (var addressType in _addressTypeList)
                             {
-                                MessageBox.Show(_typeManager.Insert(addressType) ? "Address details inserted successfully." : "Address type was not inserted.");
+                                if (_typeManager.Insert(addressType))
+                                {
+                                    MessageBox.Show("Address details inserted successfully.");
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Address type was not inserted.");
+                                    return false;
+                                }
+                                
                             }
 
-                            MessageBox.Show("Customer details inserted successfully.");
-                            _addressList.Clear();
-                            _addressTypeList.Clear();
-                            _address = new Address();
-
+                            if (MessageBox.Show("Customer details inserted successfully.") == DialogResult.OK)
+                            {
+                                _addressList.Clear();
+                                _addressTypeList.Clear();
+                                _address = new Address();
+                            }
+                           
                             CustomerProfile customerProfile = new CustomerProfile();
                             customerProfile.MdiParent = this.MdiParent;
-                            _isValid = true;
                             this.Close();
-                            
+
                         }
                         else
                         {
                             MessageBox.Show("Customer details were not inserted.");
                             ClearTextBoxes();
+                            return false;
                         }
-
 
                     }
 
                 }
                 else
                 {
-                    _isValid = false;
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -159,6 +173,8 @@ namespace ShoppingCart2
                 MessageBox.Show(ex.Message);
                 ClearTextBoxes();
             }
+
+            return true;
         }
 
         private bool ValidateAllFields()
@@ -237,20 +253,14 @@ namespace ShoppingCart2
                     txtLastName.Text = _customer.LastName;
                     txtEmail.Text = _customer.Email;
                     txtMobileNumber.Text = _customer.MobileNumber;
+                    _isNew = false;
                 }
-                else
-                {
-                    btnSubmit.Visible = true;
-                    btnEdit.Visible = false;
 
-                }
+                btnOK.Text = _isNew ? "Submit" : "Edit";
+                this.Text = _isNew ? "Add Customer" : "Edit Customer";
 
                 if (_addressList.Count > 0 && _addressTypeList.Count > 0)
                 {
-                    btnSubmit.Visible = false;
-                    btnEdit.Visible = true;
-                    this.Text = "Edit Customer";
-
                     foreach (var addressTypeItem in _addressTypeList)
                     {
                         var address = _addressList.FirstOrDefault(x => x.Id == addressTypeItem.AddressId);
@@ -301,33 +311,50 @@ namespace ShoppingCart2
                 MessageBox.Show(ex.Message);
             }
            
-
         }
         
-        private void btnEdit_Click(object sender, EventArgs e)
+        private bool Edit() 
         {
             try
             {
                 if (ValidateAllFields())
                 {
                     List<int> existingId = new List<int>();
-                   
+
                     GetData();
 
                     if (_customerManager.Update(_customer))
                     {
-                        
+
                         foreach (var item in _addressList)
                         {
                             if (item.Id == 0)
                             {
                                 int id = _addressManager.Insert(item);
-                                MessageBox.Show( id > 0 ? "Address details added successfully." : "Address details were not added.");
+
+                                if (id > 0)
+                                {
+                                    MessageBox.Show("Address details added successfully.");
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Address details were not added.");
+                                    return false;
+                                }
+
                                 item.Id = id;
                             }
                             else
                             {
-                                MessageBox.Show(_addressManager.Update(item) ? "Address details updated successfully." : "Address details were not updated.");
+                                if (_addressManager.Update(item))
+                                {
+                                    MessageBox.Show("Address details updated successfully.");
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Address details were not updated.");
+                                    return false;
+                                }
                             }
 
                         }
@@ -357,31 +384,42 @@ namespace ShoppingCart2
                         {
                             if (existingId.Where(x => x == addressType.AddressId).Count() == 0)
                             {
-                                MessageBox.Show(_typeManager.Insert(addressType) ? "Address type inserted successfully." : "Address type was not inserted.");
+                                if (_typeManager.Insert(addressType))
+                                {
+                                    MessageBox.Show("Address type inserted successfully.");
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Address type was not inserted.");
+                                    return false;
+                                }
                             }
 
                         }
 
-                        MessageBox.Show("Customer details updated successfully.");
+                        if (MessageBox.Show("Customer details updated successfully.") == DialogResult.OK)
+                        {
+                            _addressList.Clear();
+                            _addressTypeList.Clear();
+                            _address = new Address();
 
-                        _addressList.Clear();
-                        _addressTypeList.Clear();
-                        _address = new Address();
-
-                        CustomerProfile customerProfile = new CustomerProfile();
-                        customerProfile.MdiParent = this.MdiParent;
-                        this.Close();
+                            CustomerProfile customerProfile = new CustomerProfile();
+                            customerProfile.MdiParent = this.MdiParent;
+                            this.Close();
+                        }
+                        
                     }
                     else
                     {
                         MessageBox.Show("Customer details were not updated.");
                         ClearTextBoxes();
+                        return false;
                     }
 
                 }
                 else
                 {
-                    _isValid = false;
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -389,6 +427,8 @@ namespace ShoppingCart2
                 MessageBox.Show(ex.Message);
                 ClearTextBoxes();
             }
+
+            return true;
         }
 
         private void btnReset_Click(object sender, EventArgs e)
@@ -521,6 +561,11 @@ namespace ShoppingCart2
                 MessageBox.Show(ex.Message);
             }
 
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            _isSuccessful = _isNew ? Insert() : Edit();
         }
     }
 }

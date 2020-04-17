@@ -41,12 +41,12 @@ namespace ShoppingCart
 
                 if (editProductForm.ShowDialog() == DialogResult.OK)
                 {
-                    while (editProductForm.IsSuccessful == false)
+                    while (!editProductForm.IsSuccessful)
                     {
                         editProductForm.ShowDialog();
                     }
 
-                    if (editProductForm.IsSuccessful == true)
+                    if (editProductForm.IsSuccessful)
                     {
                         ListViewProducts.Items.Clear();
                         LoadListViewItems();
@@ -97,8 +97,6 @@ namespace ShoppingCart
             {
                 MessageBox.Show(ex.Message);
             }
-            
-
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -226,6 +224,11 @@ namespace ShoppingCart
 
                 if (editProduct.ShowDialog() == DialogResult.OK)
                 {
+                    while (!editProduct.IsSuccessful)
+                    {
+                        editProduct.ShowDialog();
+                    }
+
                     if (editProduct.IsSuccessful)
                     {
                         ListViewProducts.Items.Clear();
@@ -236,10 +239,6 @@ namespace ShoppingCart
                             btnAdd.Enabled = true;
                             btnDelete.Enabled = false;
                         }
-                    }
-                    else
-                    {
-                        editProduct.ShowDialog();
                     }
                    
                 }

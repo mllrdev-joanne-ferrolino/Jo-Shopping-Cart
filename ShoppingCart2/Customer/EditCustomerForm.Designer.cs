@@ -37,7 +37,6 @@
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtMobileNumber = new System.Windows.Forms.TextBox();
-            this.btnSubmit = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.lblCustomerInfo = new System.Windows.Forms.Label();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
@@ -84,7 +83,7 @@
             this.label22 = new System.Windows.Forms.Label();
             this.lblBillingAddressStreetLine = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
-            this.btnEdit = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.groupBoxBasicInfo.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -162,22 +161,10 @@
             this.txtMobileNumber.Size = new System.Drawing.Size(230, 20);
             this.txtMobileNumber.TabIndex = 3;
             // 
-            // btnSubmit
-            // 
-            this.btnSubmit.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnSubmit.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSubmit.Location = new System.Drawing.Point(185, 474);
-            this.btnSubmit.Name = "btnSubmit";
-            this.btnSubmit.Size = new System.Drawing.Size(75, 23);
-            this.btnSubmit.TabIndex = 0;
-            this.btnSubmit.Text = "Submit";
-            this.btnSubmit.UseVisualStyleBackColor = true;
-            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
-            // 
             // btnReset
             // 
             this.btnReset.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnReset.Location = new System.Drawing.Point(266, 474);
+            this.btnReset.Location = new System.Drawing.Point(242, 474);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(75, 23);
             this.btnReset.TabIndex = 2;
@@ -620,30 +607,29 @@
             this.label24.TabIndex = 32;
             this.label24.Text = "Street Line";
             // 
-            // btnEdit
+            // btnOK
             // 
-            this.btnEdit.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnEdit.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnEdit.Location = new System.Drawing.Point(185, 474);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(75, 23);
-            this.btnEdit.TabIndex = 1;
-            this.btnEdit.Text = "Save";
-            this.btnEdit.UseVisualStyleBackColor = true;
-            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            this.btnOK.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnOK.Location = new System.Drawing.Point(161, 474);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.TabIndex = 20;
+            this.btnOK.Text = "OK";
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // EditCustomerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(514, 516);
-            this.Controls.Add(this.btnEdit);
+            this.Controls.Add(this.btnOK);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBoxBasicInfo);
             this.Controls.Add(this.lblStreetLine);
             this.Controls.Add(this.lblCustomerInfo);
             this.Controls.Add(this.btnReset);
-            this.Controls.Add(this.btnSubmit);
             this.MaximizeBox = false;
             this.Name = "EditCustomerForm";
             this.Text = "Add Customer";
@@ -674,14 +660,12 @@
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtMobileNumber;
-        private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Label lblCustomerInfo;
         private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.Label lblStreetLine;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBoxBasicInfo;
-        private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.TabControl tabControlAddress;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Label label11;
@@ -722,5 +706,6 @@
         private System.Windows.Forms.TextBox txtBillingCountry;
         private System.Windows.Forms.TextBox txtBillingCity;
         private System.Windows.Forms.TextBox txtBillingStreet;
+        private System.Windows.Forms.Button btnOK;
     }
 }

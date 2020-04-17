@@ -26,12 +26,13 @@ namespace ShoppingCart2
             set { _product = value; }
         }
 
-        private bool _isNew;
+        private bool _isNew = true;
 
-        public bool IsNew
+        private bool _isSuccessful;
+        public bool IsSuccessful
         {
-            get { return _isNew; }
-            set { _isNew = value; }
+            get { return _isSuccessful; }
+            set { _isSuccessful = value; }
         }
 
         public EditProductForm()
@@ -40,15 +41,6 @@ namespace ShoppingCart2
             _product = new Product();
             InitializeComponent();
         }
-
-        private bool _isSuccessful;
-
-        public bool IsSuccessful
-        {
-            get { return _isSuccessful; }
-            set { _isSuccessful = value; }
-        }
-
 
         private bool Insert() 
         {
@@ -123,6 +115,10 @@ namespace ShoppingCart2
                         return false;
                     }
 
+                }
+                else
+                {
+                    return false;
                 }
 
             }
@@ -214,17 +210,16 @@ namespace ShoppingCart2
                 txtPrice.Text = _product.Price.ToString("0.00");
                 txtDescription.Text = _product.Description;
                 txtStock.Text = _product.Stock.ToString();
-                btnOK.Text = "Save";
                 _isNew = false;
             }
             else
             {
-                _isNew = true;
                 lblIdName.Visible = false;
                 lblId.Visible = false;
-                btnOK.Text = "Add";
             }
 
+            btnOK.Text = _isNew ? "Add" : "Save";
+            this.Text = _isNew ? "Add Product" : "Save Product";
         }
 
         private void ValidateTextBox(object sender, CancelEventArgs e)
@@ -238,6 +233,42 @@ namespace ShoppingCart2
             else
             {
                 errorProviderName.SetError(textbox, string.Empty);
+            }
+
+            if (textbox == txtName)
+            {
+                if (txtName.Text.Any(x => char.IsDigit(x)))
+                {
+                    errorProviderName.SetError(txtName, "Name contains number. Please enter valid name.");
+                }
+                else
+                {
+                    errorProviderName.SetError(txtName, string.Empty);
+                }
+            }
+
+            if (textbox == txtPrice)
+            {
+                if (txtPrice.Text.Any(x => char.IsLetter(x)))
+                {
+                    errorProviderName.SetError(txtPrice, "Price is invalid. Please enter valid price.");
+                }
+                else
+                {
+                    errorProviderName.SetError(txtPrice, string.Empty);
+                }
+            }
+
+            if (textbox == txtStock)
+            {
+                if (txtStock.Text.Any(x => char.IsLetter(x)) || txtStock.Text.Any(x => char.IsPunctuation(x)))
+                {
+                    errorProviderName.SetError(txtStock, "Stock is invalid. Please enter valid stock.");
+                }
+                else
+                {
+                    errorProviderName.SetError(txtStock, string.Empty);
+                }
             }
         }
 

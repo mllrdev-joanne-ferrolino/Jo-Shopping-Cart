@@ -46,19 +46,17 @@ namespace ShoppingCart2
         
             if (editCustomerForm.ShowDialog() == DialogResult.OK)
             {
-                while (editCustomerForm.IsValid == false)
+                while (!editCustomerForm.IsSuccessful)
                 {
                     editCustomerForm.ShowDialog();
                 }
 
-                if (editCustomerForm.IsValid == true)
+                if (editCustomerForm.IsSuccessful)
                 {
                     ListViewCustomers.Items.Clear();
                     LoadCustomers();
                 }
-               
             }
-            
         }
 
         private void CustomerForm_Load(object sender, EventArgs e)
@@ -83,7 +81,6 @@ namespace ShoppingCart2
                 MessageBox.Show(ex.Message);
             }
            
-            
         }
 
         private void ListViewCustomers_SelectedIndexChanged(object sender, EventArgs e)
@@ -275,7 +272,6 @@ namespace ShoppingCart2
                 MessageBox.Show(ex.Message);
             }
             
-
         }
 
         private void btnSearch_Click(object sender, EventArgs e)

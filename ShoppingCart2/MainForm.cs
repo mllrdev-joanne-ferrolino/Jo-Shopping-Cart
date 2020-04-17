@@ -14,18 +14,12 @@ namespace ShoppingCart2
 {
     public partial class MainForm : Form
     {
-        private OrderForm _orderForm = new OrderForm();
-        private ProductForm _productForm = new ProductForm();
-        private CustomerProfile _customerProfile = new CustomerProfile();
-        private CustomerForm _customerForm = new CustomerForm();
         private Customer _customer;
-
         public Customer Customer
         {
             get { return _customer; }
             set { _customer = value; }
         }
-
 
         public MainForm()
         {
@@ -35,6 +29,8 @@ namespace ShoppingCart2
         private void ShopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             viewCustomersToolStripMenuItem.Enabled = true;
+
+            OrderForm _orderForm = new OrderForm();
 
             if (this.ActiveMdiChild != null && this.ActiveMdiChild != _orderForm)
             {
@@ -50,6 +46,8 @@ namespace ShoppingCart2
         {
             viewCustomersToolStripMenuItem.Enabled = true;
 
+            ProductForm _productForm = new ProductForm();
+
             if (this.ActiveMdiChild != null && this.ActiveMdiChild != _productForm)
             {
                 this.ActiveMdiChild.Close();
@@ -61,11 +59,14 @@ namespace ShoppingCart2
 
         private void viewCustomersToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            CustomerProfile _customerProfile = new CustomerProfile();
+
             if (this.ActiveMdiChild != null && this.ActiveMdiChild != _customerProfile)
             {
                 this.ActiveMdiChild.Close();
             }
 
+            
             _customerProfile.MdiParent = this;
             _customerProfile.Customer = _customer;
             _customerProfile.Show();
@@ -73,9 +74,16 @@ namespace ShoppingCart2
 
         private void viewCustomerListToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            CustomerForm _customerForm = new CustomerForm();
+
+            if (this.ActiveMdiChild != null && this.ActiveMdiChild != _customerForm)
+            {
+                this.ActiveMdiChild.Close();
+            }
+
             _customerForm.MdiParent = this;
             _customerForm.Show();
         }
+
     }
 }
