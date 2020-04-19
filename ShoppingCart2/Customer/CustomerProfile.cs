@@ -57,7 +57,7 @@ namespace ShoppingCart2
                     if (_customer.Id > 0)
                     {
                         MainForm parent = (MainForm)this.MdiParent;
-                        parent.viewCustomersToolStripMenuItem.Enabled = true;
+                        parent.viewCustomersToolStripMenuItem.Visible = true;
                         parent.ShopToolStripMenuItem.Enabled = true;
                         parent.Customer = _customer;
                         LoadData();

@@ -18,6 +18,14 @@ namespace ShoppingCart2
         private IOrderItemManager _orderItemManager;
         private IOrderManager _orderManager;
         private IProductManager _productManager;
+        private Customer _customer;
+
+        public Customer Customer
+        {
+            get { return _customer; }
+            set { _customer = value; }
+        }
+
         private Order _order;
 
         public Order Order

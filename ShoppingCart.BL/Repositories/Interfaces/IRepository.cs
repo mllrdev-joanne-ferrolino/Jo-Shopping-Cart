@@ -9,7 +9,6 @@ namespace ShoppingCart.BL.Repositories.Interfaces
      public interface IRepository<T> where T : class
     {
         IList<T> GetAll();
-    
         bool Delete(int[] id);
     }
 }

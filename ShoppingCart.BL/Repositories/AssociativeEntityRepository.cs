@@ -27,6 +27,5 @@ namespace ShoppingCart.BL.Repositories
             }
         }
 
-       
     }
 }

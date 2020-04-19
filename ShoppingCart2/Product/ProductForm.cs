@@ -18,11 +18,21 @@ namespace ShoppingCart
     public partial class ProductForm : Form
     {
         private IProductManager _manager;
+        private IOrderItemManager _orderItemManager;
         private Product _product;
-   
+        private Customer _customer;
+
+        public Customer Customer
+        {
+            get { return _customer; }
+            set { _customer = value; }
+        }
+
+
         public ProductForm()
         {
             _manager = new ProductManager();
+            _orderItemManager = new OrderItemManager();
           
             InitializeComponent();
         }
@@ -80,9 +90,15 @@ namespace ShoppingCart
                     ids.Add(Convert.ToInt32(item.SubItems[0].Text));
                 }
 
+                foreach (var id in ids)
+                {
+                    var orderItemIds = _orderItemManager.GetAll().Where(x => x.ProductId == id).Select(x => x.OrderId);
+                    _orderItemManager.Delete(orderItemIds.ToArray());
+                }
+
                 if (_manager.Delete(ids.ToArray()))
                 {
-                    MessageBox.Show("Details deleted successfully.");
+                    MessageBox.Show("Product details deleted successfully.");
                     ListViewProducts.Items.Clear();
                     LoadListViewItems();
                     btnAdd.Enabled = true;
@@ -257,6 +273,14 @@ namespace ShoppingCart
                 {
                     btnAdd.Enabled = true;
                     btnDelete.Enabled = false;
+                }
+
+                if (_customer != null)
+                {
+                    MainForm parent = (MainForm)this.MdiParent;
+                    parent.viewCustomersToolStripMenuItem.Visible = true;
+                    parent.ShopToolStripMenuItem.Enabled = true;
+                    parent.Customer = _customer;
                 }
             }
             catch (Exception ex)

@@ -18,14 +18,6 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetAll();
         }
        
-
-        //public int Insert(T entity)
-        //{
-        //    return Repository.Insert(entity);
-        //}
-
-      
-
         public bool Delete(int[] id)
         {
             return Repository.Delete(id);

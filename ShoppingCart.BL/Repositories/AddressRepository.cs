@@ -41,8 +41,5 @@ namespace ShoppingCart.BL.Repositories
         {
             return base.Delete(id);
         }
-
-      
-       
     }
 }

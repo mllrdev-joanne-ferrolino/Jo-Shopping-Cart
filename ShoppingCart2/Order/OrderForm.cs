@@ -38,6 +38,7 @@ namespace ShoppingCart2
         private IOrderManager _orderManager;
         private IProductManager _productManager;
         private IOrderItemManager _orderItemManager;
+        private ICustomerManager _customerManager;
        
         public OrderForm()
         {
@@ -47,6 +48,7 @@ namespace ShoppingCart2
             _orderItemManager = new OrderItemManager();
             _orderItem = new OrderItem();
             _orderItemList = new List<OrderItem>();
+            _customerManager = new CustomerManager();
             InitializeComponent();
         }
 
@@ -61,7 +63,8 @@ namespace ShoppingCart2
             else if (_customer.Id > 0)
             {
                 lblCustomerId.Text = _customer.Id.ToString();
-                lblCustomerName.Text = $"{_customer.FirstName} {_customer.LastName}";
+                var customer = _customerManager.GetById(_customer.Id);
+                lblCustomerName.Text = $"{customer.FirstName} {customer.LastName}";
             }
             else
             {
@@ -202,6 +205,7 @@ namespace ShoppingCart2
                     ListViewOrders.Items.Clear();
                     CheckoutForm checkoutForm = new CheckoutForm();
                     checkoutForm.Order = order;
+                    checkoutForm.Customer = _customer;
                     checkoutForm.MdiParent = this.MdiParent;
                     checkoutForm.Show();
 

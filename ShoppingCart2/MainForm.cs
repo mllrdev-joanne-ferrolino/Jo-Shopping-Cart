@@ -28,7 +28,7 @@ namespace ShoppingCart2
 
         private void ShopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            viewCustomersToolStripMenuItem.Enabled = true;
+            viewCustomersToolStripMenuItem.Visible = true;
 
             OrderForm _orderForm = new OrderForm();
 

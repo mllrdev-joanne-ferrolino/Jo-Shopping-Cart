@@ -69,7 +69,7 @@
             // ViewProductsToolStripMenuItem
             // 
             this.ViewProductsToolStripMenuItem.Name = "ViewProductsToolStripMenuItem";
-            this.ViewProductsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ViewProductsToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.ViewProductsToolStripMenuItem.Text = "View Products";
             this.ViewProductsToolStripMenuItem.Click += new System.EventHandler(this.ViewProductsToolStripMenuItem_Click);
             // 
@@ -84,16 +84,16 @@
             // 
             // viewCustomersToolStripMenuItem
             // 
-            this.viewCustomersToolStripMenuItem.Enabled = false;
             this.viewCustomersToolStripMenuItem.Name = "viewCustomersToolStripMenuItem";
-            this.viewCustomersToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.viewCustomersToolStripMenuItem.Text = "Profile";
+            this.viewCustomersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewCustomersToolStripMenuItem.Text = "Current Customer";
+            this.viewCustomersToolStripMenuItem.Visible = false;
             this.viewCustomersToolStripMenuItem.Click += new System.EventHandler(this.viewCustomersToolStripMenuItem_Click);
             // 
             // viewCustomerListToolStripMenuItem
             // 
             this.viewCustomerListToolStripMenuItem.Name = "viewCustomerListToolStripMenuItem";
-            this.viewCustomerListToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.viewCustomerListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.viewCustomerListToolStripMenuItem.Text = "View Customer List";
             this.viewCustomerListToolStripMenuItem.Click += new System.EventHandler(this.viewCustomerListToolStripMenuItem_Click);
             // 

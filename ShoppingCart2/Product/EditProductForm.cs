@@ -18,6 +18,7 @@ namespace ShoppingCart2
     public partial class EditProductForm : Form
     {
         private IProductManager _manager;
+        private string[] _input;
         private Product _product;
 
         public Product Product
@@ -91,6 +92,8 @@ namespace ShoppingCart2
         {
             try
             {
+                _input = new string[] { txtName.Text, txtPrice.Text, txtDescription.Text, txtStock.Text };
+
                 if (ValidateAllFields())
                 {
                     int id = lblId.Text.ToInt();
@@ -205,11 +208,26 @@ namespace ShoppingCart2
         {
             if (_product.Id != 0)
             {
+                if (_input != null)
+                {
+                    var textboxes = this.Controls.OfType<TextBox>().OrderBy(x => x.TabIndex);
+
+                    for (int i = 0; i < _input.Length; i++)
+                    {
+                        var textbox = textboxes.ElementAt(i);
+                        textbox.Text = _input[i];
+                    }
+
+                }
+                else
+                {
+                    txtName.Text = _product.Name;
+                    txtPrice.Text = _product.Price.ToString("0.00");
+                    txtDescription.Text = _product.Description;
+                    txtStock.Text = _product.Stock.ToString();
+                }
+
                 lblId.Text = _product.Id.ToString();
-                txtName.Text = _product.Name;
-                txtPrice.Text = _product.Price.ToString("0.00");
-                txtDescription.Text = _product.Description;
-                txtStock.Text = _product.Stock.ToString();
                 _isNew = false;
             }
             else

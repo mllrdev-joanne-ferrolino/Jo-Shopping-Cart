@@ -42,7 +42,7 @@ namespace ShoppingCart2
         }
 
         private bool _isNew = true;
-
+        private string _input;
         public EditOrderForm()
         {
             _orderItem = new OrderItem();
@@ -104,7 +104,8 @@ namespace ShoppingCart2
             if (_orderItem.Quantity > 0)
             {
                 _isNew = false;
-                txtQuantity.Text = _orderItem.Quantity.ToString();
+                txtQuantity.Text = _input != null ? _input : _orderItem.Quantity.ToString();
+               
             }
 
             btnOK.Text = _isNew ? "Add" : "Save";
@@ -115,6 +116,8 @@ namespace ShoppingCart2
         {
             try
             {
+                _input = txtQuantity.Text;
+
                 if (ValidateQuantity())
                 {
                     int productId = lblId.Text.ToInt();

@@ -40,8 +40,6 @@ namespace ShoppingCart.BL.Repositories
             
         }
 
-    
-
         internal bool Delete(int[] id)
         {
             try

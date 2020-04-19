@@ -24,19 +24,5 @@ namespace ShoppingCart.BL.Repositories
             return base.Delete(id);
         }
 
-        //public bool DeleteByCustomerId(int[] id)
-        //{
-        //    try
-        //    {
-        //        string sql = $"DELETE FROM {TableName} WHERE CustomerId IN ({string.Join(", ", id)})";
-        //        return _connection.Execute(sql) > 0;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _log.Error(ex.StackTrace);
-        //        return false;
-        //    }
-        //}
-
     }
 }

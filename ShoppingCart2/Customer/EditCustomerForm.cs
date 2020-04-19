@@ -24,6 +24,7 @@ namespace ShoppingCart2
         private List<AddressType> _addressTypeList;
         private Address _address;
         private AddressType _addressType;
+        private string[] _input;
 
         public List<AddressType> AddressTypeList
         {
@@ -246,13 +247,28 @@ namespace ShoppingCart2
             {
                 if (_customer != null && _customer.Id > 0)
                 {
+                    if (_input != null)
+                    {
+                        var textboxes = groupBoxBasicInfo.Controls.OfType<TextBox>().OrderBy(x => x.TabIndex);
+
+                        for (int i = 0; i < _input.Length; i++)
+                        {
+                            var textbox = textboxes.ElementAt(i);
+                            textbox.Text = _input[i];
+                        }
+
+                    }
+                    else
+                    {
+                        txtFirstName.Text = _customer.FirstName;
+                        txtLastName.Text = _customer.LastName;
+                        txtEmail.Text = _customer.Email;
+                        txtMobileNumber.Text = _customer.MobileNumber;
+                    }
+
                     lblCustomerIdName.Visible = true;
                     lblCustomerId.Visible = true;
                     lblCustomerId.Text = _customer.Id.ToString();
-                    txtFirstName.Text = _customer.FirstName;
-                    txtLastName.Text = _customer.LastName;
-                    txtEmail.Text = _customer.Email;
-                    txtMobileNumber.Text = _customer.MobileNumber;
                     _isNew = false;
                 }
 
@@ -317,6 +333,8 @@ namespace ShoppingCart2
         {
             try
             {
+                _input = new string[] { txtFirstName.Text, txtLastName.Text, txtEmail.Text, txtMobileNumber.Text };
+
                 if (ValidateAllFields())
                 {
                     List<int> existingId = new List<int>();

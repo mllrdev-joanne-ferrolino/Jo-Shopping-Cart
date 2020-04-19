@@ -61,7 +61,7 @@
             this.txtName.Location = new System.Drawing.Point(96, 41);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(300, 20);
-            this.txtName.TabIndex = 10;
+            this.txtName.TabIndex = 0;
             this.txtName.Validating += new System.ComponentModel.CancelEventHandler(this.ValidateTextBox);
             // 
             // label2
@@ -80,7 +80,7 @@
             this.txtPrice.Location = new System.Drawing.Point(96, 67);
             this.txtPrice.Name = "txtPrice";
             this.txtPrice.Size = new System.Drawing.Size(300, 20);
-            this.txtPrice.TabIndex = 12;
+            this.txtPrice.TabIndex = 1;
             // 
             // label3
             // 
@@ -109,7 +109,7 @@
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(300, 52);
-            this.txtDescription.TabIndex = 14;
+            this.txtDescription.TabIndex = 2;
             // 
             // txtStock
             // 
@@ -117,7 +117,7 @@
             this.txtStock.Location = new System.Drawing.Point(96, 151);
             this.txtStock.Name = "txtStock";
             this.txtStock.Size = new System.Drawing.Size(300, 20);
-            this.txtStock.TabIndex = 16;
+            this.txtStock.TabIndex = 3;
             // 
             // btnClear
             // 
@@ -161,7 +161,7 @@
             this.btnOK.Location = new System.Drawing.Point(136, 203);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 24;
+            this.btnOK.TabIndex = 4;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
