@@ -18,11 +18,14 @@ namespace ShoppingCart.BL.Repositories
             return base.GetAll();
         }
 
-
         public new bool Delete(int[] id)
         {
             return base.Delete(id);
         }
 
+        public new bool Insert(AddressType addressType)
+        {
+            return base.Insert(addressType);
+        }
     }
 }
