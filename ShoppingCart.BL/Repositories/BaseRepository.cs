@@ -21,8 +21,16 @@ namespace ShoppingCart.BL.Repositories
         internal static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         internal BaseRepository()
         {
-            _connection = new SqlConnection(ConfigurationManager.ConnectionStrings["dbShoppingCart"].ConnectionString);
-            _connection.Open();
+            try
+            {
+                _connection = new SqlConnection(ConfigurationManager.ConnectionStrings["dbShoppingCart"].ConnectionString);
+                _connection.Open();
+            }
+            catch (Exception ex)
+            {
+
+                _log.Error(ex.StackTrace);
+            }
         }
 
         internal IList<T> GetAll()
