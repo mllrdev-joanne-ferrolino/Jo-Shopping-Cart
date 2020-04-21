@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Forms;
 
 namespace ShoppingCart2
@@ -186,34 +187,40 @@ namespace ShoppingCart2
                     Status = "for shipping"
                 };
 
-                int id = _orderManager.Insert(order);
-
-                if (id > 0)
+                using (var scope = new TransactionScope())
                 {
-                    order.Id = id;
-                    
-                    foreach (var item in _orderItemList)
+                    int id = _orderManager.Insert(order);
+
+                    if (id > 0)
                     {
-                        item.OrderId = order.Id;
-                        _orderItemManager.Insert(item);
+                        order.Id = id;
+
+                        foreach (var item in _orderItemList)
+                        {
+                            item.OrderId = order.Id;
+                            _orderItemManager.Insert(item);
+                        }
+
+                        MessageBox.Show("Order placed successfully.");
+                        _orderItem = new OrderItem();
+                        _product = new Product();
+                        lblTotalAmount.Text = string.Empty;
+                        ListViewOrders.Items.Clear();
+                        CheckoutForm checkoutForm = new CheckoutForm();
+                        checkoutForm.Order = order;
+                        checkoutForm.Customer = _customer;
+                        checkoutForm.MdiParent = this.MdiParent;
+                        checkoutForm.Show();
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Order failed.");
                     }
 
-                    MessageBox.Show("Order placed successfully.");
-                    _orderItem = new OrderItem();
-                    _product = new Product();
-                    lblTotalAmount.Text = string.Empty;
-                    ListViewOrders.Items.Clear();
-                    CheckoutForm checkoutForm = new CheckoutForm();
-                    checkoutForm.Order = order;
-                    checkoutForm.Customer = _customer;
-                    checkoutForm.MdiParent = this.MdiParent;
-                    checkoutForm.Show();
-
+                    scope.Complete();
                 }
-                else
-                {
-                    MessageBox.Show("Order failed.");
-                }
+                
                 
             }
             catch (Exception ex)

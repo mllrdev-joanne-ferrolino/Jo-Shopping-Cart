@@ -633,6 +633,7 @@
             this.MaximizeBox = false;
             this.Name = "EditCustomerForm";
             this.Text = "Add Customer";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EditCustomerForm_FormClosed);
             this.Load += new System.EventHandler(this.EditCustomerForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.groupBoxBasicInfo.ResumeLayout(false);

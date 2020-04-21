@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Forms;
 
 namespace ShoppingCart2
@@ -134,56 +135,62 @@ namespace ShoppingCart2
                 ids.Add(item.SubItems[0].Text.ToInt());
             }
 
-            foreach (var id in ids)
+            using (var scope = new TransactionScope())
             {
-                if (_addressTypeManager.GetAll().Where(x => x.CustomerId == id).Count() > 0)
+                foreach (var id in ids)
                 {
-                    var addressTypeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == id);
-
-                    foreach (var addressType in addressTypeList)
+                    if (_addressTypeManager.GetAll().Where(x => x.CustomerId == id).Count() > 0)
                     {
-                        addressIds.Add(addressType.AddressId);
+                        var addressTypeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == id);
+
+                        foreach (var addressType in addressTypeList)
+                        {
+                            addressIds.Add(addressType.AddressId);
+                        }
+
+                        MessageBox.Show(_addressTypeManager.Delete(ids.ToArray()) ? "Address types deleted successfully" : "Address types were not deleted");
+                        MessageBox.Show(_addressManager.Delete(addressIds.ToArray()) ? "Addresses deleted successfully" : "Addresses were not deleted");
+                    }
+                    else
+                    {
+                        MessageBox.Show("No existing address type for this customer.");
                     }
 
-                    MessageBox.Show(_addressTypeManager.Delete(ids.ToArray()) ? "Address types deleted successfully" : "Address types were not deleted");
-                    MessageBox.Show(_addressManager.Delete(addressIds.ToArray()) ? "Addresses deleted successfully" : "Addresses were not deleted");
+                    if (_orderManager.GetAll().Where(x => x.CustomerId == id).Count() > 0)
+                    {
+                        var orderList = _orderManager.GetAll().Where(x => x.CustomerId == id);
+
+                        foreach (var orders in orderList)
+                        {
+                            orderIds.Add(orders.Id);
+                        }
+
+                        MessageBox.Show(_orderItemManager.Delete(orderIds.ToArray()) ? "Order item deleted successfully" : "Order items were not deleted");
+                        MessageBox.Show(_orderManager.Delete(orderIds.ToArray()) ? "Order deleted successfully" : "Orders were not deleted");
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("No existing orders for this customer");
+                    }
+
+                }
+
+                if (_customerManager.Delete(ids.ToArray()))
+                {
+                    MessageBox.Show("Customer details deleted successfully.");
+                    ListViewCustomers.Items.Clear();
+                    LoadCustomers();
+                    btnAdd.Enabled = true;
                 }
                 else
                 {
-                    MessageBox.Show("No existing address type for this customer.");
+                    MessageBox.Show("Customer details were not deleted.");
                 }
 
-                if (_orderManager.GetAll().Where(x => x.CustomerId == id).Count() > 0)
-                {
-                    var orderList = _orderManager.GetAll().Where(x => x.CustomerId == id);
-
-                    foreach (var orders in orderList)
-                    {
-                        orderIds.Add(orders.Id);
-                    }
-
-                    MessageBox.Show(_orderItemManager.Delete(orderIds.ToArray()) ? "Order item deleted successfully" : "Order items were not deleted");
-                    MessageBox.Show(_orderManager.Delete(orderIds.ToArray()) ? "Order deleted successfully" : "Orders were not deleted");
-
-                }
-                else
-                {
-                    MessageBox.Show("No existing orders for this customer");
-                }
-
+                scope.Complete();
             }
-
-            if (_customerManager.Delete(ids.ToArray()))
-            {
-                MessageBox.Show("Customer details deleted successfully.");
-                ListViewCustomers.Items.Clear();
-                LoadCustomers();
-                btnAdd.Enabled = true;
-            }
-            else
-            {
-                MessageBox.Show("Customer details were not deleted.");
-            }
+           
         }
 
         private void LoadCustomers() 

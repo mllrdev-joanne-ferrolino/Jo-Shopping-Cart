@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Forms;
 
 namespace ShoppingCart2
@@ -56,21 +57,26 @@ namespace ShoppingCart2
 
                     _product = new Product() { Name = name, Price = price, Description = description, Stock = stock };
 
-                    if (_manager.Insert(_product) > 0)
+                    using (var scope = new TransactionScope())
                     {
-                        if (MessageBox.Show("Details inserted successfully.") == DialogResult.OK)
+                        if (_manager.Insert(_product) > 0)
                         {
-                            ProductForm productForm = new ProductForm();
-                            this.Close();
-                        }
-                        
-                    }
-                    else
-                    {
-                       MessageBox.Show("Details were not inserted.");
-                        return false;
-                    }
+                            if (MessageBox.Show("Details inserted successfully.") == DialogResult.OK)
+                            {
+                                ProductForm productForm = new ProductForm();
+                                this.Close();
+                            }
 
+                        }
+                        else
+                        {
+                            MessageBox.Show("Details were not inserted.");
+                            return false;
+                        }
+
+                        scope.Complete();
+                    }
+                   
                 }
                 else
                 {
@@ -104,19 +110,25 @@ namespace ShoppingCart2
 
                     _product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock };
 
-                    if (_manager.Update(_product))
+                    using (var scope = new TransactionScope())
                     {
-                        if (MessageBox.Show("Details updated successfully.") == DialogResult.OK)
+                        if (_manager.Update(_product))
                         {
-                            ProductForm productForm = new ProductForm();
-                            this.Close();
+                            if (MessageBox.Show("Details updated successfully.") == DialogResult.OK)
+                            {
+                                ProductForm productForm = new ProductForm();
+                                this.Close();
+                            }
                         }
+                        else
+                        {
+                            MessageBox.Show("Details were not updated.");
+                            return false;
+                        }
+
+                        scope.Complete();
                     }
-                    else
-                    {
-                        MessageBox.Show("Details were not updated.");
-                        return false;
-                    }
+                  
 
                 }
                 else
