@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Forms;
 
 namespace ShoppingCart
@@ -90,24 +91,30 @@ namespace ShoppingCart
                     ids.Add(Convert.ToInt32(item.SubItems[0].Text));
                 }
 
-                foreach (var id in ids)
+                using (var scope = new TransactionScope())
                 {
-                    var orderItemIds = _orderItemManager.GetAll().Where(x => x.ProductId == id).Select(x => x.OrderId);
-                    _orderItemManager.Delete(orderItemIds.ToArray());
-                }
+                    foreach (var id in ids)
+                    {
+                        var orderItemIds = _orderItemManager.GetAll().Where(x => x.ProductId == id).Select(x => x.OrderId);
+                        _orderItemManager.Delete(orderItemIds.ToArray());
+                    }
 
-                if (_manager.Delete(ids.ToArray()))
-                {
-                    MessageBox.Show("Product details deleted successfully.");
-                    ListViewProducts.Items.Clear();
-                    LoadListViewItems();
-                    btnAdd.Enabled = true;
-                    btnDelete.Enabled = false;
+                    if (_manager.Delete(ids.ToArray()))
+                    {
+                        MessageBox.Show("Product details deleted successfully.");
+                        ListViewProducts.Items.Clear();
+                        LoadListViewItems();
+                        btnAdd.Enabled = true;
+                        btnDelete.Enabled = false;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Details were not deleted.");
+                    }
+
+                    scope.Complete();
                 }
-                else
-                {
-                    MessageBox.Show("Details were not deleted.");
-                }
+               
             }
             catch (Exception ex)
             {

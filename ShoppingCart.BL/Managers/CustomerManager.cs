@@ -46,5 +46,10 @@ namespace ShoppingCart.BL.Managers
         {
             return Repository.GetId(id);
         }
+
+        public bool ItemExist(string firstName, string lastName) 
+        {
+            return ((ICustomerRepository)Repository).ItemExist(firstName, lastName);
+        }
     }
 }

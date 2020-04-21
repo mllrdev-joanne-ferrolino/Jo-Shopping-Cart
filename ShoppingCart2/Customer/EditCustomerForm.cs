@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Forms;
 
 namespace ShoppingCart2
@@ -72,11 +73,6 @@ namespace ShoppingCart2
             InitializeComponent();
         }
 
-        private bool Filters(Customer customer) 
-        {
-            return customer.FirstName.ToLower() == txtFirstName.Text.ToLower() && customer.LastName.ToLower() == txtLastName.Text.ToLower();
-        }
-
         private bool Insert() 
         {
             try
@@ -85,9 +81,9 @@ namespace ShoppingCart2
                 {
                     List<int> addressIds = new List<int>();
 
-                    var existingCustomer = _customerManager.GetAll().Where(x => Filters(x));
+                    var IsExisting = _customerManager.ItemExist(txtFirstName.Text, txtLastName.Text);
 
-                    if (existingCustomer.Count() > 0)
+                    if (IsExisting)
                     {
                         MessageBox.Show("Customer exists.");
                         return false;
@@ -96,71 +92,88 @@ namespace ShoppingCart2
                     {
                         GetData();
 
-                        int customerId = _customerManager.Insert(_customer);
-
-                        if (customerId > 0)
+                        try
                         {
-                            foreach (var address in _addressList)
+                            using (var scope = new TransactionScope())
                             {
-                                int addressId = _addressManager.Insert(address);
-
-                                if (addressId > 0)
+                                if (_addressList.Count > 0)
                                 {
-                                    address.Id = addressId;
+                                    int customerId = _customerManager.Insert(_customer);
+
+                                    if (customerId > 0)
+                                    {
+                                        foreach (var address in _addressList)
+                                        {
+                                            int addressId = _addressManager.Insert(address);
+
+                                            if (addressId > 0)
+                                            {
+                                                address.Id = addressId;
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show("Address details were not inserted.");
+                                                return false;
+                                            }
+                                        }
+
+                                        try
+                                        {
+                                            for (int i = 0; i < _addressList.Count; i++)
+                                            {
+                                                _addressTypeList[i].AddressId = _addressList[i].Id;
+                                                _addressTypeList[i].CustomerId = customerId;
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            MessageBox.Show(ex.Message);
+                                        }
+
+                                        foreach (var addressType in _addressTypeList)
+                                        {
+                                            if (_typeManager.Insert(addressType))
+                                            {
+                                                MessageBox.Show("Address details inserted successfully.");
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show("Address type was not inserted.");
+                                                return false;
+                                            }
+
+                                        }
+
+                                        if (MessageBox.Show("Customer details inserted successfully.") == DialogResult.OK)
+                                        {
+                                            _addressList.Clear();
+                                            _addressTypeList.Clear();
+                                            _address = new Address();
+                                        }
+
+                                        CustomerProfile customerProfile = new CustomerProfile();
+                                        customerProfile.MdiParent = this.MdiParent;
+                                        this.Close();
+
+                                    }
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Address details were not inserted.");
+                                    MessageBox.Show("Customer details were not inserted.");
+                                    ClearTextBoxes();
                                     return false;
                                 }
-                            }
 
-                            try
-                            {
-                                for (int i = 0; i < _addressList.Count; i++)
-                                {
-                                    _addressTypeList[i].AddressId = _addressList[i].Id;
-                                    _addressTypeList[i].CustomerId = customerId;
-                                }
+                                scope.Complete();
                             }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(ex.Message);
-                            }
-
-                            foreach (var addressType in _addressTypeList)
-                            {
-                                if (_typeManager.Insert(addressType))
-                                {
-                                    MessageBox.Show("Address details inserted successfully.");
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Address type was not inserted.");
-                                    return false;
-                                }
-                                
-                            }
-
-                            if (MessageBox.Show("Customer details inserted successfully.") == DialogResult.OK)
-                            {
-                                _addressList.Clear();
-                                _addressTypeList.Clear();
-                                _address = new Address();
-                            }
-                           
-                            CustomerProfile customerProfile = new CustomerProfile();
-                            customerProfile.MdiParent = this.MdiParent;
-                            this.Close();
 
                         }
-                        else
+                        catch (TransactionAbortedException ex)
                         {
-                            MessageBox.Show("Customer details were not inserted.");
-                            ClearTextBoxes();
+                            MessageBox.Show(ex.Message);
                             return false;
                         }
-
+                        
                     }
 
                 }
@@ -341,98 +354,104 @@ namespace ShoppingCart2
 
                     GetData();
 
-                    if (_customerManager.Update(_customer))
+                    using (var scope = new TransactionScope())
                     {
-
-                        foreach (var item in _addressList)
+                        if (_customerManager.Update(_customer))
                         {
-                            if (item.Id == 0)
-                            {
-                                int id = _addressManager.Insert(item);
 
-                                if (id > 0)
+                            foreach (var item in _addressList)
+                            {
+                                if (item.Id == 0)
                                 {
-                                    MessageBox.Show("Address details added successfully.");
+                                    int id = _addressManager.Insert(item);
+
+                                    if (id > 0)
+                                    {
+                                        MessageBox.Show("Address details added successfully.");
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Address details were not added.");
+                                        return false;
+                                    }
+
+                                    item.Id = id;
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Address details were not added.");
-                                    return false;
+                                    if (_addressManager.Update(item))
+                                    {
+                                        MessageBox.Show("Address details updated successfully.");
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Address details were not updated.");
+                                        return false;
+                                    }
                                 }
 
-                                item.Id = id;
                             }
-                            else
+
+                            try
                             {
-                                if (_addressManager.Update(item))
+                                for (int i = 0; i < _addressList.Count; i++)
                                 {
-                                    MessageBox.Show("Address details updated successfully.");
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Address details were not updated.");
-                                    return false;
+                                    if (_addressTypeList[i].AddressId == _addressList[i].Id)
+                                    {
+                                        existingId.Add(_addressTypeList[i].AddressId);
+                                    }
+                                    else
+                                    {
+                                        _addressTypeList[i].AddressId = _addressList[i].Id;
+                                    }
+
+                                    _addressTypeList[i].CustomerId = _customer.Id;
                                 }
                             }
-
-                        }
-
-                        try
-                        {
-                            for (int i = 0; i < _addressList.Count; i++)
+                            catch (Exception ex)
                             {
-                                if (_addressTypeList[i].AddressId == _addressList[i].Id)
-                                {
-                                    existingId.Add(_addressTypeList[i].AddressId);
-                                }
-                                else
-                                {
-                                    _addressTypeList[i].AddressId = _addressList[i].Id;
-                                }
-
-                                _addressTypeList[i].CustomerId = _customer.Id;
+                                MessageBox.Show(ex.Message);
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
 
-                        foreach (var addressType in _addressTypeList)
-                        {
-                            if (existingId.Where(x => x == addressType.AddressId).Count() == 0)
+                            foreach (var addressType in _addressTypeList)
                             {
-                                if (_typeManager.Insert(addressType))
+                                if (existingId.Where(x => x == addressType.AddressId).Count() == 0)
                                 {
-                                    MessageBox.Show("Address type inserted successfully.");
+                                    if (_typeManager.Insert(addressType))
+                                    {
+                                        MessageBox.Show("Address type inserted successfully.");
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Address type was not inserted.");
+                                        return false;
+                                    }
                                 }
-                                else
-                                {
-                                    MessageBox.Show("Address type was not inserted.");
-                                    return false;
-                                }
+
+                            }
+
+                            if (MessageBox.Show("Customer details updated successfully.") == DialogResult.OK)
+                            {
+                                _addressList.Clear();
+                                _addressTypeList.Clear();
+                                _address = new Address();
+
+                                CustomerProfile customerProfile = new CustomerProfile();
+                                customerProfile.MdiParent = this.MdiParent;
+                                this.Close();
                             }
 
                         }
-
-                        if (MessageBox.Show("Customer details updated successfully.") == DialogResult.OK)
+                        else
                         {
-                            _addressList.Clear();
-                            _addressTypeList.Clear();
-                            _address = new Address();
-
-                            CustomerProfile customerProfile = new CustomerProfile();
-                            customerProfile.MdiParent = this.MdiParent;
-                            this.Close();
+                            MessageBox.Show("Customer details were not updated.");
+                            ClearTextBoxes();
+                            return false;
                         }
-                        
+
+                        scope.Complete();
                     }
-                    else
-                    {
-                        MessageBox.Show("Customer details were not updated.");
-                        ClearTextBoxes();
-                        return false;
-                    }
+                  
 
                 }
                 else
@@ -444,6 +463,8 @@ namespace ShoppingCart2
             {
                 MessageBox.Show(ex.Message);
                 ClearTextBoxes();
+                return false;
+                
             }
 
             return true;
@@ -584,6 +605,10 @@ namespace ShoppingCart2
         private void btnOK_Click(object sender, EventArgs e)
         {
             _isSuccessful = _isNew ? Insert() : Edit();
+        }
+
+        private void EditCustomerForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
         }
     }
 }

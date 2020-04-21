@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace ShoppingCart.BL.Repositories
 {
@@ -58,12 +59,16 @@ namespace ShoppingCart.BL.Repositories
         {
             try
             {
-                var properties = entity.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
-                var fields = string.Join(", ", properties.Select(e => e.Name));
-                var values = string.Join(", ", properties.Select(e => $"@{e.Name}"));
-                string sql = $"INSERT INTO {TableName} ({fields}) VALUES ({values}); SELECT @@IDENTITY";
-                return _connection.ExecuteScalar<int>(sql, entity);
-
+                using (var scope = new TransactionScope())
+                {
+                    var properties = entity.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
+                    var fields = string.Join(", ", properties.Select(e => e.Name));
+                    var values = string.Join(", ", properties.Select(e => $"@{e.Name}"));
+                    string sql = $"INSERT INTO {TableName} ({fields}) VALUES ({values}); SELECT @@IDENTITY";
+                    scope.Complete();
+                    return _connection.ExecuteScalar<int>(sql, entity);
+                }
+               
             }
             catch (Exception ex)
             {
@@ -76,10 +81,15 @@ namespace ShoppingCart.BL.Repositories
         {
             try
             {
-                var properties = entity.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
-                var values = string.Join(", ", properties.Select(e => $"{e.Name} = @{e.Name}"));
-                string sql = $"UPDATE {TableName} SET {values} WHERE Id = @Id";
-                return _connection.Execute(sql, entity) > 0;
+                using (var scope = new TransactionScope())
+                {
+                    var properties = entity.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
+                    var values = string.Join(", ", properties.Select(e => $"{e.Name} = @{e.Name}"));
+                    string sql = $"UPDATE {TableName} SET {values} WHERE Id = @Id";
+                    scope.Complete();
+                    return _connection.Execute(sql, entity) > 0;
+                }
+               
             }
             catch (Exception ex)
             {

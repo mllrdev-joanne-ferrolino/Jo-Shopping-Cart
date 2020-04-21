@@ -49,5 +49,20 @@ namespace ShoppingCart.BL.Repositories
             return base.Delete(id);
         }
 
+        public bool ItemExist(string firstName, string lastName) 
+        {
+            try
+            {
+                string sql = $"SELECT * FROM {TableName} WHERE LOWER(LastName) = '{lastName.ToLower()}' AND LOWER(FirstName) = '{firstName.ToLower()}'";
+                return _connection.Query(sql).Count() > 0;
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.StackTrace);
+                return false;
+            }
+
+        }
+
     }
 }

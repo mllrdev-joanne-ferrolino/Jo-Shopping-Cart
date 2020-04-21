@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace ShoppingCart.BL.Repositories
 {
@@ -28,7 +29,6 @@ namespace ShoppingCart.BL.Repositories
             }
             catch (Exception ex)
             {
-
                 _log.Error(ex.StackTrace);
             }
         }
@@ -52,8 +52,13 @@ namespace ShoppingCart.BL.Repositories
         {
             try
             {
-                string sql = $"DELETE FROM {TableName} WHERE {ColumnIdName} IN ({string.Join(", ", id)})";
-                return _connection.Execute(sql) > 0;
+                using (var scope = new TransactionScope())
+                {
+                    string sql = $"DELETE FROM {TableName} WHERE {ColumnIdName} IN ({string.Join(", ", id)})";
+                    scope.Complete();
+                    return _connection.Execute(sql) > 0;
+                }
+               
             }
             catch (Exception ex)
             {
