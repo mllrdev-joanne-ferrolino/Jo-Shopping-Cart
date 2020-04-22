@@ -23,9 +23,24 @@ namespace ShoppingCart.BL.Managers
             return Repository.Insert(orderItem);
         }
 
-        public bool Delete(int[] id)
+        public IList<int> GetByProductId(int id) 
         {
-            return ((IOrderItemRepository)Repository).Delete(id);
+            return ((IOrderItemRepository)Repository).GetByProductId(id);
+        }
+
+        public IList<OrderItem> GetByOrderId(int id) 
+        {
+            return ((IOrderItemRepository)Repository).GetByOrderId(id);
+        }
+
+        public bool DeleteByProductId(int[] id) 
+        {
+            return ((IOrderItemRepository)Repository).DeleteByProductId(id);
+        }
+
+        public bool DeleteByOrderId(int[] id)
+        {
+            return ((IOrderItemRepository)Repository).DeleteByOrderId(id);
         }
 
     }

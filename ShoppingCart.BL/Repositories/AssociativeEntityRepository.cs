@@ -21,8 +21,9 @@ namespace ShoppingCart.BL.Repositories
                     var fields = string.Join(", ", properties.Select(e => e.Name));
                     var values = string.Join(", ", properties.Select(e => $"@{e.Name}"));
                     string sql = $"INSERT INTO {TableName} ({fields}) VALUES ({values})";
+                    var result = _connection.Execute(sql, entity) > 0;
                     scope.Complete();
-                    return _connection.Execute(sql, entity) > 0;
+                    return result;
                     
                 }
                
@@ -33,8 +34,8 @@ namespace ShoppingCart.BL.Repositories
                 return false;
             }
         
-            
         }
 
+        
     }
 }

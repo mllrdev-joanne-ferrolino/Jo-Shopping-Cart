@@ -14,5 +14,7 @@ namespace ShoppingCart.BL.Repositories.Interfaces
         int Insert(T entity);
         bool Update(T entity);
 
+        bool Delete(int[] id);
+
     }
 }

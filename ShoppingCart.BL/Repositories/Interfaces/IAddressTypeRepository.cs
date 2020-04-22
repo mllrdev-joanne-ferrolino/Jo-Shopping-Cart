@@ -9,6 +9,9 @@ namespace ShoppingCart.BL.Repositories.Interfaces
 {
     public interface IAddressTypeRepository : IRepository<AddressType>, IAssociativeEntityRepository<AddressType>
     {
-       
+        AddressType GetAddressType(int id);
+        IList<AddressType> GetByCustomerId(int id);
+
+        bool Delete(int[] id);
     }
 }

@@ -9,5 +9,10 @@ namespace ShoppingCart.BL.Managers.Interfaces
 {
     public interface IAddressTypeManager : IManager<AddressType>, IAssociativeEntityManager<AddressType>
     {
+        AddressType GetAddressType(int id);
+
+        IList<AddressType> GetByCustomerId(int id);
+
+        bool Delete(int[] id);
     }
 }

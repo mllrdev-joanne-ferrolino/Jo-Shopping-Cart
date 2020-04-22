@@ -28,6 +28,15 @@ namespace ShoppingCart.BL.Managers
             return Repository.Insert(addressType);
         }
 
+        public AddressType GetAddressType(int id) 
+        {
+            return ((IAddressTypeRepository)Repository).GetAddressType(id);
+        }
+
+        public IList<AddressType> GetByCustomerId(int id) 
+        {
+            return ((IAddressTypeRepository)Repository).GetByCustomerId(id);
+        }
 
     }
 }

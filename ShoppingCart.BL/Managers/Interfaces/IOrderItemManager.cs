@@ -9,5 +9,11 @@ namespace ShoppingCart.BL.Managers.Interfaces
 {
     public interface IOrderItemManager : IManager<OrderItem>, IAssociativeEntityManager<OrderItem>
     {
+        IList<int> GetByProductId(int id);
+        IList<OrderItem> GetByOrderId(int id);
+
+        bool DeleteByProductId(int[] id);
+
+        bool DeleteByOrderId(int[] id);
     }
 }

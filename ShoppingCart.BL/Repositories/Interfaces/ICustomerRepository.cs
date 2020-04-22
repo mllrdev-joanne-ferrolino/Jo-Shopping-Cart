@@ -10,5 +10,7 @@ namespace ShoppingCart.BL.Repositories.Interfaces
     public interface ICustomerRepository : IRepository<Customer>, IMainEntityRepository<Customer>
     {
         bool ItemExist(string firstName, string lastName);
+        List<Customer> GetSearchResult(string name);
+
     }
 }

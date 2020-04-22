@@ -18,9 +18,5 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetAll();
         }
        
-        public bool Delete(int[] id)
-        {
-            return Repository.Delete(id);
-        }
     }
 }

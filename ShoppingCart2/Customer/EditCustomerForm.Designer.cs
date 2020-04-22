@@ -287,28 +287,28 @@
             this.txtShippingZipcode.Location = new System.Drawing.Point(143, 127);
             this.txtShippingZipcode.Name = "txtShippingZipcode";
             this.txtShippingZipcode.Size = new System.Drawing.Size(100, 20);
-            this.txtShippingZipcode.TabIndex = 38;
+            this.txtShippingZipcode.TabIndex = 3;
             // 
             // txtShippingCountry
             // 
             this.txtShippingCountry.Location = new System.Drawing.Point(143, 96);
             this.txtShippingCountry.Name = "txtShippingCountry";
             this.txtShippingCountry.Size = new System.Drawing.Size(205, 20);
-            this.txtShippingCountry.TabIndex = 37;
+            this.txtShippingCountry.TabIndex = 2;
             // 
             // txtShippingCity
             // 
             this.txtShippingCity.Location = new System.Drawing.Point(143, 66);
             this.txtShippingCity.Name = "txtShippingCity";
             this.txtShippingCity.Size = new System.Drawing.Size(205, 20);
-            this.txtShippingCity.TabIndex = 36;
+            this.txtShippingCity.TabIndex = 1;
             // 
             // txtShippingStreetLine
             // 
             this.txtShippingStreetLine.Location = new System.Drawing.Point(143, 40);
             this.txtShippingStreetLine.Name = "txtShippingStreetLine";
             this.txtShippingStreetLine.Size = new System.Drawing.Size(205, 20);
-            this.txtShippingStreetLine.TabIndex = 35;
+            this.txtShippingStreetLine.TabIndex = 0;
             // 
             // lblShippingAddressId
             // 
@@ -390,28 +390,28 @@
             this.txtMailingZipcode.Location = new System.Drawing.Point(134, 127);
             this.txtMailingZipcode.Name = "txtMailingZipcode";
             this.txtMailingZipcode.Size = new System.Drawing.Size(100, 20);
-            this.txtMailingZipcode.TabIndex = 45;
+            this.txtMailingZipcode.TabIndex = 3;
             // 
             // txtMailingCountry
             // 
             this.txtMailingCountry.Location = new System.Drawing.Point(134, 96);
             this.txtMailingCountry.Name = "txtMailingCountry";
             this.txtMailingCountry.Size = new System.Drawing.Size(205, 20);
-            this.txtMailingCountry.TabIndex = 44;
+            this.txtMailingCountry.TabIndex = 2;
             // 
             // txtMailingCity
             // 
             this.txtMailingCity.Location = new System.Drawing.Point(134, 66);
             this.txtMailingCity.Name = "txtMailingCity";
             this.txtMailingCity.Size = new System.Drawing.Size(205, 20);
-            this.txtMailingCity.TabIndex = 43;
+            this.txtMailingCity.TabIndex = 1;
             // 
             // txtMailingStreet
             // 
             this.txtMailingStreet.Location = new System.Drawing.Point(134, 40);
             this.txtMailingStreet.Name = "txtMailingStreet";
             this.txtMailingStreet.Size = new System.Drawing.Size(205, 20);
-            this.txtMailingStreet.TabIndex = 42;
+            this.txtMailingStreet.TabIndex = 0;
             // 
             // lblMailingAddressId
             // 
@@ -497,28 +497,28 @@
             this.txtBillingZipcode.Location = new System.Drawing.Point(131, 123);
             this.txtBillingZipcode.Name = "txtBillingZipcode";
             this.txtBillingZipcode.Size = new System.Drawing.Size(100, 20);
-            this.txtBillingZipcode.TabIndex = 45;
+            this.txtBillingZipcode.TabIndex = 3;
             // 
             // txtBillingCountry
             // 
             this.txtBillingCountry.Location = new System.Drawing.Point(131, 92);
             this.txtBillingCountry.Name = "txtBillingCountry";
             this.txtBillingCountry.Size = new System.Drawing.Size(205, 20);
-            this.txtBillingCountry.TabIndex = 44;
+            this.txtBillingCountry.TabIndex = 2;
             // 
             // txtBillingCity
             // 
             this.txtBillingCity.Location = new System.Drawing.Point(131, 62);
             this.txtBillingCity.Name = "txtBillingCity";
             this.txtBillingCity.Size = new System.Drawing.Size(205, 20);
-            this.txtBillingCity.TabIndex = 43;
+            this.txtBillingCity.TabIndex = 1;
             // 
             // txtBillingStreet
             // 
             this.txtBillingStreet.Location = new System.Drawing.Point(131, 36);
             this.txtBillingStreet.Name = "txtBillingStreet";
             this.txtBillingStreet.Size = new System.Drawing.Size(205, 20);
-            this.txtBillingStreet.TabIndex = 42;
+            this.txtBillingStreet.TabIndex = 0;
             // 
             // lblBillingAddressId
             // 

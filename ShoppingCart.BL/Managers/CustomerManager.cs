@@ -37,9 +37,9 @@ namespace ShoppingCart.BL.Managers
             return Repository.Update(customer);
         }
 
-        public bool Delete(int[] id)
+        public new bool Delete(int[] id)
         {
-            return ((ICustomerRepository)Repository).Delete(id);
+            return Repository.Delete(id);
         }
 
         public new int GetId(int id)
@@ -50,6 +50,11 @@ namespace ShoppingCart.BL.Managers
         public bool ItemExist(string firstName, string lastName) 
         {
             return ((ICustomerRepository)Repository).ItemExist(firstName, lastName);
+        }
+
+        public List<Customer> GetSearchResult(string name) 
+        {
+            return ((ICustomerRepository)Repository).GetSearchResult(name);
         }
     }
 }

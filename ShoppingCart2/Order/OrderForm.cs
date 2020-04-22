@@ -65,7 +65,7 @@ namespace ShoppingCart2
             {
                 lblCustomerId.Text = _customer.Id.ToString();
                 var customer = _customerManager.GetById(_customer.Id);
-                lblCustomerName.Text = $"{customer.FirstName} {customer.LastName}";
+                lblCustomerName.Text = $"{customer.FirstName.Trim()} {customer.LastName.Trim()}";
             }
             else
             {

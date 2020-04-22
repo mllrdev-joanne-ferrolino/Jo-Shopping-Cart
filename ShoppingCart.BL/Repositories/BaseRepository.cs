@@ -48,25 +48,7 @@ namespace ShoppingCart.BL.Repositories
             
         }
 
-        internal bool Delete(int[] id)
-        {
-            try
-            {
-                using (var scope = new TransactionScope())
-                {
-                    string sql = $"DELETE FROM {TableName} WHERE {ColumnIdName} IN ({string.Join(", ", id)})";
-                    scope.Complete();
-                    return _connection.Execute(sql) > 0;
-                }
-               
-            }
-            catch (Exception ex)
-            {
-                _log.Error(ex.Message);
-                return false;
-            }
-
-        }
+        
 
     }
 }

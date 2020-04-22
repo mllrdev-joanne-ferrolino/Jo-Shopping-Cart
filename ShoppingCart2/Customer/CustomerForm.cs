@@ -22,7 +22,7 @@ namespace ShoppingCart2
         private IAddressTypeManager _addressTypeManager;
         private IOrderManager _orderManager; 
         private IOrderItemManager _orderItemManager;
-        private IEnumerable<Customer> _resultList;
+        private List<Customer> _resultList;
         private List<Address> _addressList;
         private IEnumerable<AddressType> _addressTypeList;
         private Customer _customer;
@@ -98,8 +98,8 @@ namespace ShoppingCart2
                         Email = ListViewCustomers.SelectedItems[0].SubItems[3].Text,
                         MobileNumber = ListViewCustomers.SelectedItems[0].SubItems[4].Text
                     };
-
-                    _addressTypeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == _customer.Id);
+                    
+                    _addressTypeList = _addressTypeManager.GetByCustomerId(_customer.Id);
 
                     foreach (var addressItem in _addressTypeList)
                     {
@@ -139,9 +139,9 @@ namespace ShoppingCart2
             {
                 foreach (var id in ids)
                 {
-                    if (_addressTypeManager.GetAll().Where(x => x.CustomerId == id).Count() > 0)
+                    if (_addressTypeManager.GetByCustomerId(id).Count() > 0)
                     {
-                        var addressTypeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == id);
+                        var addressTypeList = _addressTypeManager.GetByCustomerId(id);
 
                         foreach (var addressType in addressTypeList)
                         {
@@ -155,17 +155,17 @@ namespace ShoppingCart2
                     {
                         MessageBox.Show("No existing address type for this customer.");
                     }
-
-                    if (_orderManager.GetAll().Where(x => x.CustomerId == id).Count() > 0)
+                    
+                    if (_orderManager.GetByCustomerId(id).Count() > 0)
                     {
-                        var orderList = _orderManager.GetAll().Where(x => x.CustomerId == id);
+                        var orderList = _orderManager.GetByCustomerId(id);
 
                         foreach (var orders in orderList)
                         {
                             orderIds.Add(orders.Id);
                         }
 
-                        MessageBox.Show(_orderItemManager.Delete(orderIds.ToArray()) ? "Order item deleted successfully" : "Order items were not deleted");
+                        MessageBox.Show(_orderItemManager.DeleteByOrderId(orderIds.ToArray()) ? "Order item deleted successfully" : "Order items were not deleted");
                         MessageBox.Show(_orderManager.Delete(orderIds.ToArray()) ? "Order deleted successfully" : "Orders were not deleted");
 
                     }
@@ -291,13 +291,19 @@ namespace ShoppingCart2
 
                     if (int.TryParse(txtSearch.Text, out id))
                     {
-                        _resultList = _customerManager.GetAll().Where(x => x.Id == id);
+                        _resultList.Clear();
+                        Customer result = _customerManager.GetById(id);
 
+                        if (result != null)
+                        {
+                            _resultList.Add(result);
+                        }
+                        
                     }
                     else
                     {
                         string searchByName = txtSearch.Text.ToLower();
-                        _resultList = _customerManager.GetAll().Where(x => x.FirstName.Contains(searchByName) || x.LastName.Contains(searchByName));
+                        _resultList = _customerManager.GetSearchResult(searchByName);
                     }
 
                     if (_resultList.Count() == 0)
@@ -348,8 +354,7 @@ namespace ShoppingCart2
 
             foreach (var result in _resultList)
             {
-                
-                var customerAddressType = _addressTypeManager.GetAll().FirstOrDefault(x => x.CustomerId == result.Id);
+                var customerAddressType = _addressTypeManager.GetAddressType(result.Id);
 
                 if (customerAddressType != null)
                 {

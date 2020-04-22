@@ -9,5 +9,6 @@ namespace ShoppingCart.BL.Repositories.Interfaces
 {
     public interface IOrderRepository: IRepository<Order>, IMainEntityRepository<Order>
     {
+        IList<Order> GetByCustomerId(int id);
     }
 }

@@ -10,5 +10,6 @@ namespace ShoppingCart.BL.Managers.Interfaces
     public interface ICustomerManager : IManager<Customer>, IMainEntityManager<Customer>
     {
         bool ItemExist(string firstName, string lastName);
+        List<Customer> GetSearchResult(string name);
     }
 }
