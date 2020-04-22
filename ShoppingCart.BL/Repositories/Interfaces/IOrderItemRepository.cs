@@ -9,5 +9,11 @@ namespace ShoppingCart.BL.Repositories.Interfaces
 {
     public interface IOrderItemRepository : IRepository<OrderItem>, IAssociativeEntityRepository<OrderItem>
     {
+        IList<int> GetByProductId(int id);
+        IList<OrderItem> GetByOrderId(int id);
+
+        bool DeleteByProductId(int[] id);
+
+        bool DeleteByOrderId(int[] id);
     }
 }

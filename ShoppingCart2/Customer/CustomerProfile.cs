@@ -83,17 +83,17 @@ namespace ShoppingCart2
         {
             _customer = _customerManager.GetById(_customer.Id);
             lblCustomerId.Text = _customer.Id.ToString();
-            lblName.Text = $"{_customer.FirstName} {_customer.LastName}";
+            lblName.Text = $"{_customer.FirstName.Trim()} {_customer.LastName.Trim()}";
             lblEmail.Text = _customer.Email;
             lblMobileNumber.Text = _customer.MobileNumber;
-
-            var typeList = _addressTypeManager.GetAll().Where(x => x.CustomerId == _customer.Id);
+            
+            var typeList = _addressTypeManager.GetByCustomerId(_customer.Id);
 
             if (typeList.Count() > 0)
             {
                 foreach (var addressType in typeList)
-                {
-                    var addressList = _addressManager.GetAll().Where(x => x.Id == addressType.AddressId);
+                { 
+                    var addressList = _addressManager.GetByAddressTypeId(addressType.AddressId);
 
                     if (addressList.Count() > 0)
                     {
@@ -146,8 +146,8 @@ namespace ShoppingCart2
             {
                 MessageBox.Show("No address type for this customer.");
             }
-
-            var orderInfo = _orderManager.GetAll().Where(x => x.CustomerId == _customer.Id);
+            
+            var orderInfo = _orderManager.GetByCustomerId(_customer.Id);
 
             if (orderInfo.Count() > 0)
             {
@@ -179,14 +179,24 @@ namespace ShoppingCart2
             {
                 while (!editCustomerForm.IsSuccessful)
                 {
-                    editCustomerForm.ShowDialog();
+                    var result = editCustomerForm.ShowDialog();
+
+                    if (result == DialogResult.Cancel)
+                    {
+                        editCustomerForm.IsSuccessful = true;
+                        this.Close();
+                    }
                 }
 
                 if (editCustomerForm.IsSuccessful)
                 {
                     LoadData();
                 }
-               
+
+            }
+            else
+            {
+                editCustomerForm.Close();
             }
             
         }

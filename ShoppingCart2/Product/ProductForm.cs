@@ -95,8 +95,12 @@ namespace ShoppingCart
                 {
                     foreach (var id in ids)
                     {
-                        var orderItemIds = _orderItemManager.GetAll().Where(x => x.ProductId == id).Select(x => x.OrderId);
-                        _orderItemManager.Delete(orderItemIds.ToArray());
+                        var productId = _orderItemManager.GetByProductId(id);
+
+                        if (productId.Count > 0)
+                        {
+                            _orderItemManager.DeleteByProductId(productId.ToArray());
+                        }
                     }
 
                     if (_manager.Delete(ids.ToArray()))

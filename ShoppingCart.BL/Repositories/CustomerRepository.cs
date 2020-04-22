@@ -64,5 +64,19 @@ namespace ShoppingCart.BL.Repositories
 
         }
 
+        public List<Customer> GetSearchResult(string name) 
+        {
+            try
+            {
+                string sql = $"SELECT * FROM {TableName} WHERE LOWER(LastName) LIKE '%{name}%' OR LOWER(FirstName) LIKE '%{name}%'";
+                return _connection.Query<Customer>(sql).AsList();
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.StackTrace);
+                return null;
+            }
+        }
+
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace ShoppingCart.BL.Repositories
 {
@@ -18,14 +19,57 @@ namespace ShoppingCart.BL.Repositories
             return base.GetAll();
         }
 
-        public new bool Delete(int[] id)
+        public bool Delete(int[] id)
         {
-            return base.Delete(id);
+            try
+            {
+                using (var scope = new TransactionScope())
+                {
+                    string sql = $"DELETE FROM {TableName} WHERE {ColumnIdName} IN ({string.Join(", ", id)})";
+                    var result = _connection.Execute(sql) > 0;
+                    scope.Complete();
+                    return result;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.Message);
+                return false;
+            }
         }
 
         public new bool Insert(AddressType addressType)
         {
             return base.Insert(addressType);
+        }
+        
+        public AddressType GetAddressType(int id) 
+        {
+            try
+            {
+                string sql = $"SELECT * FROM {TableName} WHERE CustomerId = {id}";
+                return _connection.QueryFirstOrDefault<AddressType>(sql);
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.StackTrace);
+                return null;
+            }
+        }
+
+        public IList<AddressType> GetByCustomerId(int id) 
+        {
+            try
+            {
+                string sql = $"SELECT * FROM {TableName} WHERE CustomerId = {id}";
+                return _connection.Query<AddressType>(sql).AsList();
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.StackTrace);
+                return null;
+            }
         }
     }
 }

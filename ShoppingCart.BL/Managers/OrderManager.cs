@@ -38,9 +38,14 @@ namespace ShoppingCart.BL.Managers
             return Repository.Update(order);
         }
 
-        public bool Delete(int[] id)
+        public new bool Delete(int[] id)
         {
-            return ((IOrderRepository)Repository).Delete(id);
+            return Repository.Delete(id);
+        }
+
+        public IList<Order> GetByCustomerId(int id) 
+        {
+            return ((IOrderRepository)Repository).GetByCustomerId(id);
         }
     }
 }

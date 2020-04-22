@@ -43,5 +43,18 @@ namespace ShoppingCart.BL.Repositories
             return base.Delete(id);
         }
 
+        public IList<Order> GetByCustomerId(int id)
+        {
+            try
+            {
+                string sql = $"SELECT * FROM {TableName} WHERE CustomerId = {id}";
+                return _connection.Query<Order>(sql).AsList();
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.StackTrace);
+                return null;
+            }
+        }
     }
 }

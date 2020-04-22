@@ -9,5 +9,6 @@ namespace ShoppingCart.BL.Managers.Interfaces
 {
     public interface IOrderManager : IManager<Order>, IMainEntityManager<Order>
     {
+        IList<Order> GetByCustomerId(int id);
     }
 }

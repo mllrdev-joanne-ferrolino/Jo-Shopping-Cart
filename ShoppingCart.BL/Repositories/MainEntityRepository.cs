@@ -65,8 +65,9 @@ namespace ShoppingCart.BL.Repositories
                     var fields = string.Join(", ", properties.Select(e => e.Name));
                     var values = string.Join(", ", properties.Select(e => $"@{e.Name}"));
                     string sql = $"INSERT INTO {TableName} ({fields}) VALUES ({values}); SELECT @@IDENTITY";
+                    var result = _connection.ExecuteScalar<int>(sql, entity);
                     scope.Complete();
-                    return _connection.ExecuteScalar<int>(sql, entity);
+                    return result;
                 }
                
             }
@@ -86,14 +87,36 @@ namespace ShoppingCart.BL.Repositories
                     var properties = entity.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
                     var values = string.Join(", ", properties.Select(e => $"{e.Name} = @{e.Name}"));
                     string sql = $"UPDATE {TableName} SET {values} WHERE Id = @Id";
+                    var result = _connection.Execute(sql, entity) > 0;
                     scope.Complete();
-                    return _connection.Execute(sql, entity) > 0;
+                    return result;
                 }
                
             }
             catch (Exception ex)
             {
                 _log.Error(ex.StackTrace);
+                return false;
+            }
+
+        }
+
+        internal bool Delete(int[] id)
+        {
+            try
+            {
+                using (var scope = new TransactionScope())
+                {
+                    string sql = $"DELETE FROM {TableName} WHERE {ColumnIdName} IN ({string.Join(", ", id)})";
+                    var result = _connection.Execute(sql) > 0;
+                    scope.Complete();
+                    return result;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.Message);
                 return false;
             }
 

@@ -9,6 +9,6 @@ namespace ShoppingCart.BL.Managers.Interfaces
     public interface IManager<T> where T : class
     {
         IList<T> GetAll();
-        bool Delete(int[] id);
+       
     }
 }

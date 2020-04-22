@@ -60,8 +60,8 @@ namespace ShoppingCart2
                 {
                     MessageBox.Show("No order selected");
                 }
-
-                IEnumerable<OrderItem> orderItemList = _orderItemManager.GetAll().Where(x => x.OrderId == orderId);
+                
+                var orderItemList = _orderItemManager.GetByOrderId(orderId);
 
                 if (orderItemList != null)
                 {

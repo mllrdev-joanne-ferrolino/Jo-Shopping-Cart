@@ -26,6 +26,9 @@ namespace ShoppingCart2
         private Address _address;
         private AddressType _addressType;
         private string[] _input;
+        private string[] _shippingAddress;
+        private string[] _mailingAddress;
+        private string[] _billingAddress;
 
         public List<AddressType> AddressTypeList
         {
@@ -266,8 +269,7 @@ namespace ShoppingCart2
 
                         for (int i = 0; i < _input.Length; i++)
                         {
-                            var textbox = textboxes.ElementAt(i);
-                            textbox.Text = _input[i];
+                            textboxes.ElementAt(i).Text = _input[i];
                         }
 
                     }
@@ -290,50 +292,85 @@ namespace ShoppingCart2
 
                 if (_addressList.Count > 0 && _addressTypeList.Count > 0)
                 {
-                    foreach (var addressTypeItem in _addressTypeList)
+                    if (_shippingAddress != null)
                     {
-                        var address = _addressList.FirstOrDefault(x => x.Id == addressTypeItem.AddressId);
+                        var addressTextBoxes = tabPage1.Controls.OfType<TextBox>().OrderBy(x => x.TabIndex);
 
-                        if (addressTypeItem.Name == "Shipping Address")
+                        for (int i = 0; i < _shippingAddress.Length; i++)
                         {
-                            tabControlAddress.SelectedTab = tabPage1;
-                            lblShippingAddressId.Text = address.Id.ToString();
-                            lblShippingAddressId.Visible = true;
-                            lblShippingIdName.Visible = true;
-                            txtShippingStreetLine.Text = address.AddressLine;
-                            txtShippingCity.Text = address.City;
-                            txtShippingCountry.Text = address.Country;
-                            txtShippingZipcode.Text = address.ZipCode;
-
+                            addressTextBoxes.ElementAt(i).Text = _shippingAddress[i];
                         }
-                        else if (addressTypeItem.Name == "Mailing Address")
+
+                    }
+                    if (_mailingAddress != null)
+                    {
+                        var addressTextBoxes = tabPage2.Controls.OfType<TextBox>().OrderBy(x => x.TabIndex);
+
+                        for (int i = 0; i < _mailingAddress.Length; i++)
                         {
-                            tabControlAddress.SelectedTab = tabPage2;
-                            lblMailingAddressId.Text = address.Id.ToString();
-                            lblMailingAddressId.Visible = true;
-                            lblMailingIdName.Visible = true;
-                            txtMailingStreet.Text = address.AddressLine;
-                            txtMailingCity.Text = address.City;
-                            txtMailingCountry.Text = address.Country;
-                            txtMailingZipcode.Text = address.ZipCode;
-
-
+                            addressTextBoxes.ElementAt(i).Text = _mailingAddress[i];
                         }
-                        else if (addressTypeItem.Name == "Billing Address")
-                        {
-                            tabControlAddress.SelectedTab = tabPage3;
-                            lblBillingAddressId.Text = address.Id.ToString();
-                            lblBillingAddressId.Visible = true;
-                            lblBillingIdName.Visible = true;
-                            txtBillingStreet.Text = address.AddressLine;
-                            txtBillingCity.Text = address.City;
-                            txtBillingCountry.Text = address.Country;
-                            txtBillingZipcode.Text = address.ZipCode;
 
+                    }
+                    if (_billingAddress != null)
+                    {
+                        var addressTextBoxes = tabPage3.Controls.OfType<TextBox>().OrderBy(x => x.TabIndex);
+
+                        for (int i = 0; i < _billingAddress.Length; i++)
+                        {
+                            addressTextBoxes.ElementAt(i).Text = _billingAddress[i];
+                        }
+
+                    }
+                    else
+                    {
+                        foreach (var addressTypeItem in _addressTypeList)
+                        {
+                            var address = _addressList.FirstOrDefault(x => x.Id == addressTypeItem.AddressId);
+
+                            if (addressTypeItem.Name == "Shipping Address")
+                            {
+                                tabControlAddress.SelectedTab = tabPage1;
+                                lblShippingAddressId.Text = address.Id.ToString();
+                                lblShippingAddressId.Visible = true;
+                                lblShippingIdName.Visible = true;
+                                txtShippingStreetLine.Text = address.AddressLine;
+                                txtShippingCity.Text = address.City;
+                                txtShippingCountry.Text = address.Country;
+                                txtShippingZipcode.Text = address.ZipCode;
+
+                            }
+                            else if (addressTypeItem.Name == "Mailing Address")
+                            {
+                                tabControlAddress.SelectedTab = tabPage2;
+                                lblMailingAddressId.Text = address.Id.ToString();
+                                lblMailingAddressId.Visible = true;
+                                lblMailingIdName.Visible = true;
+                                txtMailingStreet.Text = address.AddressLine;
+                                txtMailingCity.Text = address.City;
+                                txtMailingCountry.Text = address.Country;
+                                txtMailingZipcode.Text = address.ZipCode;
+
+
+                            }
+                            else if (addressTypeItem.Name == "Billing Address")
+                            {
+                                tabControlAddress.SelectedTab = tabPage3;
+                                lblBillingAddressId.Text = address.Id.ToString();
+                                lblBillingAddressId.Visible = true;
+                                lblBillingIdName.Visible = true;
+                                txtBillingStreet.Text = address.AddressLine;
+                                txtBillingCity.Text = address.City;
+                                txtBillingCountry.Text = address.Country;
+                                txtBillingZipcode.Text = address.ZipCode;
+
+                            }
                         }
                     }
+                    
                 }
-                
+               
+
             }
             catch (Exception ex)
             {
@@ -346,7 +383,11 @@ namespace ShoppingCart2
         {
             try
             {
-                _input = new string[] { txtFirstName.Text, txtLastName.Text, txtEmail.Text, txtMobileNumber.Text };
+                _input = new string[] { txtFirstName.Text, txtLastName.Text, txtEmail.Text, txtMobileNumber.Text};
+
+                _shippingAddress = new string[] { txtShippingStreetLine.Text, txtShippingCity.Text, txtShippingCountry.Text, txtShippingZipcode.Text};
+                _mailingAddress = new string[] { txtMailingStreet.Text, txtMailingCity.Text, txtMailingCountry.Text, txtMailingZipcode.Text};
+                _billingAddress = new string[] { txtBillingStreet.Text, txtBillingCity.Text, txtBillingCountry.Text, txtBillingZipcode.Text };
 
                 if (ValidateAllFields())
                 {
