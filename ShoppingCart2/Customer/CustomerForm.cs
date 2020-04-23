@@ -43,21 +43,33 @@ namespace ShoppingCart2
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            EditCustomerForm editCustomerForm = new EditCustomerForm();
-        
-            if (editCustomerForm.ShowDialog() == DialogResult.OK)
+            try
             {
-                while (!editCustomerForm.IsSuccessful)
-                {
-                    editCustomerForm.ShowDialog();
-                }
+                EditCustomerForm editCustomerForm = new EditCustomerForm();
 
-                if (editCustomerForm.IsSuccessful)
+                if (editCustomerForm.ShowDialog() == DialogResult.OK)
                 {
+                    while (!editCustomerForm.IsSuccessful)
+                    {
+                        var result = editCustomerForm.ShowDialog();
+
+                        if (result == DialogResult.Cancel)
+                        {
+                            editCustomerForm.Close();
+                            break;
+                        }
+                    }
+
                     ListViewCustomers.Items.Clear();
                     LoadCustomers();
+
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
 
         private void CustomerForm_Load(object sender, EventArgs e)
@@ -126,117 +138,127 @@ namespace ShoppingCart2
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            List<int> ids = new List<int>();
-            List<int> addressIds = new List<int>();
-            List<int> orderIds = new List<int>();
-
-            foreach (ListViewItem item in ListViewCustomers.SelectedItems)
+            try
             {
-                ids.Add(item.SubItems[0].Text.ToInt());
-            }
+                List<int> ids = new List<int>();
+                List<int> addressIds = new List<int>();
+                List<int> orderIds = new List<int>();
 
-            using (var scope = new TransactionScope())
-            {
-                foreach (var id in ids)
+                foreach (ListViewItem item in ListViewCustomers.SelectedItems)
                 {
-                    if (_addressTypeManager.GetByCustomerId(id).Count() > 0)
-                    {
-                        var addressTypeList = _addressTypeManager.GetByCustomerId(id);
+                    ids.Add(item.SubItems[0].Text.ToInt());
+                }
 
-                        foreach (var addressType in addressTypeList)
+                using (var scope = new TransactionScope())
+                {
+                    foreach (var id in ids)
+                    {
+                        if (_addressTypeManager.GetByCustomerId(id).Count() > 0)
                         {
-                            addressIds.Add(addressType.AddressId);
+                            var addressTypeList = _addressTypeManager.GetByCustomerId(id);
+
+                            foreach (var addressType in addressTypeList)
+                            {
+                                addressIds.Add(addressType.AddressId);
+                            }
+
+                            MessageBox.Show(_addressTypeManager.Delete(ids.ToArray()) ? "Address types deleted successfully" : "Address types were not deleted");
+                            MessageBox.Show(_addressManager.Delete(addressIds.ToArray()) ? "Addresses deleted successfully" : "Addresses were not deleted");
+                        }
+                        else
+                        {
+                            MessageBox.Show("No existing address type for this customer.");
                         }
 
-                        MessageBox.Show(_addressTypeManager.Delete(ids.ToArray()) ? "Address types deleted successfully" : "Address types were not deleted");
-                        MessageBox.Show(_addressManager.Delete(addressIds.ToArray()) ? "Addresses deleted successfully" : "Addresses were not deleted");
+                        if (_orderManager.GetByCustomerId(id).Count() > 0)
+                        {
+                            var orderList = _orderManager.GetByCustomerId(id);
+
+                            foreach (var orders in orderList)
+                            {
+                                orderIds.Add(orders.Id);
+                            }
+
+                            MessageBox.Show(_orderItemManager.DeleteByOrderId(orderIds.ToArray()) ? "Order item deleted successfully" : "Order items were not deleted");
+                            MessageBox.Show(_orderManager.Delete(orderIds.ToArray()) ? "Order deleted successfully" : "Orders were not deleted");
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("No existing orders for this customer");
+                        }
+
+                    }
+
+                    if (_customerManager.Delete(ids.ToArray()))
+                    {
+                        MessageBox.Show("Customer details deleted successfully.");
+                        ListViewCustomers.Items.Clear();
+                        LoadCustomers();
+                        btnAdd.Enabled = true;
                     }
                     else
                     {
-                        MessageBox.Show("No existing address type for this customer.");
-                    }
-                    
-                    if (_orderManager.GetByCustomerId(id).Count() > 0)
-                    {
-                        var orderList = _orderManager.GetByCustomerId(id);
-
-                        foreach (var orders in orderList)
-                        {
-                            orderIds.Add(orders.Id);
-                        }
-
-                        MessageBox.Show(_orderItemManager.DeleteByOrderId(orderIds.ToArray()) ? "Order item deleted successfully" : "Order items were not deleted");
-                        MessageBox.Show(_orderManager.Delete(orderIds.ToArray()) ? "Order deleted successfully" : "Orders were not deleted");
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("No existing orders for this customer");
+                        MessageBox.Show("Customer details were not deleted.");
                     }
 
+                    scope.Complete();
                 }
-
-                if (_customerManager.Delete(ids.ToArray()))
-                {
-                    MessageBox.Show("Customer details deleted successfully.");
-                    ListViewCustomers.Items.Clear();
-                    LoadCustomers();
-                    btnAdd.Enabled = true;
-                }
-                else
-                {
-                    MessageBox.Show("Customer details were not deleted.");
-                }
-
-                scope.Complete();
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
            
         }
 
         private void LoadCustomers() 
         {
-            IList<Customer> customerList = _customerManager.GetAll();
-            IList<AddressType> addressTypeList = _addressTypeManager.GetAll();
-            IList<Address> addressList = _addressManager.GetAll();
-            Address customerAddress = new Address();
-            string addressString = string.Empty;
-            string addressTypeString = string.Empty;
-
-            foreach (var customer in customerList)
+            try
             {
-                try
+                IList<Customer> customerList = _customerManager.GetAll();
+                IList<AddressType> addressTypeList = _addressTypeManager.GetAll();
+                IList<Address> addressList = _addressManager.GetAll();
+                Address customerAddress = new Address();
+                string addressString = string.Empty;
+                string addressTypeString = string.Empty;
+
+                foreach (var customer in customerList)
                 {
-                    AddressType customerAddressType = addressTypeList.FirstOrDefault(x => x.CustomerId == customer.Id);
-
-                    if (customerAddressType != null)
+                    try
                     {
-                        customerAddress = addressList.FirstOrDefault(x => x.Id == customerAddressType.AddressId);
+                        AddressType customerAddressType = addressTypeList.FirstOrDefault(x => x.CustomerId == customer.Id);
 
-                        addressString = string.Join(", ", new string[] 
-                        { 
-                            customerAddress.AddressLine, 
-                            customerAddress.City, 
-                            customerAddress.Country, 
-                            customerAddress.ZipCode 
-                        });
+                        if (customerAddressType != null)
+                        {
+                            customerAddress = addressList.FirstOrDefault(x => x.Id == customerAddressType.AddressId);
 
-                        addressTypeString = customerAddressType.Name;
+                            addressString = string.Join(", ", new string[]
+                            {
+                            customerAddress.AddressLine,
+                            customerAddress.City,
+                            customerAddress.Country,
+                            customerAddress.ZipCode
+                            });
 
+                            addressTypeString = customerAddressType.Name;
+
+                        }
+                        else
+                        {
+                            addressString = "No customer address";
+                            addressTypeString = "No address type";
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        addressString = "No customer address";
-                        addressTypeString = "No address type";
+                        addressString = ex.Message;
+                        addressTypeString = ex.Message;
                     }
-                }
-                catch (Exception ex)
-                {
-                    addressString = ex.Message;
-                    addressTypeString = ex.Message;
-                }
 
-                ListViewCustomers.Items.Add(new ListViewItem(new string[]
-                  {
+                    ListViewCustomers.Items.Add(new ListViewItem(new string[]
+                      {
                             customer.Id.ToString(),
                             customer.LastName,
                             customer.FirstName,
@@ -244,8 +266,15 @@ namespace ShoppingCart2
                             customer.MobileNumber,
                             addressString,
                             addressTypeString
-                  }));
+                      }));
+                }
+
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+           
         }
 
         private void CustomerForm_Activated(object sender, EventArgs e)
@@ -315,7 +344,6 @@ namespace ShoppingCart2
                     {
                         LoadSearchResults();
                     }
-
                 }
                 else
                 {
@@ -348,43 +376,45 @@ namespace ShoppingCart2
 
         private void LoadSearchResults() 
         {
-            ListViewCustomers.Items.Clear();
-            string addressString = string.Empty;
-            string addressTypeString = string.Empty;
-
-            foreach (var result in _resultList)
+            try
             {
-                var customerAddressType = _addressTypeManager.GetAddressType(result.Id);
+                ListViewCustomers.Items.Clear();
+                string addressString = string.Empty;
+                string addressTypeString = string.Empty;
 
-                if (customerAddressType != null)
+                foreach (var result in _resultList)
                 {
-                    var customerAddress = _addressManager.GetById(customerAddressType.AddressId);
+                    var customerAddressType = _addressTypeManager.GetAddressType(result.Id);
 
-                    if (customerAddress != null)
+                    if (customerAddressType != null)
                     {
-                        addressString = string.Join(", ", new string[]
+                        var customerAddress = _addressManager.GetById(customerAddressType.AddressId);
+
+                        if (customerAddress != null)
                         {
+                            addressString = string.Join(", ", new string[]
+                            {
                             customerAddress.AddressLine,
                             customerAddress.City,
                             customerAddress.Country,
                             customerAddress.ZipCode
-                        });
+                            });
 
-                        addressTypeString = customerAddressType.Name;
+                            addressTypeString = customerAddressType.Name;
+                        }
+                        else
+                        {
+                            addressString = "No customer address";
+                        }
+
                     }
                     else
                     {
-                        addressString = "No customer address";
+                        addressTypeString = "No customer address type";
                     }
 
-                }
-                else
-                {
-                    addressTypeString = "No customer address type";
-                }
-
-                ListViewCustomers.Items.Add(new ListViewItem(new string[]
-                {
+                    ListViewCustomers.Items.Add(new ListViewItem(new string[]
+                    {
                     result.Id.ToString(),
                     result.LastName,
                     result.FirstName,
@@ -392,8 +422,14 @@ namespace ShoppingCart2
                     result.MobileNumber,
                     addressString,
                     addressTypeString
-                }));
+                    }));
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
 
         private void txtSearch_Click(object sender, EventArgs e)

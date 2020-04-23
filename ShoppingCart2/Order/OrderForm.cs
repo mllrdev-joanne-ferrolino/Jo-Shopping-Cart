@@ -55,63 +55,88 @@ namespace ShoppingCart2
 
         private void OrderForm_Load(object sender, EventArgs e)
         {
-            LoadProductItems();
+            try
+            {
+                LoadProductItems();
 
-            if (_customer == null)
-            {
-                MessageBox.Show("No customer selected.");
-            }
-            else if (_customer.Id > 0)
-            {
-                lblCustomerId.Text = _customer.Id.ToString();
-                var customer = _customerManager.GetById(_customer.Id);
-                lblCustomerName.Text = $"{customer.FirstName.Trim()} {customer.LastName.Trim()}";
-            }
-            else
-            {
-                MessageBox.Show("No existing customer yet. Select customer.");
-                CustomerForm customerForm = new CustomerForm();
-                customerForm.MdiParent = this.MdiParent;
-                customerForm.Show();
-            }
+                if (_customer == null)
+                {
+                    MessageBox.Show("No customer selected.");
+                }
+                else if (_customer.Id > 0)
+                {
+                    lblCustomerId.Text = _customer.Id.ToString();
+                    var customer = _customerManager.GetById(_customer.Id);
+                    lblCustomerName.Text = $"{customer.FirstName.Trim()} {customer.LastName.Trim()}";
+                }
+                else
+                {
+                    MessageBox.Show("No existing customer yet. Select customer.");
+                    CustomerForm customerForm = new CustomerForm();
+                    customerForm.MdiParent = this.MdiParent;
+                    customerForm.Show();
+                }
 
-            if (ListViewProducts.SelectedItems.Count == 0)
-            {
-                btnAdd.Enabled = false;
+                if (ListViewProducts.SelectedItems.Count == 0)
+                {
+                    btnAdd.Enabled = false;
+                }
             }
-            
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+           
         }
 
         private void LoadProductItems() 
         {
-            ListViewProducts.Items.AddRange(_productManager.GetAll().Select(p => new ListViewItem(new string[] 
-            { 
-                p.Id.ToString(), 
-                p.Name, 
-                p.Price.ToString("0.00"), 
-                p.Description, 
-                p.Stock.ToString() 
-            })).ToArray());
+            try
+            {
+                ListViewProducts.Items.AddRange(_productManager.GetAll().Select(p => new ListViewItem(new string[]
+                {
+                    p.Id.ToString(),
+                    p.Name,
+                    p.Price.ToString("0.00"),
+                    p.Description,
+                    p.Stock.ToString()
+                })).ToArray());
 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
 
         private void LoadOrderItems() 
         {
-            ListViewOrders.Items.AddRange(_orderItemList.Select(o => new ListViewItem(new string[] 
-            { 
-                o.ProductId.ToString(), 
-                _productManager.GetById(o.ProductId).Name, 
-                o.Quantity.ToString(),
-                 _productManager.GetById(o.ProductId).Price.ToString("0.00"), 
-                o.Amount.ToString("0.00") 
-            })).ToArray());
+            try
+            {
+                ListViewOrders.Items.AddRange(_orderItemList.Select(o => new ListViewItem(new string[]
+                {
+                     o.ProductId.ToString(),
+                     _productManager.GetById(o.ProductId).Name,
+                     o.Quantity.ToString(),
+                    _productManager.GetById(o.ProductId).Price.ToString("0.00"),
+                    o.Amount.ToString("0.00")
+                })).ToArray());
 
-            float totalAmount = _orderItemList.Sum(x => x.Amount);
-            lblTotalAmount.Text = totalAmount.ToString("0.00");
+                float totalAmount = _orderItemList.Sum(x => x.Amount);
+                lblTotalAmount.Text = totalAmount.ToString("0.00");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+           
         }
 
         private void ListViewProducts_SelectedIndexChanged(object sender, EventArgs e)
         {
+
             if (ListViewProducts.SelectedItems.Count > 0)
             {
                 ListViewItem listViewItem = ListViewProducts.SelectedItems[0];
@@ -128,51 +153,74 @@ namespace ShoppingCart2
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (ListViewProducts.SelectedItems.Count > 0)
+            try
             {
-                EditOrderForm editOrderForm = new EditOrderForm();
-                editOrderForm.Product = _product;
-
-                if (editOrderForm.ShowDialog() == DialogResult.OK)
+                if (ListViewProducts.SelectedItems.Count > 0)
                 {
-                    while (!editOrderForm.IsSuccessful)
-                    {
-                        editOrderForm.ShowDialog();
-                    }
+                    EditOrderForm editOrderForm = new EditOrderForm();
+                    editOrderForm.Product = _product;
 
-                    if (editOrderForm.IsSuccessful)
+                    if (editOrderForm.ShowDialog() == DialogResult.OK)
                     {
-                        _orderItem = editOrderForm.OrderItem;
-                        _orderItemList.Add(_orderItem);
-                        ListViewOrders.Items.Clear();
-                        LoadOrderItems();
+                        while (!editOrderForm.IsSuccessful)
+                        {
+                            var result = editOrderForm.ShowDialog();
+
+                            if (result == DialogResult.Cancel)
+                            {
+                                editOrderForm.Close();
+                                break;
+                            }
+                        }
+
+                        if (editOrderForm.IsSuccessful)
+                        {
+                            _orderItem = editOrderForm.OrderItem;
+                            _orderItemList.Add(_orderItem);
+                            ListViewOrders.Items.Clear();
+                            LoadOrderItems();
+                        }
+                        
                     }
-                 
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
 
         private void OrderForm_Activated(object sender, EventArgs e)
         {
-            if (_orderItem == null) 
+            try
             {
-                MessageBox.Show("No order is selected.");
-            }
-            else if (_orderItem.ProductId > 0)
-            {
-                if (_orderItemList.Where(x => x.ProductId == _orderItem.ProductId) == null)
+                if (_orderItem == null)
                 {
-                    _orderItemList.Add(_orderItem);
+                    MessageBox.Show("No order is selected.");
                 }
-                else
+                else if (_orderItem.ProductId > 0)
                 {
-                    OrderItem item = _orderItemList.FirstOrDefault(x => x.ProductId == _orderItem.ProductId);
-                    item.Quantity = _orderItem.Quantity;
+                    if (_orderItemList.Where(x => x.ProductId == _orderItem.ProductId) == null)
+                    {
+                        _orderItemList.Add(_orderItem);
+                    }
+                    else
+                    {
+                        OrderItem item = _orderItemList.FirstOrDefault(x => x.ProductId == _orderItem.ProductId);
+                        item.Quantity = _orderItem.Quantity;
+                    }
+
+                    ListViewOrders.Items.Clear();
+                    LoadOrderItems();
                 }
 
-                ListViewOrders.Items.Clear();
-                LoadOrderItems();
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+          
         }
 
         private void btnCheckout_Click(object sender, EventArgs e)
@@ -360,7 +408,13 @@ namespace ShoppingCart2
                     {
                         while (!editOrder.IsSuccessful)
                         {
-                            editOrder.ShowDialog();
+                            var result = editOrder.ShowDialog();
+
+                            if (result == DialogResult.Cancel)
+                            {
+                                editOrder.Close();
+                                break;
+                            }
                         }
 
                         if (editOrder.IsSuccessful)
@@ -376,9 +430,8 @@ namespace ShoppingCart2
                                 ListViewOrders.Items.Clear();
                                 LoadOrderItems();
                             }
-                          
                         }
-
+                        
                     }
                     
                 }

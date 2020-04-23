@@ -81,123 +81,135 @@ namespace ShoppingCart2
 
         private void LoadData() 
         {
-            _customer = _customerManager.GetById(_customer.Id);
-            lblCustomerId.Text = _customer.Id.ToString();
-            lblName.Text = $"{_customer.FirstName.Trim()} {_customer.LastName.Trim()}";
-            lblEmail.Text = _customer.Email;
-            lblMobileNumber.Text = _customer.MobileNumber;
-            
-            var typeList = _addressTypeManager.GetByCustomerId(_customer.Id);
-
-            if (typeList.Count() > 0)
+            try
             {
-                foreach (var addressType in typeList)
-                { 
-                    var addressList = _addressManager.GetByAddressTypeId(addressType.AddressId);
+                _customer = _customerManager.GetById(_customer.Id);
+                lblCustomerId.Text = _customer.Id.ToString();
+                lblName.Text = $"{_customer.FirstName.Trim()} {_customer.LastName.Trim()}";
+                lblEmail.Text = _customer.Email;
+                lblMobileNumber.Text = _customer.MobileNumber;
 
-                    if (addressList.Count() > 0)
+                var typeList = _addressTypeManager.GetByCustomerId(_customer.Id);
+
+                if (typeList.Count() > 0)
+                {
+                    foreach (var addressType in typeList)
                     {
-                        foreach (var address in addressList)
+                        var addressList = _addressManager.GetByAddressTypeId(addressType.AddressId);
+
+                        if (addressList.Count() > 0)
                         {
-                            if (addressType.Name == "Shipping Address")
+                            foreach (var address in addressList)
                             {
-                                tabControlAddress.SelectedTab = tabPage1;
-                                lblShippingAddressId.Text = address.Id.ToString();
-                                lblStreetLineName.Text = address.AddressLine;
-                                lblCityName.Text = address.City;
-                                lblCountryName.Text = address.Country;
-                                lblZipCodeName.Text = address.ZipCode;
-                                _addressTypeList.Add(addressType);
-                            }
-                            else if (addressType.Name == "Mailing Address")
-                            {
-                                tabControlAddress.SelectedTab = tabPage2;
-                                lblMailingAddressId.Text = address.Id.ToString();
-                                label12.Text = address.AddressLine;
-                                label13.Text = address.City;
-                                label14.Text = address.Country;
-                                label15.Text = address.ZipCode;
-                                _addressTypeList.Add(addressType);
+                                if (addressType.Name == "Shipping Address")
+                                {
+                                    tabControlAddress.SelectedTab = tabPage1;
+                                    lblShippingAddressId.Text = address.Id.ToString();
+                                    lblStreetLineName.Text = address.AddressLine;
+                                    lblCityName.Text = address.City;
+                                    lblCountryName.Text = address.Country;
+                                    lblZipCodeName.Text = address.ZipCode;
+                                    _addressTypeList.Add(addressType);
+                                }
+                                else if (addressType.Name == "Mailing Address")
+                                {
+                                    tabControlAddress.SelectedTab = tabPage2;
+                                    lblMailingAddressId.Text = address.Id.ToString();
+                                    label12.Text = address.AddressLine;
+                                    label13.Text = address.City;
+                                    label14.Text = address.Country;
+                                    label15.Text = address.ZipCode;
+                                    _addressTypeList.Add(addressType);
+
+                                }
+                                else if (addressType.Name == "Billing Address")
+                                {
+                                    tabControlAddress.SelectedTab = tabPage3;
+                                    lblBillingAddressId.Text = address.Id.ToString();
+                                    label20.Text = address.AddressLine;
+                                    label21.Text = address.City;
+                                    label22.Text = address.Country;
+                                    label23.Text = address.ZipCode;
+                                    _addressTypeList.Add(addressType);
+                                }
+
+                                _addressList.Add(address);
 
                             }
-                            else if (addressType.Name == "Billing Address")
-                            {
-                                tabControlAddress.SelectedTab = tabPage3;
-                                lblBillingAddressId.Text = address.Id.ToString();
-                                label20.Text = address.AddressLine;
-                                label21.Text = address.City;
-                                label22.Text = address.Country;
-                                label23.Text = address.ZipCode;
-                                _addressTypeList.Add(addressType);
-                            }
-
-                            _addressList.Add(address);
 
                         }
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("No address for this customer");
+                        else
+                        {
+                            MessageBox.Show("No address for this customer");
+                        }
                     }
                 }
-            }
-            else
-            {
-                MessageBox.Show("No address type for this customer.");
-            }
-            
-            var orderInfo = _orderManager.GetByCustomerId(_customer.Id);
+                else
+                {
+                    MessageBox.Show("No address type for this customer.");
+                }
 
-            if (orderInfo.Count() > 0)
-            {
-                ListViewOrderItems.Items.Clear();
-                ListViewOrderItems.Items.AddRange(orderInfo.Select(x => new ListViewItem(new string[]
-            {
+                var orderInfo = _orderManager.GetByCustomerId(_customer.Id);
+
+                if (orderInfo.Count() > 0)
+                {
+                    ListViewOrderItems.Items.Clear();
+                    ListViewOrderItems.Items.AddRange(orderInfo.Select(x => new ListViewItem(new string[]
+                {
                         x.Id.ToString(),
                         x.CustomerId.ToString(),
                         x.TotalAmount.ToString("0.00"),
                         x.DeliveryDate.ToString(),
                         x.Status
-            })).ToArray());
+                })).ToArray());
 
+                }
+                else
+                {
+                    MessageBox.Show("There are no orders for this customer.");
+                    btnAddOrder.Enabled = true;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("There are no orders for this customer.");
-                btnAddOrder.Enabled = true;
+                MessageBox.Show(ex.Message);
             }
+           
         }
         private void btnEditDetails_Click(object sender, EventArgs e)
         {
-            EditCustomerForm editCustomerForm = new EditCustomerForm();
-            editCustomerForm.Customer = _customer;
-            editCustomerForm.AddressList = _addressList;
-            editCustomerForm.AddressTypeList = _addressTypeList;
-
-            if (editCustomerForm.ShowDialog() == DialogResult.OK)
+            try
             {
-                while (!editCustomerForm.IsSuccessful)
-                {
-                    var result = editCustomerForm.ShowDialog();
+                EditCustomerForm editCustomerForm = new EditCustomerForm();
+                editCustomerForm.Customer = _customer;
+                editCustomerForm.AddressList = _addressList;
+                editCustomerForm.AddressTypeList = _addressTypeList;
 
-                    if (result == DialogResult.Cancel)
+                if (editCustomerForm.ShowDialog() == DialogResult.OK)
+                {
+                    while (!editCustomerForm.IsSuccessful)
                     {
-                        editCustomerForm.IsSuccessful = true;
-                        this.Close();
-                    }
-                }
+                        var result = editCustomerForm.ShowDialog();
 
-                if (editCustomerForm.IsSuccessful)
-                {
+                        if (result == DialogResult.Cancel)
+                        {
+                            editCustomerForm.Close();
+                            break;
+                        }
+                    }
+
                     LoadData();
                 }
-
+                else
+                {
+                    editCustomerForm.Close();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                editCustomerForm.Close();
+                MessageBox.Show(ex.Message);
             }
+            
             
         }
 
