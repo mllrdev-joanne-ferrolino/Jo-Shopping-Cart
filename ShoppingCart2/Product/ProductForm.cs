@@ -54,7 +54,13 @@ namespace ShoppingCart
                 {
                     while (!editProductForm.IsSuccessful)
                     {
-                        editProductForm.ShowDialog();
+                        var result = editProductForm.ShowDialog();
+
+                        if (result == DialogResult.Cancel)
+                        {
+                            editProductForm.Close();
+                            break;
+                        }
                     }
 
                     if (editProductForm.IsSuccessful)
@@ -253,7 +259,13 @@ namespace ShoppingCart
                 {
                     while (!editProduct.IsSuccessful)
                     {
-                        editProduct.ShowDialog();
+                        var result = editProduct.ShowDialog();
+
+                        if (result == DialogResult.Cancel)
+                        {
+                            editProduct.Close();
+                            break;
+                        }
                     }
 
                     if (editProduct.IsSuccessful)

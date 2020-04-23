@@ -648,8 +648,5 @@ namespace ShoppingCart2
             _isSuccessful = _isNew ? Insert() : Edit();
         }
 
-        private void EditCustomerForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-        }
     }
 }
