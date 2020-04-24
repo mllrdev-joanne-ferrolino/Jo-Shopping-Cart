@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Repositories.Interfaces
 {
-    public interface IAddressTypeRepository : IRepository<AddressType>, IAssociativeEntityRepository<AddressType>
+    public interface IAddressTypeRepository : IRepository<AddressType>, IJunctionEntityRepository<AddressType>
     {
         AddressType GetAddressType(int id);
         IList<AddressType> GetByCustomerId(int id);

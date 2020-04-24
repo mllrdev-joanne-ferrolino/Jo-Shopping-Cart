@@ -17,7 +17,7 @@ namespace ShoppingCart.BL.Repositories
     internal abstract class BaseRepository<T> where T: class
     {
         internal abstract string TableName { get; }
-        internal abstract string ColumnIdName { get; }
+       
         internal SqlConnection _connection;
         internal static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         internal BaseRepository()

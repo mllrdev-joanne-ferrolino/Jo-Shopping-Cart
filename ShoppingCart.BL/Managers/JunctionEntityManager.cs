@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers
 {
-    public abstract class AssociativeEntityManager<T> where T:class
+    public abstract class JunctionEntityManager<T> where T:class
     {
-        public abstract IAssociativeEntityRepository<T> Repository { get; }
+        public abstract IJunctionEntityRepository<T> Repository { get; }
 
         public bool Insert(T entity)
         {

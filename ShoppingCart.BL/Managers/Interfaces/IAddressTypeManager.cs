@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers.Interfaces
 {
-    public interface IAddressTypeManager : IManager<AddressType>, IAssociativeEntityManager<AddressType>
+    public interface IAddressTypeManager : IManager<AddressType>, IJunctionEntityManager<AddressType>
     {
         AddressType GetAddressType(int id);
 

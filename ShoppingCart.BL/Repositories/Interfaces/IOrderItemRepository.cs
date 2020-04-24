@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Repositories.Interfaces
 {
-    public interface IOrderItemRepository : IRepository<OrderItem>, IAssociativeEntityRepository<OrderItem>
+    public interface IOrderItemRepository : IRepository<OrderItem>, IJunctionEntityRepository<OrderItem>
     {
         IList<int> GetByProductId(int id);
         IList<OrderItem> GetByOrderId(int id);

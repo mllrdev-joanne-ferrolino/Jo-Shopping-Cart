@@ -8,7 +8,7 @@ using System.Transactions;
 
 namespace ShoppingCart.BL.Repositories
 {
-    internal abstract class AssociativeEntityRepository<T> : BaseRepository<T> where T:class
+    internal abstract class JunctionEntityRepository<T> : BaseRepository<T> where T:class
     {
        
         public bool Insert(T entity)

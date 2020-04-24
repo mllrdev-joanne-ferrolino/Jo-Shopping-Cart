@@ -43,6 +43,7 @@
             this.btnView = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProviderName)).BeginInit();
             this.SuspendLayout();
@@ -57,7 +58,8 @@
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4,
-            this.columnHeader5});
+            this.columnHeader5,
+            this.columnHeader6});
             this.ListViewProducts.FullRowSelect = true;
             this.ListViewProducts.HideSelection = false;
             this.ListViewProducts.Location = new System.Drawing.Point(6, 19);
@@ -78,7 +80,7 @@
             // 
             this.columnHeader2.Text = "Product Name";
             this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader2.Width = 200;
+            this.columnHeader2.Width = 180;
             // 
             // columnHeader3
             // 
@@ -90,7 +92,7 @@
             // 
             this.columnHeader4.Text = "Description";
             this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader4.Width = 240;
+            this.columnHeader4.Width = 200;
             // 
             // columnHeader5
             // 
@@ -179,6 +181,12 @@
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Status";
+            this.columnHeader6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader6.Width = 80;
+            // 
             // ProductForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -218,6 +226,7 @@
         private System.Windows.Forms.Button btnView;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
     }
 }
 

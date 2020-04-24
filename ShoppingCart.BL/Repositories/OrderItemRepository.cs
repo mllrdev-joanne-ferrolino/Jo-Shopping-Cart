@@ -10,10 +10,9 @@ using System.Transactions;
 
 namespace ShoppingCart.BL.Repositories
 {
-    internal class OrderItemRepository : AssociativeEntityRepository<OrderItem>, IOrderItemRepository
+    internal class OrderItemRepository : JunctionEntityRepository<OrderItem>, IOrderItemRepository
     {
         internal override string TableName => "OrderItem";
-        internal override string ColumnIdName => "OrderId";
         public new IList<OrderItem> GetAll()
         {
             return base.GetAll();
@@ -42,7 +41,7 @@ namespace ShoppingCart.BL.Repositories
         {
             try
             {
-                string sql = $"SELECT * FROM {TableName} WHERE {ColumnIdName} = {id}";
+                string sql = $"SELECT * FROM {TableName} WHERE OrderId = {id}";
                 return _connection.Query<OrderItem>(sql).AsList();
             }
             catch (Exception ex)
@@ -57,7 +56,7 @@ namespace ShoppingCart.BL.Repositories
             {
                 using (var scope = new TransactionScope())
                 {
-                    string sql = $"DELETE FROM {TableName} WHERE {ColumnIdName} IN ({string.Join(", ", id)})";
+                    string sql = $"DELETE FROM {TableName} WHERE OrderId IN ({string.Join(", ", id)})";
                     var result = _connection.Execute(sql) > 0;
                     scope.Complete();
                     return result;

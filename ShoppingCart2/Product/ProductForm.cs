@@ -109,6 +109,7 @@ namespace ShoppingCart
                         }
                     }
 
+
                     if (_manager.Delete(ids.ToArray()))
                     {
                         MessageBox.Show("Product details deleted successfully.");
@@ -122,9 +123,11 @@ namespace ShoppingCart
                         MessageBox.Show("Details were not deleted.");
                     }
 
+
+
                     scope.Complete();
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -223,7 +226,8 @@ namespace ShoppingCart
                     p.Name, 
                     p.Price.ToString("0.00"), 
                     p.Description, 
-                    p.Stock.ToString()
+                    p.Stock.ToString(),
+                    p.Status
                 })).ToArray());
         }
 
@@ -251,7 +255,8 @@ namespace ShoppingCart
                 float price = ListViewProducts.SelectedItems[0].SubItems[2].Text.ToFloat();
                 string description = ListViewProducts.SelectedItems[0].SubItems[3].Text;
                 int stock = ListViewProducts.SelectedItems[0].SubItems[4].Text.ToInt();
-                _product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock };
+                string status = ListViewProducts.SelectedItems[0].SubItems[5].Text;
+                _product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock, Status = status };
                 EditProductForm editProduct = new EditProductForm();
                 editProduct.Product = _product;
 

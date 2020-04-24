@@ -12,7 +12,6 @@ namespace ShoppingCart.BL.Repositories
     internal class OrderRepository : MainEntityRepository<Order>, IOrderRepository
     {
         internal override string TableName => "[Order]";
-        internal override string ColumnIdName => "Id";
         public new IList<Order> GetAll()
         {
             return base.GetAll();
