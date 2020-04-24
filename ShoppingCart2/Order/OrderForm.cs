@@ -93,7 +93,7 @@ namespace ShoppingCart2
         {
             try
             {
-                ListViewProducts.Items.AddRange(_productManager.GetAll().Select(p => new ListViewItem(new string[]
+                ListViewProducts.Items.AddRange(_productManager.GetActiveItems().Select(p => new ListViewItem(new string[]
                 {
                     p.Id.ToString(),
                     p.Name,

@@ -13,7 +13,6 @@ namespace ShoppingCart.BL.Repositories
     internal class CustomerRepository : MainEntityRepository<Customer>, ICustomerRepository
     {
         internal override string TableName => "Customer";
-        internal override string ColumnIdName => "Id";
         public new IList<Customer> GetAll()
         {
             return base.GetAll();

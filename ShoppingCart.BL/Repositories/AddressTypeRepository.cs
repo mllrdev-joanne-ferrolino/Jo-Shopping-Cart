@@ -10,10 +10,9 @@ using System.Transactions;
 
 namespace ShoppingCart.BL.Repositories
 {
-    internal class AddressTypeRepository : AssociativeEntityRepository<AddressType>, IAddressTypeRepository
+    internal class AddressTypeRepository : JunctionEntityRepository<AddressType>, IAddressTypeRepository
     {
         internal override string TableName => "AddressType";
-        internal override string ColumnIdName => "CustomerId";
         public new IList<AddressType> GetAll()
         {
             return base.GetAll();
@@ -25,7 +24,7 @@ namespace ShoppingCart.BL.Repositories
             {
                 using (var scope = new TransactionScope())
                 {
-                    string sql = $"DELETE FROM {TableName} WHERE {ColumnIdName} IN ({string.Join(", ", id)})";
+                    string sql = $"DELETE FROM {TableName} WHERE CustomerId IN ({string.Join(", ", id)})";
                     var result = _connection.Execute(sql) > 0;
                     scope.Complete();
                     return result;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers.Interfaces
 {
-    public interface IAssociativeEntityManager<T> where T: class
+    public interface IJunctionEntityManager<T> where T: class
     {
         bool Insert(T entity);
     }

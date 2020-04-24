@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers
 {
-    public class OrderItemManager : AssociativeEntityManager<OrderItem>, IOrderItemManager
+    public class OrderItemManager : JunctionEntityManager<OrderItem>, IOrderItemManager
     {
-        public override IAssociativeEntityRepository<OrderItem> Repository => new OrderItemRepository();
+        public override IJunctionEntityRepository<OrderItem> Repository => new OrderItemRepository();
         public IList<OrderItem> GetAll()
         {
             return ((IOrderItemRepository)Repository).GetAll();

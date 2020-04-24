@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Repositories.Interfaces
 {
-    public interface IAssociativeEntityRepository<T> where T: class
+    public interface IJunctionEntityRepository<T> where T: class
     {
         bool Insert(T entity);
     }

@@ -12,7 +12,6 @@ namespace ShoppingCart.BL.Repositories
     internal class AddressRepository : MainEntityRepository<Address>, IAddressRepository
     {
         internal override string TableName => "Address";
-        internal override string ColumnIdName => "Id";
 
         public new IList<Address> GetAll()
         {

@@ -9,5 +9,6 @@ namespace ShoppingCart.BL.Managers.Interfaces
 {
     public interface IProductManager : IManager<Product>, IMainEntityManager<Product>
     {
+        IList<Product> GetActiveItems();
     }
 }

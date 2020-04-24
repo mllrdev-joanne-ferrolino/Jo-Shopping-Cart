@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers
 {
-    public class AddressTypeManager : AssociativeEntityManager<AddressType>, IAddressTypeManager
+    public class AddressTypeManager : JunctionEntityManager<AddressType>, IAddressTypeManager
     {
-        public override IAssociativeEntityRepository<AddressType> Repository => new AddressTypeRepository();
+        public override IJunctionEntityRepository<AddressType> Repository => new AddressTypeRepository();
 
         public IList<AddressType> GetAll()
         {

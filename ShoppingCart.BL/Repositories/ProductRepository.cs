@@ -10,14 +10,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Transactions;
 
 namespace ShoppingCart.BL.Repositories
 {
     internal class ProductRepository : MainEntityRepository<Product>, IProductRepository
     {
         internal override string TableName => "Product";
-        internal override string ColumnIdName => "Id";
         public new IList<Product> GetAll()
         {
             return base.GetAll();
@@ -48,6 +47,22 @@ namespace ShoppingCart.BL.Repositories
             return base.Delete(id);
         }
 
-       
+        public IList<Product> GetActiveItems() 
+        {
+            try
+            {
+                string sql = $"SELECT * FROM {TableName} WHERE Status = 'active'";
+                return _connection.Query<Product>(sql).AsList();
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.StackTrace);
+                return null;
+            }
+        }
+
+
+
+
     }
 }

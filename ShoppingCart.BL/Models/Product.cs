@@ -14,5 +14,7 @@ namespace ShoppingCart.BL.Models
         public string Description { get; set; }
         public int Stock { get; set; }
 
+        public string Status { get; set; } = "active";
+
     }
 }

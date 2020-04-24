@@ -54,12 +54,12 @@
   <ItemGroup>
     <Compile Include="Managers\AddressManager.cs" />
     <Compile Include="Managers\AddressTypeManager.cs" />
-    <Compile Include="Managers\AssociativeEntityManager.cs" />
+    <Compile Include="Managers\JunctionEntityManager.cs" />
     <Compile Include="Managers\BaseManager.cs" />
     <Compile Include="Managers\CustomerManager.cs" />
     <Compile Include="Managers\Interfaces\IAddressManager.cs" />
     <Compile Include="Managers\Interfaces\IAddressTypeManager.cs" />
-    <Compile Include="Managers\Interfaces\IAssociativeEntityManager.cs" />
+    <Compile Include="Managers\Interfaces\IJunctionEntityManager.cs" />
     <Compile Include="Managers\Interfaces\ICustomerManager.cs" />
     <Compile Include="Managers\Interfaces\IMainEntityManager.cs" />
     <Compile Include="Managers\Interfaces\IManager.cs" />
@@ -79,12 +79,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AddressRepository.cs" />
     <Compile Include="Repositories\AddressTypeRepository.cs" />
-    <Compile Include="Repositories\AssociativeEntityRepository.cs" />
+    <Compile Include="Repositories\JunctionEntityRepository.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />
     <Compile Include="Repositories\Interfaces\IAddressRepository.cs" />
     <Compile Include="Repositories\Interfaces\IAddressTypeRepository.cs" />
-    <Compile Include="Repositories\Interfaces\IAssociativeEntityRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IJunctionEntityRepository.cs" />
     <Compile Include="Repositories\Interfaces\ICustomerRepository.cs" />
     <Compile Include="Repositories\Interfaces\IMainEntitiesRepository.cs" />
     <Compile Include="Repositories\Interfaces\IOrderItemRepository.cs" />

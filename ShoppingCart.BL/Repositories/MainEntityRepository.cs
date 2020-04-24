@@ -107,7 +107,7 @@ namespace ShoppingCart.BL.Repositories
             {
                 using (var scope = new TransactionScope())
                 {
-                    string sql = $"DELETE FROM {TableName} WHERE {ColumnIdName} IN ({string.Join(", ", id)})";
+                    string sql = $"DELETE FROM {TableName} WHERE Id IN ({string.Join(", ", id)})";
                     var result = _connection.Execute(sql) > 0;
                     scope.Complete();
                     return result;

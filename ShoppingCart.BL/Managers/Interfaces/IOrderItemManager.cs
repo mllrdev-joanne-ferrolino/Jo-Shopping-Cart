@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.BL.Managers.Interfaces
 {
-    public interface IOrderItemManager : IManager<OrderItem>, IAssociativeEntityManager<OrderItem>
+    public interface IOrderItemManager : IManager<OrderItem>, IJunctionEntityManager<OrderItem>
     {
         IList<int> GetByProductId(int id);
         IList<OrderItem> GetByOrderId(int id);

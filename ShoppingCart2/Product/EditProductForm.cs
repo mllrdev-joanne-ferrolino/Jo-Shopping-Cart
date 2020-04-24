@@ -54,8 +54,9 @@ namespace ShoppingCart2
                     float price = txtPrice.Text.ToFloat();
                     string description = txtDescription.Text;
                     int stock = txtStock.Text.ToInt();
+                    string status = cboStatus.SelectedItem.ToString();
 
-                    _product = new Product() { Name = name, Price = price, Description = description, Stock = stock };
+                    _product = new Product() { Name = name, Price = price, Description = description, Stock = stock, Status = status };
 
                     using (var scope = new TransactionScope())
                     {
@@ -98,7 +99,7 @@ namespace ShoppingCart2
         {
             try
             {
-                _input = new string[] { txtName.Text, txtPrice.Text, txtDescription.Text, txtStock.Text };
+                _input = new string[] { txtName.Text, txtPrice.Text, txtDescription.Text, txtStock.Text, cboStatus.Text };
 
                 if (ValidateAllFields())
                 {
@@ -107,8 +108,9 @@ namespace ShoppingCart2
                     float price = txtPrice.Text.ToFloat();
                     string description = txtDescription.Text;
                     int stock = txtStock.Text.ToInt();
+                    string status = cboStatus.SelectedItem.ToString();
 
-                    _product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock };
+                    _product = new Product() { Id = id, Name = name, Price = price, Description = description, Stock = stock, Status = status };
 
                     using (var scope = new TransactionScope())
                     {
@@ -222,12 +224,12 @@ namespace ShoppingCart2
             {
                 if (_input != null)
                 {
-                    var textboxes = this.Controls.OfType<TextBox>().OrderBy(x => x.TabIndex);
-
+                    var con = new string[] { txtName.Text, txtPrice.Text, txtDescription.Text, txtStock.Text, cboStatus.Text };
+                    
                     for (int i = 0; i < _input.Length; i++)
                     {
-                        var textbox = textboxes.ElementAt(i);
-                        textbox.Text = _input[i];
+                        con[i] = _input[i];
+
                     }
 
                 }
@@ -237,6 +239,7 @@ namespace ShoppingCart2
                     txtPrice.Text = _product.Price.ToString("0.00");
                     txtDescription.Text = _product.Description;
                     txtStock.Text = _product.Stock.ToString();
+                    cboStatus.Text = _product.Status;
                 }
 
                 lblId.Text = _product.Id.ToString();

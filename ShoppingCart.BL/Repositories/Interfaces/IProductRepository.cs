@@ -9,5 +9,6 @@ namespace ShoppingCart.BL.Repositories.Interfaces
 {
     public interface IProductRepository: IRepository<Product>, IMainEntityRepository<Product>
     {
+        IList<Product> GetActiveItems();
     }
 }
