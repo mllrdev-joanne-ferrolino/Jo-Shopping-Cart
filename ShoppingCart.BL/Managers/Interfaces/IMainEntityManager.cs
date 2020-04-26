@@ -14,5 +14,7 @@ namespace ShoppingCart.BL.Managers.Interfaces
         int Insert(T obj);
         bool Update(T obj);
         bool Delete(int[] id);
+
+        IList<T> Search(T obj);
     }
 }

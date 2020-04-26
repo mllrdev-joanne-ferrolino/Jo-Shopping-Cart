@@ -70,5 +70,35 @@ namespace ShoppingCart.BL.Repositories
                 return null;
             }
         }
+
+        public AddressType GetByAddressId(int id) 
+        {
+            try
+            {
+                string sql = $"SELECT * FROM {TableName} WHERE AddressId = {id}";
+                return _connection.QueryFirstOrDefault<AddressType>(sql);
+
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.StackTrace);
+                return null;
+            }
+        }
+
+        public IList<AddressType> GetByName(string name) 
+        {
+            try
+            {
+                string sql = $"SELECT * FROM {TableName} WHERE Name = '{name}'";
+                return _connection.Query<AddressType>(sql).AsList();
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.StackTrace);
+                return null;
+            }
+
+        }
     }
 }

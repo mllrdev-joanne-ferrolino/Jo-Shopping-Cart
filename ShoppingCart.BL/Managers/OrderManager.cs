@@ -47,5 +47,10 @@ namespace ShoppingCart.BL.Managers
         {
             return ((IOrderRepository)Repository).GetByCustomerId(id);
         }
+
+        public new IList<Order> Search(Order order) 
+        {
+            return Repository.Search(order);
+        }
     }
 }

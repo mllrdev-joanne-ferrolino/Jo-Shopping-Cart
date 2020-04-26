@@ -48,5 +48,10 @@ namespace ShoppingCart.BL.Managers
         {
             return ((IProductRepository)Repository).GetActiveItems();
         }
+
+        public new IList<Product> Search(Product product) 
+        {
+            return Repository.Search(product);
+        }
     }
 }

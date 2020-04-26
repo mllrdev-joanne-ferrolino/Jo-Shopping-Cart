@@ -41,5 +41,10 @@ namespace ShoppingCart.BL.Managers
         {
             return Repository.GetId(id);
         }
+
+        public IList<T> Search(T obj) 
+        {
+            return Repository.Search(obj);
+        }
     }
 }

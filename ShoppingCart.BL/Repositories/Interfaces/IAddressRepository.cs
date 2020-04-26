@@ -9,6 +9,6 @@ namespace ShoppingCart.BL.Repositories.Interfaces
 {
     public interface IAddressRepository : IRepository<Address>, IMainEntityRepository<Address>
     {
-        IList<Address> GetByAddressTypeId(int id);
+        IList<Address> GetByAddressId(int id);
     }
 }

@@ -48,9 +48,14 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetId(id);
         }
 
-        public IList<Address> GetByAddressTypeId(int id) 
+        public IList<Address> GetByAddressId(int id) 
         {
-            return ((IAddressRepository)Repository).GetByAddressTypeId(id);
+            return ((IAddressRepository)Repository).GetByAddressId(id);
+        }
+
+        public new IList<Address> Search(Address address) 
+        {
+            return Repository.Search(address);
         }
     }
 }

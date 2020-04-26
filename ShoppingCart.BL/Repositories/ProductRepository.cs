@@ -61,8 +61,10 @@ namespace ShoppingCart.BL.Repositories
             }
         }
 
-
-
+        public new IList<Product> Search(Product product) 
+        {
+            return base.Search(product);
+        }
 
     }
 }
