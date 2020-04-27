@@ -288,7 +288,6 @@ namespace ShoppingCart2
             {
                 ListViewCustomers.Items.Clear();
                
-
                 if (_resultList.Count() > 0)
                 {
                     LoadSearchResults();
@@ -316,15 +315,34 @@ namespace ShoppingCart2
             
         }
 
+        private bool IsCustomerInfoFilled() 
+        {
+            foreach (TextBox textBox in grpCustomer.Controls.OfType<TextBox>())
+            {
+                if (!string.IsNullOrWhiteSpace(textBox.Text))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool IsAddressInfoFilled()
+        {
+            foreach (TextBox textBox in grpAddress.Controls.OfType<TextBox>())
+            {
+                if (!string.IsNullOrWhiteSpace(textBox.Text))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private void btnSearch_Click(object sender, EventArgs e)
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(txtSearchId.Text) ||
-                    !string.IsNullOrWhiteSpace(txtSearchFName.Text) ||
-                    !string.IsNullOrWhiteSpace(txtSearchLName.Text) ||
-                    !string.IsNullOrWhiteSpace(txtSearchEmail.Text) ||
-                    !string.IsNullOrWhiteSpace(txtMobileNo.Text))
+                if (IsCustomerInfoFilled())
                 {
                     Customer searchItem = new Customer()
                     {
@@ -343,10 +361,8 @@ namespace ShoppingCart2
                         LoadSearchResults();
                     }
                 }
-                if (!string.IsNullOrWhiteSpace(txtSearchStreet.Text) ||
-                    !string.IsNullOrWhiteSpace(txtSearchCity.Text) ||
-                    !string.IsNullOrWhiteSpace(txtSearchCountry.Text) ||
-                    !string.IsNullOrWhiteSpace(txtSearchZipCode.Text))
+
+                if (IsAddressInfoFilled())
                 {
                     Address searchAddress = new Address()
                     {
@@ -357,6 +373,7 @@ namespace ShoppingCart2
                     };
 
                     var addressResult = _addressManager.Search(searchAddress);
+
                     if (addressResult.Count > 0)
                     {
                         _addressResult = addressResult.ToList();
@@ -369,6 +386,7 @@ namespace ShoppingCart2
                 if (!string.IsNullOrWhiteSpace(cboType.SelectedItem.ToString()))
                 {
                     var searchByAddressType = _addressTypeManager.GetByName(type);
+
                     if (searchByAddressType.Count() > 0)
                     {
                         _typeResult = searchByAddressType.ToList();
@@ -392,20 +410,17 @@ namespace ShoppingCart2
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            foreach (Control control in grpSearch.Controls)
+            foreach (TextBox textBox in grpCustomer.Controls.OfType<TextBox>())
             {
-                if (control is TextBox)
-                {
-                    TextBox textbox = control as TextBox;
-                    textbox.Text = string.Empty;
-                }
-                else if (control is ComboBox)
-                {
-                    ComboBox comboBox = control as ComboBox;
-                    comboBox.SelectedItem = string.Empty;
-                }
+                textBox.Text = string.Empty;
             }
 
+            foreach (TextBox textBox in grpAddress.Controls.OfType<TextBox>())
+            {
+                textBox.Text = string.Empty;
+            }
+
+            cboType.SelectedItem = string.Empty;
             ListViewCustomers.Items.Clear();
             _resultList = new List<Customer>();
             LoadCustomers();
@@ -559,6 +574,8 @@ namespace ShoppingCart2
                       
                     }
                 }
+
+                
              
 
             }
