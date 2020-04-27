@@ -41,7 +41,7 @@ namespace ShoppingCart.BL.Repositories
             return base.Delete(id);
         }
 
-        public IList<Address> GetByAddressTypeId(int id) 
+        public IList<Address> GetByAddressId(int id) 
         {
             try
             {
@@ -53,6 +53,11 @@ namespace ShoppingCart.BL.Repositories
                 _log.Error(ex.StackTrace);
                 return null;
             }
+        }
+
+        public new IList<Address> Search(Address address) 
+        {
+            return base.Search(address);
         }
     }
 }

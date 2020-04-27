@@ -55,5 +55,10 @@ namespace ShoppingCart.BL.Repositories
                 return null;
             }
         }
+
+        public new IList<Order> Search(Order order) 
+        {
+            return base.Search(order);
+        }
     }
 }

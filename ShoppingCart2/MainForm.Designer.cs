@@ -46,7 +46,7 @@
             this.customerToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(874, 24);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -85,7 +85,7 @@
             // viewCustomersToolStripMenuItem
             // 
             this.viewCustomersToolStripMenuItem.Name = "viewCustomersToolStripMenuItem";
-            this.viewCustomersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewCustomersToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.viewCustomersToolStripMenuItem.Text = "Current Customer";
             this.viewCustomersToolStripMenuItem.Visible = false;
             this.viewCustomersToolStripMenuItem.Click += new System.EventHandler(this.viewCustomersToolStripMenuItem_Click);
@@ -93,7 +93,7 @@
             // viewCustomerListToolStripMenuItem
             // 
             this.viewCustomerListToolStripMenuItem.Name = "viewCustomerListToolStripMenuItem";
-            this.viewCustomerListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewCustomerListToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.viewCustomerListToolStripMenuItem.Text = "View Customer List";
             this.viewCustomerListToolStripMenuItem.Click += new System.EventHandler(this.viewCustomerListToolStripMenuItem_Click);
             // 
@@ -101,7 +101,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 733);
+            this.ClientSize = new System.Drawing.Size(874, 711);
             this.Controls.Add(this.menuStrip1);
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;

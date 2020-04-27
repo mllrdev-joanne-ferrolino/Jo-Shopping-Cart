@@ -15,6 +15,7 @@ namespace ShoppingCart.BL.Repositories.Interfaces
         bool Update(T entity);
 
         bool Delete(int[] id);
+        IList<T> Search(T obj);
 
     }
 }

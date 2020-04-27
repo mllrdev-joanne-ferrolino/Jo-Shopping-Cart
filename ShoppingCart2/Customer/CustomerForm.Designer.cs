@@ -37,18 +37,47 @@
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.btnOrder = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.txtSearchId = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
-            this.btnAdd = new System.Windows.Forms.Button();
-            this.btnDelete = new System.Windows.Forms.Button();
-            this.btnOrder = new System.Windows.Forms.Button();
+            this.grpSearch = new System.Windows.Forms.GroupBox();
+            this.cboType = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtSearchZipCode = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txtSearchCountry = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtSearchCity = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtSearchStreet = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtMobileNo = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtSearchEmail = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtSearchLName = new System.Windows.Forms.TextBox();
+            this.lblLastName = new System.Windows.Forms.Label();
+            this.txtSearchFName = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.grpCustomer = new System.Windows.Forms.GroupBox();
+            this.grpAddress = new System.Windows.Forms.GroupBox();
+            this.grpType = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
+            this.grpSearch.SuspendLayout();
+            this.grpCustomer.SuspendLayout();
+            this.grpAddress.SuspendLayout();
+            this.grpType.SuspendLayout();
             this.SuspendLayout();
             // 
             // ListViewCustomers
             // 
-            this.ListViewCustomers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.ListViewCustomers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ListViewCustomers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
@@ -59,9 +88,9 @@
             this.columnHeader7});
             this.ListViewCustomers.FullRowSelect = true;
             this.ListViewCustomers.HideSelection = false;
-            this.ListViewCustomers.Location = new System.Drawing.Point(17, 30);
+            this.ListViewCustomers.Location = new System.Drawing.Point(12, 32);
             this.ListViewCustomers.Name = "ListViewCustomers";
-            this.ListViewCustomers.Size = new System.Drawing.Size(666, 377);
+            this.ListViewCustomers.Size = new System.Drawing.Size(562, 408);
             this.ListViewCustomers.TabIndex = 0;
             this.ListViewCustomers.UseCompatibleStateImageBehavior = false;
             this.ListViewCustomers.View = System.Windows.Forms.View.Details;
@@ -75,12 +104,12 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "Last Name";
-            this.columnHeader2.Width = 150;
+            this.columnHeader2.Width = 130;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "First Name";
-            this.columnHeader3.Width = 150;
+            this.columnHeader3.Width = 130;
             // 
             // columnHeader4
             // 
@@ -104,27 +133,64 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.ListViewCustomers);
-            this.groupBox1.Location = new System.Drawing.Point(29, 49);
+            this.groupBox1.Controls.Add(this.btnOrder);
+            this.groupBox1.Controls.Add(this.btnDelete);
+            this.groupBox1.Controls.Add(this.btnAdd);
+            this.groupBox1.Location = new System.Drawing.Point(256, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(701, 428);
+            this.groupBox1.Size = new System.Drawing.Size(586, 497);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Customers";
             // 
-            // txtSearch
+            // btnOrder
             // 
-            this.txtSearch.Location = new System.Drawing.Point(29, 21);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(201, 20);
-            this.txtSearch.TabIndex = 2;
-            this.txtSearch.Text = "Search by Id or Name";
-            this.txtSearch.Click += new System.EventHandler(this.txtSearch_Click);
+            this.btnOrder.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnOrder.Enabled = false;
+            this.btnOrder.Location = new System.Drawing.Point(190, 458);
+            this.btnOrder.Name = "btnOrder";
+            this.btnOrder.Size = new System.Drawing.Size(75, 23);
+            this.btnOrder.TabIndex = 8;
+            this.btnOrder.Text = "Order";
+            this.btnOrder.UseVisualStyleBackColor = true;
+            this.btnOrder.Click += new System.EventHandler(this.btnOrder_Click);
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnDelete.Location = new System.Drawing.Point(352, 458);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnDelete.TabIndex = 7;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnAdd.Location = new System.Drawing.Point(271, 458);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnAdd.TabIndex = 5;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // txtSearchId
+            // 
+            this.txtSearchId.Location = new System.Drawing.Point(69, 28);
+            this.txtSearchId.Name = "txtSearchId";
+            this.txtSearchId.Size = new System.Drawing.Size(132, 20);
+            this.txtSearchId.TabIndex = 2;
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(236, 20);
+            this.btnSearch.Location = new System.Drawing.Point(44, 443);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
             this.btnSearch.TabIndex = 3;
@@ -134,7 +200,7 @@
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(317, 20);
+            this.btnClear.Location = new System.Drawing.Point(125, 443);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 4;
@@ -142,51 +208,234 @@
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // btnAdd
+            // grpSearch
             // 
-            this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnAdd.Location = new System.Drawing.Point(328, 486);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnAdd.TabIndex = 5;
-            this.btnAdd.Text = "Add";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            this.grpSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.grpSearch.Controls.Add(this.grpType);
+            this.grpSearch.Controls.Add(this.grpAddress);
+            this.grpSearch.Controls.Add(this.grpCustomer);
+            this.grpSearch.Controls.Add(this.btnClear);
+            this.grpSearch.Controls.Add(this.btnSearch);
+            this.grpSearch.Location = new System.Drawing.Point(9, 12);
+            this.grpSearch.Name = "grpSearch";
+            this.grpSearch.Size = new System.Drawing.Size(238, 497);
+            this.grpSearch.TabIndex = 9;
+            this.grpSearch.TabStop = false;
+            this.grpSearch.Text = "Search";
             // 
-            // btnDelete
+            // cboType
             // 
-            this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnDelete.Location = new System.Drawing.Point(409, 486);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnDelete.TabIndex = 7;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            this.cboType.FormattingEnabled = true;
+            this.cboType.Items.AddRange(new object[] {
+            "",
+            "Shipping Address",
+            "Mailing Address",
+            "Billing Address"});
+            this.cboType.Location = new System.Drawing.Point(63, 26);
+            this.cboType.Name = "cboType";
+            this.cboType.Size = new System.Drawing.Size(132, 21);
+            this.cboType.TabIndex = 21;
             // 
-            // btnOrder
+            // label9
             // 
-            this.btnOrder.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnOrder.Enabled = false;
-            this.btnOrder.Location = new System.Drawing.Point(247, 486);
-            this.btnOrder.Name = "btnOrder";
-            this.btnOrder.Size = new System.Drawing.Size(75, 23);
-            this.btnOrder.TabIndex = 8;
-            this.btnOrder.Text = "Order";
-            this.btnOrder.UseVisualStyleBackColor = true;
-            this.btnOrder.Click += new System.EventHandler(this.btnOrder_Click);
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(7, 30);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(31, 13);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "Type";
+            // 
+            // txtSearchZipCode
+            // 
+            this.txtSearchZipCode.Location = new System.Drawing.Point(70, 103);
+            this.txtSearchZipCode.Name = "txtSearchZipCode";
+            this.txtSearchZipCode.Size = new System.Drawing.Size(132, 20);
+            this.txtSearchZipCode.TabIndex = 19;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(12, 107);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(47, 13);
+            this.label8.TabIndex = 18;
+            this.label8.Text = "ZipCode";
+            // 
+            // txtSearchCountry
+            // 
+            this.txtSearchCountry.Location = new System.Drawing.Point(71, 76);
+            this.txtSearchCountry.Name = "txtSearchCountry";
+            this.txtSearchCountry.Size = new System.Drawing.Size(131, 20);
+            this.txtSearchCountry.TabIndex = 17;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(11, 79);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(43, 13);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "Country";
+            // 
+            // txtSearchCity
+            // 
+            this.txtSearchCity.Location = new System.Drawing.Point(71, 51);
+            this.txtSearchCity.Name = "txtSearchCity";
+            this.txtSearchCity.Size = new System.Drawing.Size(131, 20);
+            this.txtSearchCity.TabIndex = 15;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(11, 55);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(24, 13);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "City";
+            // 
+            // txtSearchStreet
+            // 
+            this.txtSearchStreet.Location = new System.Drawing.Point(71, 24);
+            this.txtSearchStreet.Name = "txtSearchStreet";
+            this.txtSearchStreet.Size = new System.Drawing.Size(131, 20);
+            this.txtSearchStreet.TabIndex = 13;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(9, 28);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(55, 13);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "StreetLine";
+            // 
+            // txtMobileNo
+            // 
+            this.txtMobileNo.Location = new System.Drawing.Point(69, 140);
+            this.txtMobileNo.Name = "txtMobileNo";
+            this.txtMobileNo.Size = new System.Drawing.Size(132, 20);
+            this.txtMobileNo.TabIndex = 11;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(7, 144);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(55, 13);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Mobile No";
+            // 
+            // txtSearchEmail
+            // 
+            this.txtSearchEmail.Location = new System.Drawing.Point(69, 113);
+            this.txtSearchEmail.Name = "txtSearchEmail";
+            this.txtSearchEmail.Size = new System.Drawing.Size(132, 20);
+            this.txtSearchEmail.TabIndex = 9;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(8, 117);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(32, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Email";
+            // 
+            // txtSearchLName
+            // 
+            this.txtSearchLName.Location = new System.Drawing.Point(69, 85);
+            this.txtSearchLName.Name = "txtSearchLName";
+            this.txtSearchLName.Size = new System.Drawing.Size(132, 20);
+            this.txtSearchLName.TabIndex = 7;
+            // 
+            // lblLastName
+            // 
+            this.lblLastName.AutoSize = true;
+            this.lblLastName.Location = new System.Drawing.Point(7, 88);
+            this.lblLastName.Name = "lblLastName";
+            this.lblLastName.Size = new System.Drawing.Size(58, 13);
+            this.lblLastName.TabIndex = 6;
+            this.lblLastName.Text = "Last Name";
+            // 
+            // txtSearchFName
+            // 
+            this.txtSearchFName.Location = new System.Drawing.Point(69, 55);
+            this.txtSearchFName.Name = "txtSearchFName";
+            this.txtSearchFName.Size = new System.Drawing.Size(132, 20);
+            this.txtSearchFName.TabIndex = 5;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 59);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "First Name";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 32);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(16, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Id";
+            // 
+            // grpCustomer
+            // 
+            this.grpCustomer.Controls.Add(this.label1);
+            this.grpCustomer.Controls.Add(this.txtSearchId);
+            this.grpCustomer.Controls.Add(this.label2);
+            this.grpCustomer.Controls.Add(this.txtSearchFName);
+            this.grpCustomer.Controls.Add(this.lblLastName);
+            this.grpCustomer.Controls.Add(this.txtSearchLName);
+            this.grpCustomer.Controls.Add(this.label3);
+            this.grpCustomer.Controls.Add(this.txtSearchEmail);
+            this.grpCustomer.Controls.Add(this.label4);
+            this.grpCustomer.Controls.Add(this.txtMobileNo);
+            this.grpCustomer.Location = new System.Drawing.Point(11, 25);
+            this.grpCustomer.Name = "grpCustomer";
+            this.grpCustomer.Size = new System.Drawing.Size(215, 176);
+            this.grpCustomer.TabIndex = 22;
+            this.grpCustomer.TabStop = false;
+            this.grpCustomer.Text = "By Customer";
+            // 
+            // grpAddress
+            // 
+            this.grpAddress.Controls.Add(this.label5);
+            this.grpAddress.Controls.Add(this.txtSearchStreet);
+            this.grpAddress.Controls.Add(this.label6);
+            this.grpAddress.Controls.Add(this.txtSearchZipCode);
+            this.grpAddress.Controls.Add(this.txtSearchCity);
+            this.grpAddress.Controls.Add(this.label8);
+            this.grpAddress.Controls.Add(this.label7);
+            this.grpAddress.Controls.Add(this.txtSearchCountry);
+            this.grpAddress.Location = new System.Drawing.Point(11, 214);
+            this.grpAddress.Name = "grpAddress";
+            this.grpAddress.Size = new System.Drawing.Size(216, 137);
+            this.grpAddress.TabIndex = 23;
+            this.grpAddress.TabStop = false;
+            this.grpAddress.Text = "By Address";
+            // 
+            // grpType
+            // 
+            this.grpType.Controls.Add(this.label9);
+            this.grpType.Controls.Add(this.cboType);
+            this.grpType.Location = new System.Drawing.Point(10, 364);
+            this.grpType.Name = "grpType";
+            this.grpType.Size = new System.Drawing.Size(216, 59);
+            this.grpType.TabIndex = 24;
+            this.grpType.TabStop = false;
+            this.grpType.Text = "By Address Type";
             // 
             // CustomerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(752, 523);
-            this.Controls.Add(this.btnOrder);
-            this.Controls.Add(this.btnDelete);
-            this.Controls.Add(this.btnAdd);
-            this.Controls.Add(this.btnClear);
-            this.Controls.Add(this.btnSearch);
-            this.Controls.Add(this.txtSearch);
+            this.ClientSize = new System.Drawing.Size(854, 523);
+            this.Controls.Add(this.grpSearch);
             this.Controls.Add(this.groupBox1);
             this.Name = "CustomerForm";
             this.Text = "Customer";
@@ -194,8 +443,14 @@
             this.Load += new System.EventHandler(this.CustomerForm_Load);
             this.Click += new System.EventHandler(this.CustomerForm_Click);
             this.groupBox1.ResumeLayout(false);
+            this.grpSearch.ResumeLayout(false);
+            this.grpCustomer.ResumeLayout(false);
+            this.grpCustomer.PerformLayout();
+            this.grpAddress.ResumeLayout(false);
+            this.grpAddress.PerformLayout();
+            this.grpType.ResumeLayout(false);
+            this.grpType.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -203,7 +458,7 @@
 
         private System.Windows.Forms.ListView ListViewCustomers;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.TextBox txtSearchId;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnAdd;
@@ -216,5 +471,28 @@
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.Button btnOrder;
         private System.Windows.Forms.ColumnHeader columnHeader7;
+        private System.Windows.Forms.GroupBox grpSearch;
+        private System.Windows.Forms.ComboBox cboType;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txtSearchZipCode;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox txtSearchCountry;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox txtSearchCity;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtSearchStreet;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtMobileNo;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtSearchEmail;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtSearchLName;
+        private System.Windows.Forms.Label lblLastName;
+        private System.Windows.Forms.TextBox txtSearchFName;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox grpType;
+        private System.Windows.Forms.GroupBox grpAddress;
+        private System.Windows.Forms.GroupBox grpCustomer;
     }
 }

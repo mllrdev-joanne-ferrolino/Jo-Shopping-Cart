@@ -9,6 +9,6 @@ namespace ShoppingCart.BL.Managers.Interfaces
 {
     public interface IAddressManager : IManager<Address>, IMainEntityManager<Address>
     {
-        IList<Address> GetByAddressTypeId(int id);
+        IList<Address> GetByAddressId(int id);
     }
 }

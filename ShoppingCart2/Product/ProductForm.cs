@@ -41,6 +41,7 @@ namespace ShoppingCart
         private void Products_Load(object sender, EventArgs e)
         {
             LoadListViewItems();
+            cboSearchStatus.SelectedItem = string.Empty;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -82,7 +83,19 @@ namespace ShoppingCart
         private void btnView_Click(object sender, EventArgs e)
         {
             ListViewProducts.Items.Clear();
-            txtSearch.Text = string.Empty;
+            foreach (Control control in grpSearch.Controls)
+            {
+                if (control is TextBox)
+                {
+                    TextBox textbox = control as TextBox;
+                    textbox.Text = string.Empty;
+                }
+                else if(control is ComboBox)
+                {
+                    ComboBox comboBox = control as ComboBox;
+                    comboBox.SelectedItem = string.Empty;
+                }
+            }
             LoadListViewItems();
         }
 
@@ -139,71 +152,47 @@ namespace ShoppingCart
         {
             try
             {
-                if (!string.IsNullOrEmpty(txtSearch.Text))
+                string status = cboSearchStatus.SelectedItem.ToString();
+
+                if (status == null)
                 {
-                    int id = 0;
+                    status = string.Empty;
+                }
+                Product searchItem = new Product()
+                {
+                    Id = txtSearchId.Text.ToInt(),
+                    Name = txtSearchName.Text,
+                    Price = txtSearchPrice.Text.ToFloat(),
+                    Description = txtDesc.Text,
+                    Stock = txtStock.Text.ToInt(),
+                    Status = status
+                };
 
-                    if (int.TryParse(txtSearch.Text, out id))
+                var searchResult = _manager.Search(searchItem);
+
+                if (searchResult.Count > 0)
+                {
+                    ListViewProducts.Items.Clear();
+                    ListViewProducts.Items.AddRange(searchResult.Select(x => new ListViewItem(new string[]
                     {
-                        Product result = _manager.GetById(id);
-
-                        if (result == null)
-                        {
-                            MessageBox.Show("Item doesn't exist");
-                            txtSearch.Clear();
-                        }
-                        else
-                        {
-                            ListViewItem resultItem = new ListViewItem(new string[] 
-                            { 
-                                result.Id.ToString(), 
-                                result.Name, 
-                                result.Price.ToString("0.00"), 
-                                result.Description, 
-                                result.Stock.ToString() 
-                            });
-
-                            ListViewProducts.Items.Clear();
-                            ListViewProducts.Items.Add(resultItem);
-                        }
-                    }
-                    else
-                    {
-                        string searchByName = txtSearch.Text.ToLower();
-                        IList<Product> resultList = new List<Product>();
-                        resultList = _manager.GetByName(searchByName);
-
-                        if (resultList.Count == 0)
-                        {
-                            MessageBox.Show("Item doesn't exist");
-                            txtSearch.Clear();
-                        }
-                        else
-                        {
-                            ListViewProducts.Items.Clear();
-                            ListViewProducts.Items.AddRange(resultList.Select(x => new ListViewItem(new string[] 
-                            { 
-                                x.Id.ToString(), 
-                                x.Name, 
-                                x.Price.ToString("0.00"), 
-                                x.Description, 
-                                x.Stock.ToString() 
-                            })).ToArray());
-                        }
-                    }
-
+                                x.Id.ToString(),
+                                x.Name,
+                                x.Price.ToString("0.00"),
+                                x.Description,
+                                x.Stock.ToString(),
+                                x.Status
+                    })).ToArray());
                 }
                 else
                 {
-                    MessageBox.Show("Please input your search query.");
-                    txtSearch.Clear();
-                    txtSearch.Focus();
+                    MessageBox.Show("No item matches your search query.");
                 }
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                txtSearch.Clear();
+                txtSearchId.Clear();
             }
 
         }
@@ -243,7 +232,7 @@ namespace ShoppingCart
 
         private void txtSearch_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = string.Empty;
+            txtSearchId.Text = string.Empty;
         }
 
         private void ListViewProducts_DoubleClick(object sender, EventArgs e)

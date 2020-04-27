@@ -56,5 +56,10 @@ namespace ShoppingCart.BL.Managers
         {
             return ((ICustomerRepository)Repository).GetSearchResult(name);
         }
+
+        public new IList<Customer> Search(Customer customer) 
+        {
+            return Repository.Search(customer);
+        }
     }
 }

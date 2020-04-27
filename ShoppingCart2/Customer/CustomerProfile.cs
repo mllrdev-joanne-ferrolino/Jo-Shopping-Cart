@@ -95,7 +95,7 @@ namespace ShoppingCart2
                 {
                     foreach (var addressType in typeList)
                     {
-                        var addressList = _addressManager.GetByAddressTypeId(addressType.AddressId);
+                        var addressList = _addressManager.GetByAddressId(addressType.AddressId);
 
                         if (addressList.Count() > 0)
                         {

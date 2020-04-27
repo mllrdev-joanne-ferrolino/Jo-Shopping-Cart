@@ -52,7 +52,7 @@ namespace ShoppingCart.BL.Repositories
         {
             try
             {
-                string sql = $"SELECT * FROM {TableName} WHERE LOWER(LastName) = '{lastName.ToLower()}' AND LOWER(FirstName) = '{firstName.ToLower()}'";
+                string sql = $"SELECT * FROM {TableName} WHERE LastName = '{lastName}' AND FirstName = '{firstName}'";
                 return _connection.Query(sql).Count() > 0;
             }
             catch (Exception ex)
@@ -77,5 +77,9 @@ namespace ShoppingCart.BL.Repositories
             }
         }
 
+        public new IList<Customer> Search(Customer customer) 
+        {
+            return base.Search(customer);
+        }
     }
 }

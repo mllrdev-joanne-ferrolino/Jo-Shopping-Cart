@@ -11,7 +11,8 @@ namespace ShoppingCart.BL.Repositories.Interfaces
     {
         AddressType GetAddressType(int id);
         IList<AddressType> GetByCustomerId(int id);
-
         bool Delete(int[] id);
+        AddressType GetByAddressId(int id);
+        IList<AddressType> GetByName(string name);
     }
 }

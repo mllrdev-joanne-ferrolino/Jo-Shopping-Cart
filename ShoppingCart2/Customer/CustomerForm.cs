@@ -23,6 +23,8 @@ namespace ShoppingCart2
         private IOrderManager _orderManager; 
         private IOrderItemManager _orderItemManager;
         private List<Customer> _resultList;
+        private List<Address> _addressResult;
+        private List<AddressType> _typeResult;
         private List<Address> _addressList;
         private IEnumerable<AddressType> _addressTypeList;
         private Customer _customer;
@@ -36,6 +38,8 @@ namespace ShoppingCart2
             _addressList = new List<Address>();
             _addressTypeList = new List<AddressType>();
             _resultList = new List<Customer>();
+            _addressResult = new List<Address>();
+            _typeResult = new List<AddressType>();
             _customer = new Customer();
 
             InitializeComponent();
@@ -75,6 +79,7 @@ namespace ShoppingCart2
         private void CustomerForm_Load(object sender, EventArgs e)
         {
             LoadCustomers();
+            cboType.SelectedItem = string.Empty;
         }
 
         private void btnOrder_Click(object sender, EventArgs e)
@@ -282,7 +287,7 @@ namespace ShoppingCart2
             try
             {
                 ListViewCustomers.Items.Clear();
-
+               
                 if (_resultList.Count() > 0)
                 {
                     LoadSearchResults();
@@ -310,52 +315,89 @@ namespace ShoppingCart2
             
         }
 
+        private bool IsCustomerInfoFilled() 
+        {
+            foreach (TextBox textBox in grpCustomer.Controls.OfType<TextBox>())
+            {
+                if (!string.IsNullOrWhiteSpace(textBox.Text))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool IsAddressInfoFilled()
+        {
+            foreach (TextBox textBox in grpAddress.Controls.OfType<TextBox>())
+            {
+                if (!string.IsNullOrWhiteSpace(textBox.Text))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private void btnSearch_Click(object sender, EventArgs e)
         {
             try
             {
-                if (!string.IsNullOrEmpty(txtSearch.Text))
+                if (IsCustomerInfoFilled())
                 {
-                    int id = 0;
-
-                    if (int.TryParse(txtSearch.Text, out id))
+                    Customer searchItem = new Customer()
                     {
-                        _resultList.Clear();
-                        Customer result = _customerManager.GetById(id);
+                        Id = txtSearchId.Text.ToInt(),
+                        FirstName = txtSearchFName.Text,
+                        LastName = txtSearchLName.Text,
+                        Email = txtSearchEmail.Text,
+                        MobileNumber = txtMobileNo.Text
+                    };
 
-                        if (result != null)
-                        {
-                            _resultList.Add(result);
-                        }
-                        
-                    }
-                    else
-                    {
-                        string searchByName = txtSearch.Text.ToLower();
-                        _resultList = _customerManager.GetSearchResult(searchByName);
-                    }
+                    var customerResult = _customerManager.Search(searchItem);
 
-                    if (_resultList.Count() == 0)
+                    if (customerResult.Count > 0)
                     {
-                        MessageBox.Show("Item doesn't exist");
-
-                    }
-                    else
-                    {
+                        _resultList = customerResult.ToList();
                         LoadSearchResults();
                     }
                 }
-                else
+
+                if (IsAddressInfoFilled())
                 {
-                    MessageBox.Show("Please input your search query.");
-                    txtSearch.Clear();
-                    txtSearch.Focus();
+                    Address searchAddress = new Address()
+                    {
+                        AddressLine = txtSearchStreet.Text,
+                        City = txtSearchCity.Text,
+                        Country = txtSearchCountry.Text,
+                        ZipCode = txtSearchZipCode.Text
+                    };
+
+                    var addressResult = _addressManager.Search(searchAddress);
+
+                    if (addressResult.Count > 0)
+                    {
+                        _addressResult = addressResult.ToList();
+                        LoadAddressResults();
+                    }
                 }
+
+                var type = cboType.SelectedItem.ToString();
+
+                if (!string.IsNullOrWhiteSpace(cboType.SelectedItem.ToString()))
+                {
+                    var searchByAddressType = _addressTypeManager.GetByName(type);
+
+                    if (searchByAddressType.Count() > 0)
+                    {
+                        _typeResult = searchByAddressType.ToList();
+                        LoadTypeResults();
+                    }
+                }
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                txtSearch.Clear();
             }
         }
 
@@ -368,7 +410,17 @@ namespace ShoppingCart2
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = "Search by Id or Name";
+            foreach (TextBox textBox in grpCustomer.Controls.OfType<TextBox>())
+            {
+                textBox.Text = string.Empty;
+            }
+
+            foreach (TextBox textBox in grpAddress.Controls.OfType<TextBox>())
+            {
+                textBox.Text = string.Empty;
+            }
+
+            cboType.SelectedItem = string.Empty;
             ListViewCustomers.Items.Clear();
             _resultList = new List<Customer>();
             LoadCustomers();
@@ -432,11 +484,107 @@ namespace ShoppingCart2
             
         }
 
-        private void txtSearch_Click(object sender, EventArgs e)
+        private void LoadAddressResults() 
         {
-            txtSearch.Clear();
+            try
+            {
+                ListViewCustomers.Items.Clear();
+                string addressString = string.Empty;
+                string addressTypeString = string.Empty;
+                
+                foreach (var result in _addressResult)
+                {
+                    AddressType customerAddressType = _addressTypeManager.GetByAddressId(result.Id);
+
+                    if (customerAddressType != null)
+                    {
+                        Customer customerAddress = _customerManager.GetById(customerAddressType.CustomerId);
+
+                        if (customerAddress != null)
+                        {
+                            addressString = string.Join(", ", new string[]
+                            {
+                                  result.AddressLine,
+                                  result.City,
+                                  result.Country,
+                                  result.ZipCode
+                            });
+
+                            addressTypeString = customerAddressType.Name;
+                        }
+                      
+                        ListViewCustomers.Items.Add(new ListViewItem(new string[]
+                        {
+                            customerAddress.Id.ToString(),
+                            customerAddress.LastName,
+                            customerAddress.FirstName,
+                            customerAddress.Email,
+                            customerAddress.MobileNumber,
+                            addressString,
+                            addressTypeString
+                        }));
+                    }
+                 
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
+        public void LoadTypeResults() 
+        {
+            try
+            {
+                ListViewCustomers.Items.Clear();
+                string addressString = string.Empty;
+                string addressTypeString = string.Empty;
+
+                if (_typeResult.Count > 0)
+                {
+                    foreach (var result in _typeResult)
+                    {
+                        var customerAddress = _addressManager.GetById(result.AddressId);
+
+                        if (customerAddress != null)
+                        {
+                            var customer = _customerManager.GetById(result.CustomerId);
+                            addressString = string.Join(", ", new string[]
+                            {
+                                customerAddress.AddressLine,
+                                customerAddress.City,
+                                customerAddress.Country,
+                                customerAddress.ZipCode
+                            });
+
+                            addressTypeString = result.Name;
+
+                            ListViewCustomers.Items.Add(new ListViewItem(new string[]
+                            {
+                                customer.Id.ToString(),
+                                customer.LastName,
+                                customer.FirstName,
+                                customer.Email,
+                                customer.MobileNumber,
+                                addressString,
+                                addressTypeString
+                            }));
+                        }
+                      
+                    }
+                }
+
+                
+             
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        
         private void ListViewCustomers_DoubleClick(object sender, EventArgs e)
         {
             try
