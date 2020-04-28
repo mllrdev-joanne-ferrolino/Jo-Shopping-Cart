@@ -29,7 +29,6 @@ namespace ShoppingCart2
         private List<Address> _addressList;
         private IEnumerable<AddressType> _addressTypeList;
         private Customer _customer;
-        private List<string> _customerProperties;
        
         public CustomerForm()
         {
@@ -44,7 +43,6 @@ namespace ShoppingCart2
             _addressResult = new List<Address>();
             _typeResult = new List<AddressType>();
             _customer = new Customer();
-            _customerProperties = new List<string>();
 
             InitializeComponent();
         }
