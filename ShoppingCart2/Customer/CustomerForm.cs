@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -22,12 +23,13 @@ namespace ShoppingCart2
         private IAddressTypeManager _addressTypeManager;
         private IOrderManager _orderManager; 
         private IOrderItemManager _orderItemManager;
-        private List<Customer> _resultList;
+        private List<Customer> _customerResult;
         private List<Address> _addressResult;
         private List<AddressType> _typeResult;
         private List<Address> _addressList;
         private IEnumerable<AddressType> _addressTypeList;
         private Customer _customer;
+       
         public CustomerForm()
         {
             _customerManager = new CustomerManager();
@@ -37,7 +39,7 @@ namespace ShoppingCart2
             _orderItemManager = new OrderItemManager();
             _addressList = new List<Address>();
             _addressTypeList = new List<AddressType>();
-            _resultList = new List<Customer>();
+            _customerResult = new List<Customer>();
             _addressResult = new List<Address>();
             _typeResult = new List<AddressType>();
             _customer = new Customer();
@@ -288,7 +290,7 @@ namespace ShoppingCart2
             {
                 ListViewCustomers.Items.Clear();
                
-                if (_resultList.Count() > 0)
+                if (_customerResult.Count > 0 || _addressResult.Count > 0 || _typeResult.Count > 0)
                 {
                     LoadSearchResults();
                 }
@@ -342,6 +344,11 @@ namespace ShoppingCart2
         {
             try
             {
+                _customerResult = new List<Customer>();
+                _addressResult = new List<Address>();
+                _typeResult = new List<AddressType>();
+                bool isItemExisting = true;
+
                 if (IsCustomerInfoFilled())
                 {
                     Customer searchItem = new Customer()
@@ -353,12 +360,12 @@ namespace ShoppingCart2
                         MobileNumber = txtMobileNo.Text
                     };
 
-                    var customerResult = _customerManager.Search(searchItem);
+                    _customerResult = _customerManager.Search(searchItem).ToList();
 
-                    if (customerResult.Count > 0)
+                    if (_customerResult.Count == 0)
                     {
-                        _resultList = customerResult.ToList();
-                        LoadSearchResults();
+                        MessageBox.Show("No items match your search query.");
+                        isItemExisting = false;
                     }
                 }
 
@@ -372,28 +379,40 @@ namespace ShoppingCart2
                         ZipCode = txtSearchZipCode.Text
                     };
 
-                    var addressResult = _addressManager.Search(searchAddress);
+                    _addressResult = _addressManager.Search(searchAddress).ToList();
 
-                    if (addressResult.Count > 0)
+                    if (_addressResult.Count == 0)
                     {
-                        _addressResult = addressResult.ToList();
-                        LoadAddressResults();
+                        MessageBox.Show("No items match your search query.");
+                        isItemExisting = false;
                     }
+                  
                 }
 
                 var type = cboType.SelectedItem.ToString();
 
                 if (!string.IsNullOrWhiteSpace(cboType.SelectedItem.ToString()))
                 {
-                    var searchByAddressType = _addressTypeManager.GetByName(type);
+                    _typeResult = _addressTypeManager.GetByName(type).ToList();
 
-                    if (searchByAddressType.Count() > 0)
+                    if (_typeResult.Count == 0)
                     {
-                        _typeResult = searchByAddressType.ToList();
-                        LoadTypeResults();
+                        MessageBox.Show("No items match your search query.");
+                        isItemExisting = false;
                     }
+                 
                 }
 
+                if (isItemExisting)
+                {
+                    LoadSearchResults();
+                }
+                else
+                {
+                    ListViewCustomers.Items.Clear();
+                    LoadCustomers();
+                }
+                
             }
             catch (Exception ex)
             {
@@ -405,7 +424,6 @@ namespace ShoppingCart2
         {
             ListViewCustomers.SelectedItems.Clear();
             btnAdd.Enabled = true;
-           
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -422,7 +440,9 @@ namespace ShoppingCart2
 
             cboType.SelectedItem = string.Empty;
             ListViewCustomers.Items.Clear();
-            _resultList = new List<Customer>();
+            _customerResult = new List<Customer>();
+            _addressResult = new List<Address>();
+            _typeResult = new List<AddressType>();
             LoadCustomers();
         }
 
@@ -431,51 +451,59 @@ namespace ShoppingCart2
             try
             {
                 ListViewCustomers.Items.Clear();
-                string addressString = string.Empty;
-                string addressTypeString = string.Empty;
 
-                foreach (var result in _resultList)
+                if (_customerResult.Count == 0)
                 {
-                    var customerAddressType = _addressTypeManager.GetAddressType(result.Id);
-
-                    if (customerAddressType != null)
-                    {
-                        var customerAddress = _addressManager.GetById(customerAddressType.AddressId);
-
-                        if (customerAddress != null)
-                        {
-                            addressString = string.Join(", ", new string[]
-                            {
-                            customerAddress.AddressLine,
-                            customerAddress.City,
-                            customerAddress.Country,
-                            customerAddress.ZipCode
-                            });
-
-                            addressTypeString = customerAddressType.Name;
-                        }
-                        else
-                        {
-                            addressString = "No customer address";
-                        }
-
-                    }
-                    else
-                    {
-                        addressTypeString = "No customer address type";
-                    }
-
-                    ListViewCustomers.Items.Add(new ListViewItem(new string[]
-                    {
-                    result.Id.ToString(),
-                    result.LastName,
-                    result.FirstName,
-                    result.Email,
-                    result.MobileNumber,
-                    addressString,
-                    addressTypeString
-                    }));
+                    _customerResult = _customerManager.GetAll().ToList();
                 }
+
+                if (_addressResult.Count == 0)
+                {
+                    _addressResult = _addressManager.GetAll().ToList();
+                }
+
+                if (_typeResult.Count == 0)
+                {
+                    _typeResult = _addressTypeManager.GetAll().ToList();
+                }
+
+                var searchList = from c in _customerResult
+                                 join t in _typeResult on c.Id equals t.CustomerId
+                                 join a in _addressResult on t.AddressId equals a.Id
+                                 select new
+                                 {
+                                     Id = c.Id,
+                                     LastName = c.LastName,
+                                     FirstName = c.FirstName,
+                                     Email = c.Email,
+                                     MobileNumber = c.MobileNumber,
+                                     AddressString = string.Join(", ", new string[] { a.AddressLine, a.City, a.Country, a.ZipCode }),
+                                     TypeName = t.Name
+                                 };
+
+                if (searchList.Count() > 0)
+                {
+                    foreach (var item in searchList)
+                    {
+                        ListViewCustomers.Items.Add(new ListViewItem(new string[]
+                       {
+                       item.Id.ToString(),
+                       item.LastName,
+                       item.FirstName,
+                       item.Email,
+                       item.MobileNumber,
+                       item.AddressString,
+                       item.TypeName
+                       }));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("No items matched your search query.");
+                    ListViewCustomers.Items.Clear();
+                    LoadCustomers();
+                }
+               
             }
             catch (Exception ex)
             {
@@ -484,107 +512,6 @@ namespace ShoppingCart2
             
         }
 
-        private void LoadAddressResults() 
-        {
-            try
-            {
-                ListViewCustomers.Items.Clear();
-                string addressString = string.Empty;
-                string addressTypeString = string.Empty;
-                
-                foreach (var result in _addressResult)
-                {
-                    AddressType customerAddressType = _addressTypeManager.GetByAddressId(result.Id);
-
-                    if (customerAddressType != null)
-                    {
-                        Customer customerAddress = _customerManager.GetById(customerAddressType.CustomerId);
-
-                        if (customerAddress != null)
-                        {
-                            addressString = string.Join(", ", new string[]
-                            {
-                                  result.AddressLine,
-                                  result.City,
-                                  result.Country,
-                                  result.ZipCode
-                            });
-
-                            addressTypeString = customerAddressType.Name;
-                        }
-                      
-                        ListViewCustomers.Items.Add(new ListViewItem(new string[]
-                        {
-                            customerAddress.Id.ToString(),
-                            customerAddress.LastName,
-                            customerAddress.FirstName,
-                            customerAddress.Email,
-                            customerAddress.MobileNumber,
-                            addressString,
-                            addressTypeString
-                        }));
-                    }
-                 
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        public void LoadTypeResults() 
-        {
-            try
-            {
-                ListViewCustomers.Items.Clear();
-                string addressString = string.Empty;
-                string addressTypeString = string.Empty;
-
-                if (_typeResult.Count > 0)
-                {
-                    foreach (var result in _typeResult)
-                    {
-                        var customerAddress = _addressManager.GetById(result.AddressId);
-
-                        if (customerAddress != null)
-                        {
-                            var customer = _customerManager.GetById(result.CustomerId);
-                            addressString = string.Join(", ", new string[]
-                            {
-                                customerAddress.AddressLine,
-                                customerAddress.City,
-                                customerAddress.Country,
-                                customerAddress.ZipCode
-                            });
-
-                            addressTypeString = result.Name;
-
-                            ListViewCustomers.Items.Add(new ListViewItem(new string[]
-                            {
-                                customer.Id.ToString(),
-                                customer.LastName,
-                                customer.FirstName,
-                                customer.Email,
-                                customer.MobileNumber,
-                                addressString,
-                                addressTypeString
-                            }));
-                        }
-                      
-                    }
-                }
-
-                
-             
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        
         private void ListViewCustomers_DoubleClick(object sender, EventArgs e)
         {
             try
