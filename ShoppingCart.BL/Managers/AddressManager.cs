@@ -1,5 +1,5 @@
 ﻿using ShoppingCart.BL.Managers.Interfaces;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using ShoppingCart.BL.Repositories;
 using ShoppingCart.BL.Repositories.Interfaces;
 using System;
@@ -53,9 +53,9 @@ namespace ShoppingCart.BL.Managers
             return ((IAddressRepository)Repository).GetByAddressId(id);
         }
 
-        public new IList<Address> Search(Address address) 
+        public new IList<Address> Search(List<string> conditions) 
         {
-            return Repository.Search(address);
+            return Repository.Search(conditions);
         }
     }
 }

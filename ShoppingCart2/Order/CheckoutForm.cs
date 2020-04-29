@@ -1,6 +1,6 @@
 ﻿using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

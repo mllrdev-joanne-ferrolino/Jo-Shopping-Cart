@@ -15,6 +15,8 @@ namespace ShoppingCart.BL.Managers.Interfaces
         bool Update(T obj);
         bool Delete(int[] id);
 
-        IList<T> Search(T obj);
+        IList<T> Search(List<string> conditions);
+
+        List<string> CreateConditions(T obj);
     }
 }

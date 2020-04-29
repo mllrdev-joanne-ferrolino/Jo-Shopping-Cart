@@ -1,5 +1,5 @@
 ﻿using ShoppingCart.BL.Managers.Interfaces;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using ShoppingCart.BL.Repositories;
 using ShoppingCart.BL.Repositories.Interfaces;
 using System;

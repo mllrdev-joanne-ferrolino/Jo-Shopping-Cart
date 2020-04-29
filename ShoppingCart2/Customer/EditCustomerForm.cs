@@ -1,7 +1,7 @@
 ﻿using ShoppingCart;
 using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using ShoppingCart.Utilities;
 using System;
 using System.Collections.Generic;
@@ -551,7 +551,7 @@ namespace ShoppingCart2
                             ZipCode = txtShippingZipcode.Text
                         };
 
-                        AddressType addressType = new AddressType() { AddressId = shippingAddress.Id, Name = "Shipping Address" };
+                        AddressType addressType = new AddressType() { AddressId = shippingAddress.Id, Name = "Shipping Address", AddressCode = (int)AddressCode.Shipping };
                         _addressList.Add(shippingAddress);
                         _addressTypeList.Add(addressType);
 
@@ -585,7 +585,7 @@ namespace ShoppingCart2
                             ZipCode = txtMailingZipcode.Text
                         };
 
-                        AddressType addressType = new AddressType() { AddressId = mailingAddress.Id, Name = "Mailing Address" };
+                        AddressType addressType = new AddressType() { AddressId = mailingAddress.Id, Name = "Mailing Address", AddressCode = (int)AddressCode.Mailing };
                         _addressList.Add(mailingAddress);
                         _addressTypeList.Add(addressType);
                     }
@@ -617,7 +617,7 @@ namespace ShoppingCart2
                             ZipCode = txtBillingZipcode.Text
                         };
 
-                        AddressType addressType = new AddressType() { AddressId = billingAddress.Id, Name = "Mailing Address" };
+                        AddressType addressType = new AddressType() { AddressId = billingAddress.Id, Name = "Billing Address", AddressCode = (int)AddressCode.Billing };
 
                         _addressList.Add(billingAddress);
                         _addressTypeList.Add(addressType);

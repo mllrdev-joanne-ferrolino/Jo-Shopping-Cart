@@ -58,16 +58,11 @@ namespace ShoppingCart.BL.Repositories
         {
             try
             {
-                using (var scope = new TransactionScope())
-                {
-                    var properties = entity.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
-                    var fields = string.Join(", ", properties.Select(e => e.Name));
-                    var values = string.Join(", ", properties.Select(e => $"@{e.Name}"));
-                    string sql = $"INSERT INTO {TableName} ({fields}) VALUES ({values}); SELECT @@IDENTITY";
-                    var result = _connection.ExecuteScalar<int>(sql, entity);
-                    scope.Complete();
-                    return result;
-                }
+                var properties = entity.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
+                var fields = string.Join(", ", properties.Select(e => e.Name));
+                var values = string.Join(", ", properties.Select(e => $"@{e.Name}"));
+                string sql = $"INSERT INTO {TableName} ({fields}) VALUES ({values}); SELECT @@IDENTITY";
+                return _connection.ExecuteScalar<int>(sql, entity);
                
             }
             catch (Exception ex)
@@ -81,16 +76,10 @@ namespace ShoppingCart.BL.Repositories
         {
             try
             {
-                using (var scope = new TransactionScope())
-                {
-                    var properties = entity.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
-                    var values = string.Join(", ", properties.Select(e => $"{e.Name} = @{e.Name}"));
-                    string sql = $"UPDATE {TableName} SET {values} WHERE Id = @Id";
-                    var result = _connection.Execute(sql, entity) > 0;
-                    scope.Complete();
-                    return result;
-                }
-               
+                var properties = entity.GetType().GetProperties().Where(e => e.Name.ToLower() != "id");
+                var values = string.Join(", ", properties.Select(e => $"{e.Name} = @{e.Name}"));
+                string sql = $"UPDATE {TableName} SET {values} WHERE Id = @Id";
+                return _connection.Execute(sql, entity) > 0;
             }
             catch (Exception ex)
             {
@@ -104,14 +93,8 @@ namespace ShoppingCart.BL.Repositories
         {
             try
             {
-                using (var scope = new TransactionScope())
-                {
-                    string sql = $"DELETE FROM {TableName} WHERE Id IN ({string.Join(", ", id)})";
-                    var result = _connection.Execute(sql) > 0;
-                    scope.Complete();
-                    return result;
-                }
-
+                string sql = $"DELETE FROM {TableName} WHERE Id IN ({string.Join(", ", id)})";
+                return _connection.Execute(sql) > 0;
             }
             catch (Exception ex)
             {
@@ -121,44 +104,43 @@ namespace ShoppingCart.BL.Repositories
 
         }
 
-        internal IList<T> Search(T obj) 
+        internal IList<T> Search(List<string> condition) 
         {
             try
             {
-                IList<T> result = new List<T>();
-                List<string> condition = new List<string>();
-                var properties = obj.GetType().GetProperties();
+                //List<string> condition = new List<string>();
+                //var properties = obj.GetType().GetProperties();
 
-                foreach (var property in properties)
-                {
-                    var value = property.GetValue(obj);
+                //foreach (var property in properties)
+                //{
+                //    var value = property.GetValue(obj);
 
-                    if (value is int)
-                    {
-                        if ((int)value > 0)
-                        {
-                            condition.Add($"{property.Name} = {value}");
-                        }
+                //    if (value is int)
+                //    {
+                //        if ((int)value > 0)
+                //        {
+                //            condition.Add($"{property.Name} = {value}");
+                //        }
 
-                    }
-                    else if (value is string)
-                    {
-                        if (!string.IsNullOrWhiteSpace((string)value))
-                        {
-                            condition.Add($"{property.Name} = '{value}'");
-                        }
+                //    }
+                //    else if (value is string)
+                //    {
+                //        if (!string.IsNullOrWhiteSpace((string)value))
+                //        {
+                //            condition.Add($"{property.Name} = '{value}'");
+                //        }
 
-                    } 
-                    else if (value is float)
-                    {
-                        if ((float)value > 0.0f)
-                        {
-                            condition.Add($"{property.Name} = {value}");
-                        }
+                //    } 
+                //    else if (value is float)
+                //    {
+                //        if ((float)value > 0.0f)
+                //        {
+                //            condition.Add($"{property.Name} = {value}");
+                //        }
 
-                    }
+                //    }
 
-                }
+                //}
 
                 string sql = $"SELECT * FROM {TableName} WHERE {string.Join(" AND ", condition.ToArray())}";
                 return _connection.Query<T>(sql).AsList();

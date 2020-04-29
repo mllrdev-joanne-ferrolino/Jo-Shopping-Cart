@@ -1,5 +1,5 @@
 ﻿using ShoppingCart;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

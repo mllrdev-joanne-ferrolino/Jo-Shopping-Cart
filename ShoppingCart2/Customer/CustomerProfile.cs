@@ -1,6 +1,6 @@
 ﻿using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using ShoppingCart.Utilities;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ShoppingCart2.Models;
+using System.Runtime.InteropServices;
 
 namespace ShoppingCart2
 {
@@ -79,96 +81,169 @@ namespace ShoppingCart2
            
         }
 
+        private CustomerDTO FetchData() 
+        {
+            try
+            {
+                CustomerDTO customerDTO = new CustomerDTO();
+                customerDTO.Details = _customerManager.GetById(_customer.Id);
+                customerDTO.Orders = _orderManager.GetByCustomerId(_customer.Id).Select(x => new OrderDTO()
+                {
+                    Id = x.Id,
+                    DeliveryDate = x.DeliveryDate,
+                    Status = x.Status,
+                    TotalAmount = x.TotalAmount
+                }).ToList();
+
+                var newAddress = from t in _addressTypeManager.GetByCustomerId(_customer.Id)
+                                 join a in _addressManager.GetAll()
+                                 on t.AddressId equals a.Id
+                                 select new AddressDTO() { Details = a, Name = t.Name, AddressCode = t.AddressCode };
+
+                customerDTO.Addresses = newAddress.ToList();
+                return customerDTO;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+            
+        }
         private void LoadData() 
         {
             try
             {
-                _customer = _customerManager.GetById(_customer.Id);
-                lblCustomerId.Text = _customer.Id.ToString();
-                lblName.Text = $"{_customer.FirstName.Trim()} {_customer.LastName.Trim()}";
-                lblEmail.Text = _customer.Email;
-                lblMobileNumber.Text = _customer.MobileNumber;
+                var customerDTO = FetchData();
 
-                var typeList = _addressTypeManager.GetByCustomerId(_customer.Id);
+                lblCustomerId.Text = customerDTO.Details.Id.ToString();
+                lblName.Text = $"{customerDTO.Details.FirstName.Trim()} {customerDTO.Details.LastName.Trim()}";
+                lblEmail.Text = customerDTO.Details.Email;
+                lblMobileNumber.Text = customerDTO.Details.MobileNumber;
 
-                if (typeList.Count() > 0)
+                foreach (var address in customerDTO.Addresses)
                 {
-                    foreach (var addressType in typeList)
+                    if (address.Name == "Shipping Address")
                     {
-                        var addressList = _addressManager.GetByAddressId(addressType.AddressId);
+                        tabControlAddress.SelectedTab = tabPage1;
+                        lblShippingAddressId.Text = address.Details.Id.ToString();
+                        lblStreetLineName.Text = address.Details.AddressLine;
+                        lblCityName.Text = address.Details.City;
+                        lblCountryName.Text = address.Details.Country;
+                        lblZipCodeName.Text = address.Details.ZipCode;
 
-                        if (addressList.Count() > 0)
-                        {
-                            foreach (var address in addressList)
-                            {
-                                if (addressType.Name == "Shipping Address")
-                                {
-                                    tabControlAddress.SelectedTab = tabPage1;
-                                    lblShippingAddressId.Text = address.Id.ToString();
-                                    lblStreetLineName.Text = address.AddressLine;
-                                    lblCityName.Text = address.City;
-                                    lblCountryName.Text = address.Country;
-                                    lblZipCodeName.Text = address.ZipCode;
-                                    _addressTypeList.Add(addressType);
-                                }
-                                else if (addressType.Name == "Mailing Address")
-                                {
-                                    tabControlAddress.SelectedTab = tabPage2;
-                                    lblMailingAddressId.Text = address.Id.ToString();
-                                    label12.Text = address.AddressLine;
-                                    label13.Text = address.City;
-                                    label14.Text = address.Country;
-                                    label15.Text = address.ZipCode;
-                                    _addressTypeList.Add(addressType);
-
-                                }
-                                else if (addressType.Name == "Billing Address")
-                                {
-                                    tabControlAddress.SelectedTab = tabPage3;
-                                    lblBillingAddressId.Text = address.Id.ToString();
-                                    label20.Text = address.AddressLine;
-                                    label21.Text = address.City;
-                                    label22.Text = address.Country;
-                                    label23.Text = address.ZipCode;
-                                    _addressTypeList.Add(addressType);
-                                }
-
-                                _addressList.Add(address);
-
-                            }
-
-                        }
-                        else
-                        {
-                            MessageBox.Show("No address for this customer");
-                        }
+                    }
+                    else if (address.Name == "Mailing Address")
+                    {
+                        tabControlAddress.SelectedTab = tabPage2;
+                        lblMailingAddressId.Text = address.Details.Id.ToString();
+                        label12.Text = address.Details.AddressLine;
+                        label13.Text = address.Details.City;
+                        label14.Text = address.Details.Country;
+                        label15.Text = address.Details.ZipCode;
+                    }
+                    else if (address.Name == "Billing Address")
+                    {
+                        tabControlAddress.SelectedTab = tabPage3;
+                        lblBillingAddressId.Text = address.Details.Id.ToString();
+                        label20.Text = address.Details.AddressLine;
+                        label21.Text = address.Details.City;
+                        label22.Text = address.Details.Country;
+                        label23.Text = address.Details.ZipCode;
                     }
                 }
-                else
-                {
-                    MessageBox.Show("No address type for this customer.");
-                }
 
-                var orderInfo = _orderManager.GetByCustomerId(_customer.Id);
-
-                if (orderInfo.Count() > 0)
-                {
-                    ListViewOrderItems.Items.Clear();
-                    ListViewOrderItems.Items.AddRange(orderInfo.Select(x => new ListViewItem(new string[]
+                ListViewOrderItems.Items.Clear();
+                ListViewOrderItems.Items.AddRange(customerDTO.Orders.Select(x => new ListViewItem(new string[]
                 {
                         x.Id.ToString(),
-                        x.CustomerId.ToString(),
+                        customerDTO.Details.Id.ToString(),
                         x.TotalAmount.ToString("0.00"),
                         x.DeliveryDate.ToString(),
                         x.Status
                 })).ToArray());
 
-                }
-                else
-                {
-                    MessageBox.Show("There are no orders for this customer.");
-                    btnAddOrder.Enabled = true;
-                }
+
+                //var typeList = _addressTypeManager.GetByCustomerId(_customer.Id);
+
+                //if (typeList.Count() > 0)
+                //{
+                //    foreach (var addressType in typeList)
+                //    {
+                //        var addressList = _addressManager.GetByAddressId(addressType.AddressId);
+
+                //        if (addressList.Count() > 0)
+                //        {
+                //            foreach (var address in addressList)
+                //            {
+                //                if (addressType.AddressCode == (int)AddressCode.Shipping)
+                //                {
+                //                    tabControlAddress.SelectedTab = tabPage1;
+                //                    lblShippingAddressId.Text = address.Id.ToString();
+                //                    lblStreetLineName.Text = address.AddressLine;
+                //                    lblCityName.Text = address.City;
+                //                    lblCountryName.Text = address.Country;
+                //                    lblZipCodeName.Text = address.ZipCode;
+                //                    _addressTypeList.Add(addressType);
+                //                }
+                //                else if (addressType.AddressCode == (int)AddressCode.Mailing)
+                //                {
+                //                    tabControlAddress.SelectedTab = tabPage2;
+                //                    lblMailingAddressId.Text = address.Id.ToString();
+                //                    label12.Text = address.AddressLine;
+                //                    label13.Text = address.City;
+                //                    label14.Text = address.Country;
+                //                    label15.Text = address.ZipCode;
+                //                    _addressTypeList.Add(addressType);
+
+                //                }
+                //                else if (addressType.AddressCode == (int)AddressCode.Billing)
+                //                {
+                //                    tabControlAddress.SelectedTab = tabPage3;
+                //                    lblBillingAddressId.Text = address.Id.ToString();
+                //                    label20.Text = address.AddressLine;
+                //                    label21.Text = address.City;
+                //                    label22.Text = address.Country;
+                //                    label23.Text = address.ZipCode;
+                //                    _addressTypeList.Add(addressType);
+                //                }
+
+                //                _addressList.Add(address);
+
+                //            }
+
+                //        }
+                //        else
+                //        {
+                //            MessageBox.Show("No address for this customer");
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                //    MessageBox.Show("No address type for this customer.");
+                //}
+
+                //var orderInfo = _orderManager.GetByCustomerId(_customer.Id);
+
+                //if (orderInfo.Count() > 0)
+                //{
+                //    ListViewOrderItems.Items.Clear();
+                //    ListViewOrderItems.Items.AddRange(orderInfo.Select(x => new ListViewItem(new string[]
+                //{
+                //        x.Id.ToString(),
+                //        x.CustomerId.ToString(),
+                //        x.TotalAmount.ToString("0.00"),
+                //        x.DeliveryDate.ToString(),
+                //        x.Status
+                //})).ToArray());
+
+                //}
+                //else
+                //{
+                //    MessageBox.Show("There are no orders for this customer.");
+                //    btnAddOrder.Enabled = true;
+                //}
             }
             catch (Exception ex)
             {

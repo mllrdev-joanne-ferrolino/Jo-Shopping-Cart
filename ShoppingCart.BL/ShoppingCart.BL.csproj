@@ -70,12 +70,12 @@
     <Compile Include="Managers\OrderItemManager.cs" />
     <Compile Include="Managers\OrderManager.cs" />
     <Compile Include="Managers\ProductManager.cs" />
-    <Compile Include="Models\Address.cs" />
-    <Compile Include="Models\AddressType.cs" />
-    <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\Order.cs" />
-    <Compile Include="Models\OrderItem.cs" />
-    <Compile Include="Models\Product.cs" />
+    <Compile Include="Entities\Address.cs" />
+    <Compile Include="Entities\AddressType.cs" />
+    <Compile Include="Entities\Customer.cs" />
+    <Compile Include="Entities\Order.cs" />
+    <Compile Include="Entities\OrderItem.cs" />
+    <Compile Include="Entities\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AddressRepository.cs" />
     <Compile Include="Repositories\AddressTypeRepository.cs" />
@@ -86,7 +86,7 @@
     <Compile Include="Repositories\Interfaces\IAddressTypeRepository.cs" />
     <Compile Include="Repositories\Interfaces\IJunctionEntityRepository.cs" />
     <Compile Include="Repositories\Interfaces\ICustomerRepository.cs" />
-    <Compile Include="Repositories\Interfaces\IMainEntitiesRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IMainEntityRepository.cs" />
     <Compile Include="Repositories\Interfaces\IOrderItemRepository.cs" />
     <Compile Include="Repositories\Interfaces\IOrderRepository.cs" />
     <Compile Include="Repositories\Interfaces\IProductRepository.cs" />

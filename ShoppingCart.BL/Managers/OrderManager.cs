@@ -1,5 +1,5 @@
 ﻿using ShoppingCart.BL.Managers.Interfaces;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using ShoppingCart.BL.Repositories;
 using ShoppingCart.BL.Repositories.Interfaces;
 using System;
@@ -48,9 +48,9 @@ namespace ShoppingCart.BL.Managers
             return ((IOrderRepository)Repository).GetByCustomerId(id);
         }
 
-        public new IList<Order> Search(Order order) 
+        public new IList<Order> Search(List<string> conditions) 
         {
-            return Repository.Search(order);
+            return Repository.Search(conditions);
         }
     }
 }

@@ -42,9 +42,48 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetId(id);
         }
 
-        public IList<T> Search(T obj) 
+        public IList<T> Search(List<string> conditions) 
         {
-            return Repository.Search(obj);
+            return Repository.Search(conditions);
+        }
+
+        public List<string> CreateConditions(T obj) 
+        {
+            List<string> conditions = new List<string>();
+            var properties = obj.GetType().GetProperties();
+
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(obj);
+
+                if (value is int)
+                {
+                    if ((int)value > 0)
+                    {
+                        conditions.Add($"{property.Name} = {value}");
+                    }
+
+                }
+                else if (value is string)
+                {
+                    if (!string.IsNullOrWhiteSpace((string)value))
+                    {
+                        conditions.Add($"{property.Name} = '{value}'");
+                    }
+
+                }
+                else if (value is float)
+                {
+                    if ((float)value > 0.0f)
+                    {
+                        conditions.Add($"{property.Name} = {value}");
+                    }
+
+                }
+
+            }
+
+            return conditions;
         }
     }
 }

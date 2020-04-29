@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using ShoppingCart.BL.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -61,9 +61,9 @@ namespace ShoppingCart.BL.Repositories
             }
         }
 
-        public new IList<Product> Search(Product product) 
+        public new IList<Product> Search(List<string> conditions) 
         {
-            return base.Search(product);
+            return base.Search(conditions);
         }
 
     }

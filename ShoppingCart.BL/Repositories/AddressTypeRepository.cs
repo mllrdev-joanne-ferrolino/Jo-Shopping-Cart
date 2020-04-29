@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using ShoppingCart.BL.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;

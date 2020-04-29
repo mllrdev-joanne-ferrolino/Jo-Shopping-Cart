@@ -1,6 +1,6 @@
 ﻿using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using ShoppingCart.Utilities;
 using System;
 using System.Collections.Generic;
@@ -360,7 +360,8 @@ namespace ShoppingCart2
                         MobileNumber = txtMobileNo.Text
                     };
 
-                    _customerResult = _customerManager.Search(searchItem).ToList();
+                    var con = _customerManager.CreateConditions(searchItem);
+                    _customerResult = _customerManager.Search(con).ToList();
 
                     if (_customerResult.Count == 0)
                     {
@@ -379,7 +380,8 @@ namespace ShoppingCart2
                         ZipCode = txtSearchZipCode.Text
                     };
 
-                    _addressResult = _addressManager.Search(searchAddress).ToList();
+                    var con = _addressManager.CreateConditions(searchAddress);
+                    _addressResult = _addressManager.Search(con).ToList();
 
                     if (_addressResult.Count == 0)
                     {
@@ -477,8 +479,8 @@ namespace ShoppingCart2
                                      FirstName = c.FirstName,
                                      Email = c.Email,
                                      MobileNumber = c.MobileNumber,
-                                     AddressString = string.Join(", ", new string[] { a.AddressLine, a.City, a.Country, a.ZipCode }),
-                                     TypeName = t.Name
+                                     FullAddress = string.Join(", ", new string[] { a.AddressLine, a.City, a.Country, a.ZipCode }),
+                                     AddressType = t.Name
                                  };
 
                 if (searchList.Count() > 0)
@@ -492,8 +494,8 @@ namespace ShoppingCart2
                        item.FirstName,
                        item.Email,
                        item.MobileNumber,
-                       item.AddressString,
-                       item.TypeName
+                       item.FullAddress,
+                       item.AddressType
                        }));
                     }
                 }

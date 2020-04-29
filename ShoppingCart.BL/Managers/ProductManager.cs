@@ -1,5 +1,5 @@
 ﻿using ShoppingCart.BL.Managers.Interfaces;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using ShoppingCart.BL.Repositories;
 using ShoppingCart.BL.Repositories.Interfaces;
 using System;
@@ -49,9 +49,9 @@ namespace ShoppingCart.BL.Managers
             return ((IProductRepository)Repository).GetActiveItems();
         }
 
-        public new IList<Product> Search(Product product) 
+        public new IList<Product> Search(List<string> conditions) 
         {
-            return Repository.Search(product);
+            return Repository.Search(conditions);
         }
     }
 }

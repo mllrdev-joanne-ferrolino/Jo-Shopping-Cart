@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using ShoppingCart.BL.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -54,14 +54,8 @@ namespace ShoppingCart.BL.Repositories
         {
             try
             {
-                using (var scope = new TransactionScope())
-                {
-                    string sql = $"DELETE FROM {TableName} WHERE OrderId IN ({string.Join(", ", id)})";
-                    var result = _connection.Execute(sql) > 0;
-                    scope.Complete();
-                    return result;
-                }
-
+                string sql = $"DELETE FROM {TableName} WHERE OrderId IN ({string.Join(", ", id)})";
+                return _connection.Execute(sql) > 0;
             }
             catch (Exception ex)
             {
@@ -73,14 +67,8 @@ namespace ShoppingCart.BL.Repositories
         {
             try
             {
-                using (var scope = new TransactionScope())
-                {
-                    string sql = $"DELETE FROM {TableName} WHERE ProductId IN ({string.Join(", ", id)})";
-                    var result = _connection.Execute(sql) > 0;
-                    scope.Complete();
-                    return result;
-                }
-
+                string sql = $"DELETE FROM {TableName} WHERE ProductId IN ({string.Join(", ", id)})";
+                return _connection.Execute(sql) > 0;
             }
             catch (Exception ex)
             {

@@ -1,7 +1,7 @@
 ﻿using ShoppingCart;
 using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using ShoppingCart.Utilities;
 using ShoppingCart2;
 using System;

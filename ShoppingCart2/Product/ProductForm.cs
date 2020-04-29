@@ -1,6 +1,6 @@
 ﻿using ShoppingCart.BL.Managers;
 using ShoppingCart.BL.Managers.Interfaces;
-using ShoppingCart.BL.Models;
+using ShoppingCart.BL.Entities;
 using ShoppingCart.Utilities;
 using ShoppingCart2;
 using System;
@@ -167,8 +167,8 @@ namespace ShoppingCart
                     Stock = txtStock.Text.ToInt(),
                     Status = status
                 };
-
-                var searchResult = _manager.Search(searchItem);
+                var con = _manager.CreateConditions(searchItem);
+                var searchResult = _manager.Search(con);
 
                 if (searchResult.Count > 0)
                 {
