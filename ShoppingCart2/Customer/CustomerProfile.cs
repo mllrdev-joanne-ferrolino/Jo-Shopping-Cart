@@ -98,7 +98,7 @@ namespace ShoppingCart2
                 var newAddress = from t in _addressTypeManager.GetByCustomerId(_customer.Id)
                                  join a in _addressManager.GetAll()
                                  on t.AddressId equals a.Id
-                                 select new AddressDTO() { Details = a, Name = t.Name, AddressCode = t.AddressCode };
+                                 select new AddressDTO() { Details = a, Name = t.Name, AddressCode = (AddressCode)t.AddressCode };
 
                 customerDTO.Addresses = newAddress.ToList();
                 return customerDTO;
@@ -123,7 +123,7 @@ namespace ShoppingCart2
 
                 foreach (var address in customerDTO.Addresses)
                 {
-                    if (address.Name == "Shipping Address")
+                    if (address.AddressCode == AddressCode.Shipping)
                     {
                         tabControlAddress.SelectedTab = tabPage1;
                         lblShippingAddressId.Text = address.Details.Id.ToString();
@@ -132,8 +132,16 @@ namespace ShoppingCart2
                         lblCountryName.Text = address.Details.Country;
                         lblZipCodeName.Text = address.Details.ZipCode;
 
+                        var newAddType = new AddressType() 
+                        { 
+                            AddressId = address.Details.Id, 
+                            CustomerId = customerDTO.Details.Id, 
+                            AddressCode = (int)address.AddressCode, 
+                            Name = address.Name 
+                        };
+                        _addressTypeList.Add(newAddType);
                     }
-                    else if (address.Name == "Mailing Address")
+                    else if (address.AddressCode == AddressCode.Mailing)
                     {
                         tabControlAddress.SelectedTab = tabPage2;
                         lblMailingAddressId.Text = address.Details.Id.ToString();
@@ -141,8 +149,17 @@ namespace ShoppingCart2
                         label13.Text = address.Details.City;
                         label14.Text = address.Details.Country;
                         label15.Text = address.Details.ZipCode;
+
+                        var newAddType = new AddressType() 
+                        { 
+                            AddressId = address.Details.Id, 
+                            CustomerId = customerDTO.Details.Id, 
+                            AddressCode = (int)address.AddressCode, 
+                            Name = address.Name 
+                        };
+                        _addressTypeList.Add(newAddType);
                     }
-                    else if (address.Name == "Billing Address")
+                    else if (address.AddressCode == AddressCode.Billing)
                     {
                         tabControlAddress.SelectedTab = tabPage3;
                         lblBillingAddressId.Text = address.Details.Id.ToString();
@@ -150,7 +167,18 @@ namespace ShoppingCart2
                         label21.Text = address.Details.City;
                         label22.Text = address.Details.Country;
                         label23.Text = address.Details.ZipCode;
+
+                        var newAddType = new AddressType() 
+                        { 
+                            AddressId = address.Details.Id, 
+                            CustomerId = customerDTO.Details.Id, 
+                            AddressCode = (int)address.AddressCode, 
+                            Name = address.Name 
+                        };
+                        _addressTypeList.Add(newAddType);
                     }
+
+                    _addressList.Add(address.Details);
                 }
 
                 ListViewOrderItems.Items.Clear();
@@ -163,87 +191,6 @@ namespace ShoppingCart2
                         x.Status
                 })).ToArray());
 
-
-                //var typeList = _addressTypeManager.GetByCustomerId(_customer.Id);
-
-                //if (typeList.Count() > 0)
-                //{
-                //    foreach (var addressType in typeList)
-                //    {
-                //        var addressList = _addressManager.GetByAddressId(addressType.AddressId);
-
-                //        if (addressList.Count() > 0)
-                //        {
-                //            foreach (var address in addressList)
-                //            {
-                //                if (addressType.AddressCode == (int)AddressCode.Shipping)
-                //                {
-                //                    tabControlAddress.SelectedTab = tabPage1;
-                //                    lblShippingAddressId.Text = address.Id.ToString();
-                //                    lblStreetLineName.Text = address.AddressLine;
-                //                    lblCityName.Text = address.City;
-                //                    lblCountryName.Text = address.Country;
-                //                    lblZipCodeName.Text = address.ZipCode;
-                //                    _addressTypeList.Add(addressType);
-                //                }
-                //                else if (addressType.AddressCode == (int)AddressCode.Mailing)
-                //                {
-                //                    tabControlAddress.SelectedTab = tabPage2;
-                //                    lblMailingAddressId.Text = address.Id.ToString();
-                //                    label12.Text = address.AddressLine;
-                //                    label13.Text = address.City;
-                //                    label14.Text = address.Country;
-                //                    label15.Text = address.ZipCode;
-                //                    _addressTypeList.Add(addressType);
-
-                //                }
-                //                else if (addressType.AddressCode == (int)AddressCode.Billing)
-                //                {
-                //                    tabControlAddress.SelectedTab = tabPage3;
-                //                    lblBillingAddressId.Text = address.Id.ToString();
-                //                    label20.Text = address.AddressLine;
-                //                    label21.Text = address.City;
-                //                    label22.Text = address.Country;
-                //                    label23.Text = address.ZipCode;
-                //                    _addressTypeList.Add(addressType);
-                //                }
-
-                //                _addressList.Add(address);
-
-                //            }
-
-                //        }
-                //        else
-                //        {
-                //            MessageBox.Show("No address for this customer");
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    MessageBox.Show("No address type for this customer.");
-                //}
-
-                //var orderInfo = _orderManager.GetByCustomerId(_customer.Id);
-
-                //if (orderInfo.Count() > 0)
-                //{
-                //    ListViewOrderItems.Items.Clear();
-                //    ListViewOrderItems.Items.AddRange(orderInfo.Select(x => new ListViewItem(new string[]
-                //{
-                //        x.Id.ToString(),
-                //        x.CustomerId.ToString(),
-                //        x.TotalAmount.ToString("0.00"),
-                //        x.DeliveryDate.ToString(),
-                //        x.Status
-                //})).ToArray());
-
-                //}
-                //else
-                //{
-                //    MessageBox.Show("There are no orders for this customer.");
-                //    btnAddOrder.Enabled = true;
-                //}
             }
             catch (Exception ex)
             {

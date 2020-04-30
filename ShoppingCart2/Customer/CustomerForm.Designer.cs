@@ -44,33 +44,33 @@
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.grpSearch = new System.Windows.Forms.GroupBox();
-            this.cboType = new System.Windows.Forms.ComboBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.txtSearchZipCode = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.txtSearchCountry = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txtSearchCity = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txtSearchStreet = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txtMobileNo = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtSearchEmail = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtSearchLName = new System.Windows.Forms.TextBox();
-            this.lblLastName = new System.Windows.Forms.Label();
-            this.txtSearchFName = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.grpCustomer = new System.Windows.Forms.GroupBox();
-            this.grpAddress = new System.Windows.Forms.GroupBox();
             this.grpType = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.cboType = new System.Windows.Forms.ComboBox();
+            this.grpAddress = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtSearchStreet = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtSearchZipCode = new System.Windows.Forms.TextBox();
+            this.txtSearchCity = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtSearchCountry = new System.Windows.Forms.TextBox();
+            this.grpCustomer = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtSearchFName = new System.Windows.Forms.TextBox();
+            this.lblLastName = new System.Windows.Forms.Label();
+            this.txtSearchLName = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtSearchEmail = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtMobileNo = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.grpSearch.SuspendLayout();
-            this.grpCustomer.SuspendLayout();
-            this.grpAddress.SuspendLayout();
             this.grpType.SuspendLayout();
+            this.grpAddress.SuspendLayout();
+            this.grpCustomer.SuspendLayout();
             this.SuspendLayout();
             // 
             // ListViewCustomers
@@ -224,18 +224,16 @@
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "Search";
             // 
-            // cboType
+            // grpType
             // 
-            this.cboType.FormattingEnabled = true;
-            this.cboType.Items.AddRange(new object[] {
-            "",
-            "Shipping Address",
-            "Mailing Address",
-            "Billing Address"});
-            this.cboType.Location = new System.Drawing.Point(63, 26);
-            this.cboType.Name = "cboType";
-            this.cboType.Size = new System.Drawing.Size(132, 21);
-            this.cboType.TabIndex = 21;
+            this.grpType.Controls.Add(this.label9);
+            this.grpType.Controls.Add(this.cboType);
+            this.grpType.Location = new System.Drawing.Point(10, 364);
+            this.grpType.Name = "grpType";
+            this.grpType.Size = new System.Drawing.Size(216, 59);
+            this.grpType.TabIndex = 24;
+            this.grpType.TabStop = false;
+            this.grpType.Text = "By Address Type";
             // 
             // label9
             // 
@@ -246,60 +244,35 @@
             this.label9.TabIndex = 20;
             this.label9.Text = "Type";
             // 
-            // txtSearchZipCode
+            // cboType
             // 
-            this.txtSearchZipCode.Location = new System.Drawing.Point(70, 103);
-            this.txtSearchZipCode.Name = "txtSearchZipCode";
-            this.txtSearchZipCode.Size = new System.Drawing.Size(132, 20);
-            this.txtSearchZipCode.TabIndex = 19;
+            this.cboType.FormattingEnabled = true;
+            this.cboType.Items.AddRange(new object[] {
+            "",
+            "Shipping",
+            "Mailing",
+            "Billing"});
+            this.cboType.Location = new System.Drawing.Point(63, 26);
+            this.cboType.Name = "cboType";
+            this.cboType.Size = new System.Drawing.Size(132, 21);
+            this.cboType.TabIndex = 21;
             // 
-            // label8
+            // grpAddress
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 107);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(47, 13);
-            this.label8.TabIndex = 18;
-            this.label8.Text = "ZipCode";
-            // 
-            // txtSearchCountry
-            // 
-            this.txtSearchCountry.Location = new System.Drawing.Point(71, 76);
-            this.txtSearchCountry.Name = "txtSearchCountry";
-            this.txtSearchCountry.Size = new System.Drawing.Size(131, 20);
-            this.txtSearchCountry.TabIndex = 17;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(11, 79);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(43, 13);
-            this.label7.TabIndex = 16;
-            this.label7.Text = "Country";
-            // 
-            // txtSearchCity
-            // 
-            this.txtSearchCity.Location = new System.Drawing.Point(71, 51);
-            this.txtSearchCity.Name = "txtSearchCity";
-            this.txtSearchCity.Size = new System.Drawing.Size(131, 20);
-            this.txtSearchCity.TabIndex = 15;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(11, 55);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(24, 13);
-            this.label6.TabIndex = 14;
-            this.label6.Text = "City";
-            // 
-            // txtSearchStreet
-            // 
-            this.txtSearchStreet.Location = new System.Drawing.Point(71, 24);
-            this.txtSearchStreet.Name = "txtSearchStreet";
-            this.txtSearchStreet.Size = new System.Drawing.Size(131, 20);
-            this.txtSearchStreet.TabIndex = 13;
+            this.grpAddress.Controls.Add(this.label5);
+            this.grpAddress.Controls.Add(this.txtSearchStreet);
+            this.grpAddress.Controls.Add(this.label6);
+            this.grpAddress.Controls.Add(this.txtSearchZipCode);
+            this.grpAddress.Controls.Add(this.txtSearchCity);
+            this.grpAddress.Controls.Add(this.label8);
+            this.grpAddress.Controls.Add(this.label7);
+            this.grpAddress.Controls.Add(this.txtSearchCountry);
+            this.grpAddress.Location = new System.Drawing.Point(11, 214);
+            this.grpAddress.Name = "grpAddress";
+            this.grpAddress.Size = new System.Drawing.Size(216, 137);
+            this.grpAddress.TabIndex = 23;
+            this.grpAddress.TabStop = false;
+            this.grpAddress.Text = "By Address";
             // 
             // label5
             // 
@@ -310,78 +283,60 @@
             this.label5.TabIndex = 12;
             this.label5.Text = "StreetLine";
             // 
-            // txtMobileNo
+            // txtSearchStreet
             // 
-            this.txtMobileNo.Location = new System.Drawing.Point(69, 140);
-            this.txtMobileNo.Name = "txtMobileNo";
-            this.txtMobileNo.Size = new System.Drawing.Size(132, 20);
-            this.txtMobileNo.TabIndex = 11;
+            this.txtSearchStreet.Location = new System.Drawing.Point(71, 24);
+            this.txtSearchStreet.Name = "txtSearchStreet";
+            this.txtSearchStreet.Size = new System.Drawing.Size(131, 20);
+            this.txtSearchStreet.TabIndex = 13;
             // 
-            // label4
+            // label6
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 144);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(55, 13);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "Mobile No";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(11, 55);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(24, 13);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "City";
             // 
-            // txtSearchEmail
+            // txtSearchZipCode
             // 
-            this.txtSearchEmail.Location = new System.Drawing.Point(69, 113);
-            this.txtSearchEmail.Name = "txtSearchEmail";
-            this.txtSearchEmail.Size = new System.Drawing.Size(132, 20);
-            this.txtSearchEmail.TabIndex = 9;
+            this.txtSearchZipCode.Location = new System.Drawing.Point(70, 103);
+            this.txtSearchZipCode.Name = "txtSearchZipCode";
+            this.txtSearchZipCode.Size = new System.Drawing.Size(132, 20);
+            this.txtSearchZipCode.TabIndex = 19;
             // 
-            // label3
+            // txtSearchCity
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 117);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(32, 13);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Email";
+            this.txtSearchCity.Location = new System.Drawing.Point(71, 51);
+            this.txtSearchCity.Name = "txtSearchCity";
+            this.txtSearchCity.Size = new System.Drawing.Size(131, 20);
+            this.txtSearchCity.TabIndex = 15;
             // 
-            // txtSearchLName
+            // label8
             // 
-            this.txtSearchLName.Location = new System.Drawing.Point(69, 85);
-            this.txtSearchLName.Name = "txtSearchLName";
-            this.txtSearchLName.Size = new System.Drawing.Size(132, 20);
-            this.txtSearchLName.TabIndex = 7;
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(12, 107);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(47, 13);
+            this.label8.TabIndex = 18;
+            this.label8.Text = "ZipCode";
             // 
-            // lblLastName
+            // label7
             // 
-            this.lblLastName.AutoSize = true;
-            this.lblLastName.Location = new System.Drawing.Point(7, 88);
-            this.lblLastName.Name = "lblLastName";
-            this.lblLastName.Size = new System.Drawing.Size(58, 13);
-            this.lblLastName.TabIndex = 6;
-            this.lblLastName.Text = "Last Name";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(11, 79);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(43, 13);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "Country";
             // 
-            // txtSearchFName
+            // txtSearchCountry
             // 
-            this.txtSearchFName.Location = new System.Drawing.Point(69, 55);
-            this.txtSearchFName.Name = "txtSearchFName";
-            this.txtSearchFName.Size = new System.Drawing.Size(132, 20);
-            this.txtSearchFName.TabIndex = 5;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 59);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(57, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "First Name";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 32);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(16, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Id";
+            this.txtSearchCountry.Location = new System.Drawing.Point(71, 76);
+            this.txtSearchCountry.Name = "txtSearchCountry";
+            this.txtSearchCountry.Size = new System.Drawing.Size(131, 20);
+            this.txtSearchCountry.TabIndex = 17;
             // 
             // grpCustomer
             // 
@@ -402,33 +357,78 @@
             this.grpCustomer.TabStop = false;
             this.grpCustomer.Text = "By Customer";
             // 
-            // grpAddress
+            // label1
             // 
-            this.grpAddress.Controls.Add(this.label5);
-            this.grpAddress.Controls.Add(this.txtSearchStreet);
-            this.grpAddress.Controls.Add(this.label6);
-            this.grpAddress.Controls.Add(this.txtSearchZipCode);
-            this.grpAddress.Controls.Add(this.txtSearchCity);
-            this.grpAddress.Controls.Add(this.label8);
-            this.grpAddress.Controls.Add(this.label7);
-            this.grpAddress.Controls.Add(this.txtSearchCountry);
-            this.grpAddress.Location = new System.Drawing.Point(11, 214);
-            this.grpAddress.Name = "grpAddress";
-            this.grpAddress.Size = new System.Drawing.Size(216, 137);
-            this.grpAddress.TabIndex = 23;
-            this.grpAddress.TabStop = false;
-            this.grpAddress.Text = "By Address";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 32);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(16, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Id";
             // 
-            // grpType
+            // label2
             // 
-            this.grpType.Controls.Add(this.label9);
-            this.grpType.Controls.Add(this.cboType);
-            this.grpType.Location = new System.Drawing.Point(10, 364);
-            this.grpType.Name = "grpType";
-            this.grpType.Size = new System.Drawing.Size(216, 59);
-            this.grpType.TabIndex = 24;
-            this.grpType.TabStop = false;
-            this.grpType.Text = "By Address Type";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 59);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "First Name";
+            // 
+            // txtSearchFName
+            // 
+            this.txtSearchFName.Location = new System.Drawing.Point(69, 55);
+            this.txtSearchFName.Name = "txtSearchFName";
+            this.txtSearchFName.Size = new System.Drawing.Size(132, 20);
+            this.txtSearchFName.TabIndex = 5;
+            // 
+            // lblLastName
+            // 
+            this.lblLastName.AutoSize = true;
+            this.lblLastName.Location = new System.Drawing.Point(7, 88);
+            this.lblLastName.Name = "lblLastName";
+            this.lblLastName.Size = new System.Drawing.Size(58, 13);
+            this.lblLastName.TabIndex = 6;
+            this.lblLastName.Text = "Last Name";
+            // 
+            // txtSearchLName
+            // 
+            this.txtSearchLName.Location = new System.Drawing.Point(69, 85);
+            this.txtSearchLName.Name = "txtSearchLName";
+            this.txtSearchLName.Size = new System.Drawing.Size(132, 20);
+            this.txtSearchLName.TabIndex = 7;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(8, 117);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(32, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Email";
+            // 
+            // txtSearchEmail
+            // 
+            this.txtSearchEmail.Location = new System.Drawing.Point(69, 113);
+            this.txtSearchEmail.Name = "txtSearchEmail";
+            this.txtSearchEmail.Size = new System.Drawing.Size(132, 20);
+            this.txtSearchEmail.TabIndex = 9;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(7, 144);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(55, 13);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Mobile No";
+            // 
+            // txtMobileNo
+            // 
+            this.txtMobileNo.Location = new System.Drawing.Point(69, 140);
+            this.txtMobileNo.Name = "txtMobileNo";
+            this.txtMobileNo.Size = new System.Drawing.Size(132, 20);
+            this.txtMobileNo.TabIndex = 11;
             // 
             // CustomerForm
             // 
@@ -444,12 +444,12 @@
             this.Click += new System.EventHandler(this.CustomerForm_Click);
             this.groupBox1.ResumeLayout(false);
             this.grpSearch.ResumeLayout(false);
-            this.grpCustomer.ResumeLayout(false);
-            this.grpCustomer.PerformLayout();
-            this.grpAddress.ResumeLayout(false);
-            this.grpAddress.PerformLayout();
             this.grpType.ResumeLayout(false);
             this.grpType.PerformLayout();
+            this.grpAddress.ResumeLayout(false);
+            this.grpAddress.PerformLayout();
+            this.grpCustomer.ResumeLayout(false);
+            this.grpCustomer.PerformLayout();
             this.ResumeLayout(false);
 
         }

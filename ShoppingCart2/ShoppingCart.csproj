@@ -54,7 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddressCode.cs" />
     <Compile Include="Customer\CustomerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +75,7 @@
     <Compile Include="Models\AddressDTO.cs" />
     <Compile Include="Models\CustomerDTO.cs" />
     <Compile Include="Models\OrderDTO.cs" />
+    <Compile Include="Models\SearchResultDTO.cs" />
     <Compile Include="Order\CheckoutForm.cs">
       <SubType>Form</SubType>
     </Compile>

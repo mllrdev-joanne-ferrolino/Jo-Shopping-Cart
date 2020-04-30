@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\AddressCode.cs" />
     <Compile Include="Managers\AddressManager.cs" />
     <Compile Include="Managers\AddressTypeManager.cs" />
     <Compile Include="Managers\JunctionEntityManager.cs" />

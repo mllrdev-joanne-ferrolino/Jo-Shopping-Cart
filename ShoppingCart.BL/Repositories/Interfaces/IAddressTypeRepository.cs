@@ -14,5 +14,8 @@ namespace ShoppingCart.BL.Repositories.Interfaces
         bool Delete(int[] id);
         AddressType GetByAddressId(int id);
         IList<AddressType> GetByName(string name);
+        bool Update(AddressType addressType);
+
+        IList<AddressType> GetByCode(int code);
     }
 }

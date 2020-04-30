@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Windows.Forms;
+using ShoppingCart2.Models;
 
 namespace ShoppingCart2
 {
@@ -224,58 +225,53 @@ namespace ShoppingCart2
         {
             try
             {
-                IList<Customer> customerList = _customerManager.GetAll();
-                IList<AddressType> addressTypeList = _addressTypeManager.GetAll();
-                IList<Address> addressList = _addressManager.GetAll();
-                Address customerAddress = new Address();
-                string addressString = string.Empty;
-                string addressTypeString = string.Empty;
+                string fullAddress = "No address";
+                string addressType = "No address type";
+                var customerList = _customerManager.GetAll().ToList();
 
-                foreach (var customer in customerList)
+                if (customerList.Count > 0)
                 {
-                    try
+                    foreach (var customer in customerList)
                     {
-                        AddressType customerAddressType = addressTypeList.FirstOrDefault(x => x.CustomerId == customer.Id);
+                        CustomerDTO customerDTO = new CustomerDTO();
+                        customerDTO.Details = customer;
+                        var addressList = from t in _addressTypeManager.GetByCustomerId(customer.Id)
+                                          join a in _addressManager.GetAll() on t.AddressId equals a.Id
+                                          select new AddressDTO() { Details = a, AddressCode = (AddressCode)t.AddressCode };
 
-                        if (customerAddressType != null)
+                        if (addressList.Count() > 0)
                         {
-                            customerAddress = addressList.FirstOrDefault(x => x.Id == customerAddressType.AddressId);
+                            customerDTO.Addresses = addressList.ToList();
+                            var singleAddress = customerDTO.Addresses.FirstOrDefault();
 
-                            addressString = string.Join(", ", new string[]
+                            fullAddress = string.Join(", ", new string[]
                             {
-                            customerAddress.AddressLine,
-                            customerAddress.City,
-                            customerAddress.Country,
-                            customerAddress.ZipCode
+                                singleAddress.Details.AddressLine,
+                                singleAddress.Details.City,
+                                singleAddress.Details.Country,
+                                singleAddress.Details.ZipCode
                             });
 
-                            addressTypeString = customerAddressType.Name;
-
+                            addressType = singleAddress.AddressCode.ToString();
                         }
-                        else
+
+                        ListViewCustomers.Items.Add(new ListViewItem(new string[]
                         {
-                            addressString = "No customer address";
-                            addressTypeString = "No address type";
-                        }
+                            customerDTO.Details.Id.ToString(),
+                            customerDTO.Details.LastName,
+                            customerDTO.Details.FirstName,
+                            customerDTO.Details.Email,
+                            customerDTO.Details.MobileNumber,
+                            fullAddress,
+                            addressType
+                        }));
                     }
-                    catch (Exception ex)
-                    {
-                        addressString = ex.Message;
-                        addressTypeString = ex.Message;
-                    }
-
-                    ListViewCustomers.Items.Add(new ListViewItem(new string[]
-                      {
-                            customer.Id.ToString(),
-                            customer.LastName,
-                            customer.FirstName,
-                            customer.Email,
-                            customer.MobileNumber,
-                            addressString,
-                            addressTypeString
-                      }));
                 }
-
+                else
+                {
+                    MessageBox.Show("No customers found.");
+                }
+                
             }
             catch (Exception ex)
             {
@@ -392,10 +388,11 @@ namespace ShoppingCart2
                 }
 
                 var type = cboType.SelectedItem.ToString();
+                int code = (int)Enum.Parse(typeof(AddressCode), type);
 
                 if (!string.IsNullOrWhiteSpace(cboType.SelectedItem.ToString()))
                 {
-                    _typeResult = _addressTypeManager.GetByName(type).ToList();
+                    _typeResult = _addressTypeManager.GetByCode(code).ToList();
 
                     if (_typeResult.Count == 0)
                     {
@@ -472,15 +469,12 @@ namespace ShoppingCart2
                 var searchList = from c in _customerResult
                                  join t in _typeResult on c.Id equals t.CustomerId
                                  join a in _addressResult on t.AddressId equals a.Id
-                                 select new
+                                 select new SearchResultDTO
                                  {
-                                     Id = c.Id,
-                                     LastName = c.LastName,
-                                     FirstName = c.FirstName,
-                                     Email = c.Email,
-                                     MobileNumber = c.MobileNumber,
+                                     Details = c,
                                      FullAddress = string.Join(", ", new string[] { a.AddressLine, a.City, a.Country, a.ZipCode }),
-                                     AddressType = t.Name
+                                     
+                                     Code = (AddressCode)t.AddressCode
                                  };
 
                 if (searchList.Count() > 0)
@@ -489,13 +483,13 @@ namespace ShoppingCart2
                     {
                         ListViewCustomers.Items.Add(new ListViewItem(new string[]
                        {
-                       item.Id.ToString(),
-                       item.LastName,
-                       item.FirstName,
-                       item.Email,
-                       item.MobileNumber,
+                       item.Details.Id.ToString(),
+                       item.Details.LastName,
+                       item.Details.FirstName,
+                       item.Details.Email,
+                       item.Details.MobileNumber,
                        item.FullAddress,
-                       item.AddressType
+                       item.Code.ToString()
                        }));
                     }
                 }

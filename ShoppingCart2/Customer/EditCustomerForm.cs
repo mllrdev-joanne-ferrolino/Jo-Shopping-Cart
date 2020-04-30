@@ -301,6 +301,7 @@ namespace ShoppingCart2
                             addressTextBoxes.ElementAt(i).Text = _shippingAddress[i];
                         }
 
+                        
                     }
                     if (_mailingAddress != null)
                     {
@@ -338,6 +339,7 @@ namespace ShoppingCart2
                                 txtShippingCity.Text = address.City;
                                 txtShippingCountry.Text = address.Country;
                                 txtShippingZipcode.Text = address.ZipCode;
+                                addressTypeItem.AddressCode = (int)AddressCode.Shipping;
 
                             }
                             else if (addressTypeItem.Name == "Mailing Address")
@@ -350,6 +352,7 @@ namespace ShoppingCart2
                                 txtMailingCity.Text = address.City;
                                 txtMailingCountry.Text = address.Country;
                                 txtMailingZipcode.Text = address.ZipCode;
+                                addressTypeItem.AddressCode = (int)AddressCode.Mailing;
 
 
                             }
@@ -363,6 +366,7 @@ namespace ShoppingCart2
                                 txtBillingCity.Text = address.City;
                                 txtBillingCountry.Text = address.Country;
                                 txtBillingZipcode.Text = address.ZipCode;
+                                addressTypeItem.AddressCode = (int)AddressCode.Billing;
 
                             }
                         }
@@ -399,7 +403,6 @@ namespace ShoppingCart2
                     {
                         if (_customerManager.Update(_customer))
                         {
-
                             foreach (var item in _addressList)
                             {
                                 if (item.Id == 0)
@@ -461,6 +464,19 @@ namespace ShoppingCart2
                                     if (_typeManager.Insert(addressType))
                                     {
                                         MessageBox.Show("Address type inserted successfully.");
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Address type was not inserted.");
+                                        return false;
+                                    }
+                                }
+                                else
+                                {
+
+                                    if (_typeManager.Update(addressType))
+                                    {
+                                        MessageBox.Show("Address type updated successfully.");
                                     }
                                     else
                                     {

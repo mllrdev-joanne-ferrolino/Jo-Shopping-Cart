@@ -47,5 +47,14 @@ namespace ShoppingCart.BL.Managers
             return ((IAddressTypeRepository)Repository).GetByName(name);
         }
 
+        public bool Update(AddressType addressType) 
+        {
+            return ((IAddressTypeRepository)Repository).Update(addressType);
+        }
+        public IList<AddressType> GetByCode(int code) 
+        {
+            return ((IAddressTypeRepository)Repository).GetByCode(code);
+        }
+
     }
 }

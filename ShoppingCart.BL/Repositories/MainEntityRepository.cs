@@ -108,40 +108,6 @@ namespace ShoppingCart.BL.Repositories
         {
             try
             {
-                //List<string> condition = new List<string>();
-                //var properties = obj.GetType().GetProperties();
-
-                //foreach (var property in properties)
-                //{
-                //    var value = property.GetValue(obj);
-
-                //    if (value is int)
-                //    {
-                //        if ((int)value > 0)
-                //        {
-                //            condition.Add($"{property.Name} = {value}");
-                //        }
-
-                //    }
-                //    else if (value is string)
-                //    {
-                //        if (!string.IsNullOrWhiteSpace((string)value))
-                //        {
-                //            condition.Add($"{property.Name} = '{value}'");
-                //        }
-
-                //    } 
-                //    else if (value is float)
-                //    {
-                //        if ((float)value > 0.0f)
-                //        {
-                //            condition.Add($"{property.Name} = {value}");
-                //        }
-
-                //    }
-
-                //}
-
                 string sql = $"SELECT * FROM {TableName} WHERE {string.Join(" AND ", condition.ToArray())}";
                 return _connection.Query<T>(sql).AsList();
             }
