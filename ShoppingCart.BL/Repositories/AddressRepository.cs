@@ -40,21 +40,6 @@ namespace ShoppingCart.BL.Repositories
         {
             return base.Delete(id);
         }
-
-        public IList<Address> GetByAddressId(int id) 
-        {
-            try
-            {
-                string sql = $"SELECT * FROM {TableName} WHERE Id = {id}";
-                return _connection.Query<Address>(sql).AsList();
-            }
-            catch (Exception ex)
-            {
-                _log.Error(ex.StackTrace);
-                return null;
-            }
-        }
-
         public new IList<Address> Search(List<string> conditions) 
         {
             return base.Search(conditions);

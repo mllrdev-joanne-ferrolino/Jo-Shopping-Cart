@@ -473,7 +473,6 @@ namespace ShoppingCart2
                                  {
                                      Details = c,
                                      FullAddress = string.Join(", ", new string[] { a.AddressLine, a.City, a.Country, a.ZipCode }),
-                                     
                                      Code = (AddressCode)t.AddressCode
                                  };
 

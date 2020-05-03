@@ -10,8 +10,6 @@ namespace ShoppingCart.BL.Entities
     {
         public int CustomerId { get; set; }
         public int AddressId { get; set; }
-        public string Name { get; set; }
         public int AddressCode { get; set; }
-
     }
 }

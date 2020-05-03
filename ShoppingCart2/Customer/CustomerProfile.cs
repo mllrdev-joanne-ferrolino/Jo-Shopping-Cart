@@ -98,7 +98,7 @@ namespace ShoppingCart2
                 var newAddress = from t in _addressTypeManager.GetByCustomerId(_customer.Id)
                                  join a in _addressManager.GetAll()
                                  on t.AddressId equals a.Id
-                                 select new AddressDTO() { Details = a, Name = t.Name, AddressCode = (AddressCode)t.AddressCode };
+                                 select new AddressDTO() { Details = a, AddressCode = (AddressCode)t.AddressCode };
 
                 customerDTO.Addresses = newAddress.ToList();
                 return customerDTO;
@@ -120,6 +120,7 @@ namespace ShoppingCart2
                 lblName.Text = $"{customerDTO.Details.FirstName.Trim()} {customerDTO.Details.LastName.Trim()}";
                 lblEmail.Text = customerDTO.Details.Email;
                 lblMobileNumber.Text = customerDTO.Details.MobileNumber;
+                _customer = customerDTO.Details;
 
                 foreach (var address in customerDTO.Addresses)
                 {
@@ -136,8 +137,7 @@ namespace ShoppingCart2
                         { 
                             AddressId = address.Details.Id, 
                             CustomerId = customerDTO.Details.Id, 
-                            AddressCode = (int)address.AddressCode, 
-                            Name = address.Name 
+                            AddressCode = (int)address.AddressCode
                         };
                         _addressTypeList.Add(newAddType);
                     }
@@ -154,8 +154,7 @@ namespace ShoppingCart2
                         { 
                             AddressId = address.Details.Id, 
                             CustomerId = customerDTO.Details.Id, 
-                            AddressCode = (int)address.AddressCode, 
-                            Name = address.Name 
+                            AddressCode = (int)address.AddressCode
                         };
                         _addressTypeList.Add(newAddType);
                     }
@@ -172,8 +171,7 @@ namespace ShoppingCart2
                         { 
                             AddressId = address.Details.Id, 
                             CustomerId = customerDTO.Details.Id, 
-                            AddressCode = (int)address.AddressCode, 
-                            Name = address.Name 
+                            AddressCode = (int)address.AddressCode
                         };
                         _addressTypeList.Add(newAddType);
                     }

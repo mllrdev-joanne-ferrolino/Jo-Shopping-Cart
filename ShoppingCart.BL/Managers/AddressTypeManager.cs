@@ -42,10 +42,7 @@ namespace ShoppingCart.BL.Managers
             return ((IAddressTypeRepository)Repository).GetByAddressId(id);
         }
 
-        public IList<AddressType> GetByName(string name) 
-        {
-            return ((IAddressTypeRepository)Repository).GetByName(name);
-        }
+    
 
         public bool Update(AddressType addressType) 
         {

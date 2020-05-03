@@ -10,7 +10,6 @@ namespace ShoppingCart2.Models
     public class AddressDTO
     {
         public Address Details { get; set; }
-        public string Name { get; set; }
         public AddressCode AddressCode { get; set; }
     }
 }

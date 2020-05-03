@@ -329,7 +329,7 @@ namespace ShoppingCart2
                         {
                             var address = _addressList.FirstOrDefault(x => x.Id == addressTypeItem.AddressId);
 
-                            if (addressTypeItem.Name == "Shipping Address")
+                            if (addressTypeItem.AddressCode == (int)AddressCode.Shipping)
                             {
                                 tabControlAddress.SelectedTab = tabPage1;
                                 lblShippingAddressId.Text = address.Id.ToString();
@@ -339,10 +339,8 @@ namespace ShoppingCart2
                                 txtShippingCity.Text = address.City;
                                 txtShippingCountry.Text = address.Country;
                                 txtShippingZipcode.Text = address.ZipCode;
-                                addressTypeItem.AddressCode = (int)AddressCode.Shipping;
-
                             }
-                            else if (addressTypeItem.Name == "Mailing Address")
+                            else if (addressTypeItem.AddressCode == (int)AddressCode.Mailing)
                             {
                                 tabControlAddress.SelectedTab = tabPage2;
                                 lblMailingAddressId.Text = address.Id.ToString();
@@ -352,11 +350,9 @@ namespace ShoppingCart2
                                 txtMailingCity.Text = address.City;
                                 txtMailingCountry.Text = address.Country;
                                 txtMailingZipcode.Text = address.ZipCode;
-                                addressTypeItem.AddressCode = (int)AddressCode.Mailing;
-
 
                             }
-                            else if (addressTypeItem.Name == "Billing Address")
+                            else if (addressTypeItem.AddressCode == (int)AddressCode.Billing)
                             {
                                 tabControlAddress.SelectedTab = tabPage3;
                                 lblBillingAddressId.Text = address.Id.ToString();
@@ -366,8 +362,6 @@ namespace ShoppingCart2
                                 txtBillingCity.Text = address.City;
                                 txtBillingCountry.Text = address.Country;
                                 txtBillingZipcode.Text = address.ZipCode;
-                                addressTypeItem.AddressCode = (int)AddressCode.Billing;
-
                             }
                         }
                     }
@@ -567,7 +561,7 @@ namespace ShoppingCart2
                             ZipCode = txtShippingZipcode.Text
                         };
 
-                        AddressType addressType = new AddressType() { AddressId = shippingAddress.Id, Name = "Shipping Address", AddressCode = (int)AddressCode.Shipping };
+                        AddressType addressType = new AddressType() { AddressId = shippingAddress.Id, AddressCode = (int)AddressCode.Shipping };
                         _addressList.Add(shippingAddress);
                         _addressTypeList.Add(addressType);
 
@@ -601,7 +595,7 @@ namespace ShoppingCart2
                             ZipCode = txtMailingZipcode.Text
                         };
 
-                        AddressType addressType = new AddressType() { AddressId = mailingAddress.Id, Name = "Mailing Address", AddressCode = (int)AddressCode.Mailing };
+                        AddressType addressType = new AddressType() { AddressId = mailingAddress.Id, AddressCode = (int)AddressCode.Mailing };
                         _addressList.Add(mailingAddress);
                         _addressTypeList.Add(addressType);
                     }
@@ -633,7 +627,7 @@ namespace ShoppingCart2
                             ZipCode = txtBillingZipcode.Text
                         };
 
-                        AddressType addressType = new AddressType() { AddressId = billingAddress.Id, Name = "Billing Address", AddressCode = (int)AddressCode.Billing };
+                        AddressType addressType = new AddressType() { AddressId = billingAddress.Id, AddressCode = (int)AddressCode.Billing };
 
                         _addressList.Add(billingAddress);
                         _addressTypeList.Add(addressType);

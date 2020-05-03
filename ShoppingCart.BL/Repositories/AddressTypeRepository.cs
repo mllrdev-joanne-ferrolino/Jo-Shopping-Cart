@@ -87,20 +87,6 @@ namespace ShoppingCart.BL.Repositories
             }
         }
 
-        public IList<AddressType> GetByName(string name) 
-        {
-            try
-            {
-                string sql = $"SELECT * FROM {TableName} WHERE Name = '{name}'";
-                return _connection.Query<AddressType>(sql).AsList();
-            }
-            catch (Exception ex)
-            {
-                _log.Error(ex.StackTrace);
-                return null;
-            }
-
-        }
 
         public bool Update(AddressType addressType)
         {

@@ -48,11 +48,6 @@ namespace ShoppingCart.BL.Managers
             return Repository.GetId(id);
         }
 
-        public IList<Address> GetByAddressId(int id) 
-        {
-            return ((IAddressRepository)Repository).GetByAddressId(id);
-        }
-
         public new IList<Address> Search(List<string> conditions) 
         {
             return Repository.Search(conditions);
